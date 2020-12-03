@@ -65,7 +65,7 @@ export const NavigationStyle = (theme) => ({
     flexGrow: 1,
     paddingTop: theme.spacing(10),
     minHeight: "100vh",
-    backgroundСolor: "#292121ed",
+    backgroundColor: "#292121ed",
   },
   items: {
     display: "flex",

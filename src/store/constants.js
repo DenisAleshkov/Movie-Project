@@ -20,9 +20,24 @@ export const NAV_ICONS = (cssClass = "") => {
   ];
 };
 
+export const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAtadE3LWhSA3YpGcKSoVJfUjqF5hQ1JeY",
+  authDomain: "movie-project-e25db.firebaseapp.com",
+  projectId: "movie-project-e25db",
+  storageBucket: "movie-project-e25db.appspot.com",
+  messagingSenderId: "896885905753",
+  appId: "1:896885905753:web:9678d9d814ae0fad2f5448"
+};
+
 export const SET_MOVIES = "SET_MOVIES";
 export const SET_TV = "SET_TV";
 
 export const SET_LOADING = "SET_LOADING";
 
 export const SET_ERROR = "SET_ERROR";
+
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_ERROR = "REGISTER_ERROR";
+
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_ERROR = "LOGIN_ERROR";
