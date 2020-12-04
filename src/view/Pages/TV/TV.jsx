@@ -11,6 +11,7 @@ class TV extends Component {
     this.props.tv.tvList.map((item) => (
       <PosterCard
         key={item.id}
+        id={item.id}
         poster={item.backdrop_path}
         title={item.original_name}
         style={{ margin: "20px" }}

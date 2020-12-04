@@ -66,7 +66,14 @@ export const NavigationStyle = (theme) => ({
   items: {
     display: "flex",
   },
-  navMenu: {},
+  navMenu: {
+  },
+  activeNavLink: {
+    backgroundColor: "#565050",
+    "&:hover": {
+      backgroundColor: "#565050",
+    }
+  },
   navBar: {
     display: "flex",
     justifyContent: "space-between",
@@ -108,4 +115,5 @@ export const NavigationStyle = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  
 });

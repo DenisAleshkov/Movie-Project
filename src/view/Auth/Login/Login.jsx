@@ -22,17 +22,23 @@ class Login extends React.Component {
     this.state = {
       email: "",
       password: "",
+      checked: false,
     };
   }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.login(this.state);
   };
-  handleChande = (e) => {
+  handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
     });
   };
+  handleCheckboxChange = (e) => {
+    this.setState({
+      checked: e.target.checked,
+    });
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -60,7 +66,7 @@ class Login extends React.Component {
               name="email"
               autoComplete="email"
               autoFocus
-              onChange={this.handleChande}
+              onChange={this.handleChange}
             />
             <TextField
               variant="outlined"
@@ -72,12 +78,13 @@ class Login extends React.Component {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={this.handleChande}
+              onChange={this.handleChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+              onChange={this.handleCheckboxChange}
+            /> 
             <Button
               type="submit"
               fullWidth
@@ -89,7 +96,9 @@ class Login extends React.Component {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/auth/register">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/auth/register">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
             </Grid>
           </form>

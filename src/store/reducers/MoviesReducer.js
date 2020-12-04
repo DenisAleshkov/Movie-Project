@@ -1,4 +1,10 @@
-import { SET_MOVIES, SET_ERROR, SET_TV } from "./../constants";
+import {
+  SET_MOVIES,
+  SET_ERROR,
+  SET_TV,
+  SET_MOVIE_TO_LIBRARY,
+  GET_MOVIE_FROM_LIBRARY,
+} from "./../constants";
 
 const initialState = {
   movies: {
@@ -9,6 +15,8 @@ const initialState = {
     page: null,
     tvList: [],
   },
+  library: [],
+  allMovies: [],
   error: null,
 };
 
@@ -37,6 +45,12 @@ const MoviesReducer = (state = initialState, action) => {
         ...state,
         movies: null,
         error: action.payload,
+      };
+    }
+    case SET_MOVIE_TO_LIBRARY: {
+      return {
+        ...state,
+        library: action.payload,
       };
     }
     default: {

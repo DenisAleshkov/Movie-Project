@@ -1,5 +1,6 @@
 import Slideshow from "@material-ui/icons/Slideshow";
 import Tv from "@material-ui/icons/Tv";
+import Book from "@material-ui/icons/BookmarkBorder";
 
 export const GLOBALS = {
   API_KEY: "720082cb7997030cf3bdec52b8169388",
@@ -17,6 +18,10 @@ export const NAV_ICONS = (cssClass = "") => {
       component: <Tv className={cssClass} />,
       url: "/home/tv",
     },
+    {
+      component: <Book className={cssClass} />,
+      url: "/home/library"
+    }
   ];
 };
 
@@ -31,6 +36,8 @@ export const FIREBASE_CONFIG = {
 
 export const SET_MOVIES = "SET_MOVIES";
 export const SET_TV = "SET_TV";
+export const SET_MOVIE_TO_LIBRARY = "SET_MOVIE_TO_LIBRARY"
+export const GET_MOVIE_FROM_LIBRARY = "GET_MOVIE_FROM_LIBRARY";
 
 export const SET_LOADING = "SET_LOADING";
 

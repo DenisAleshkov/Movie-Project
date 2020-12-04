@@ -7,15 +7,20 @@ class Movie extends Component {
   componentDidMount() {
     this.props.getMovies(1);
   }
-  showMovies = () =>
-    this.props.movies.moviesList.map((item) => (
-      <PosterCard
-        key={item.id}
-        poster={item.backdrop_path}
-        title={item.title}
-        style={{ margin: "20px" }}
-      />
-    ));
+  showMovies = () => {
+    return this.props.movies.moviesList.map((item) => {
+      return (
+        <PosterCard
+          key={item.id}
+          id={item.id}
+          poster={item.backdrop_path}
+          title={item.title}
+          style={{ margin: "20px" }}
+        />
+      );
+    });
+  };
+
   render() {
     return <>{this.showMovies()}</>;
   }

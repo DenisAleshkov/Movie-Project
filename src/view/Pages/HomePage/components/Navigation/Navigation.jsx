@@ -12,6 +12,7 @@ class HomePage extends Component {
     super(props);
     this.state = {
       open: null,
+      isActive: false,
       searchText: "",
     };
   }
@@ -20,12 +21,14 @@ class HomePage extends Component {
       open: !value,
     });
   };
+
   render() {
-    const { classes, Content } = this.props;
+    const { classes, Content, location } = this.props;
+
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <NavBar classes={classes} open={this.state.open} />
+        <NavBar classes={classes} open={this.state.open} location={location}/>
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
@@ -47,7 +50,7 @@ class HomePage extends Component {
               <MenuIcon />
             </IconButton>
           </div>
-          <SideBar classes={classes} />
+          <SideBar classes={classes} location={location} />
         </Drawer>
         <main
           className={clsx(classes.content, {
