@@ -4,8 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import { NavigationStyle } from "./NavigationStyle";
 import { Drawer, CssBaseline, IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import NavBar from "./components/NavBar";
-import SideBar from "./components/SideBar";
+import NavBar from "./../NavBar/NavBar";
+import SideBar from "./../Sidebar/SideBar";
 
 class HomePage extends Component {
   constructor(props) {

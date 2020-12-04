@@ -6,7 +6,7 @@ import {
 } from "./../constants";
 
 const initialState = {
-  isAuth: null,
+  isAuth: false,
   userId: null,
   firstName: "",
   lastName: "",

@@ -11,11 +11,11 @@ export const NAV_ICONS = (cssClass = "") => {
   return [
     {
       component: <Slideshow className={cssClass} />,
-      url: "/movies",
+      url: "/home/movies",
     },
     {
       component: <Tv className={cssClass} />,
-      url: "/tv",
+      url: "/home/tv",
     },
   ];
 };

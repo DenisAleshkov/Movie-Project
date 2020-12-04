@@ -35,10 +35,6 @@ export const NavigationStyle = (theme) => ({
     flexShrink: 0,
     whiteSpace: "nowrap",
   },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
   drawerOpen: {
     width: drawerWidth,
     transition: theme.transitions.create("width", {

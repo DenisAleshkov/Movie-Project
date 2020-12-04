@@ -89,7 +89,7 @@ class Login extends React.Component {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/register">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/auth/register">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </form>

@@ -43,10 +43,10 @@ class NavBar extends React.Component {
             />
           </div>
           <Box className={clsx(classes.navMenu)}>
-            <Button component={Link} to="/movies" color="inherit">
+            <Button component={Link} to="/home/movies" color="inherit">
               Movies
             </Button>
-            <Button component={Link} to="/tv" color="inherit">
+            <Button component={Link} to="/home/tv" color="inherit">
               Tv
             </Button>
           </Box>

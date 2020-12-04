@@ -12,16 +12,21 @@ export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
 export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
 export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
 
+const getUserInfo = async (id, email) => {
+  const userData = await firebase.firestore().collection("users").get(id);
+  const user = userData.docs
+    .filter((doc) => doc.data().email === email)
+    .map((doc) => doc.data())[0];
+  return user;
+};
+
 export const login = (credentials) => (dispatch) => {
-  const db = firebase.firestore().collection("users");
   firebase
     .auth()
     .signInWithEmailAndPassword(credentials.email, credentials.password)
     .then(async (res) => {
-      const userData = await db.get(res.user.uid);
-      const user = userData.docs
-        .filter((doc) => doc.data().email === credentials.email)
-        .map((doc) => doc.data())[0];
+      const user = await getUserInfo(res.user.email, credentials.email);
+      localStorage.setItem("token", res.user.uid)
       dispatch(
         loginSuccess({
           isAuth: true,

@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { NAV_ICONS } from "./../../../store/constants";
+import { NAV_ICONS } from "./../../../../../store/constants"
 import { Link } from "react-router-dom";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 

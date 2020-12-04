@@ -113,7 +113,7 @@ class Register extends React.Component {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link to="/login">Already have an account? Sign in</Link>
+                <Link to="/auth/login">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </form>
