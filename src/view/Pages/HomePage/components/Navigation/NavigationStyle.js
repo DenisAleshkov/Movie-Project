@@ -115,5 +115,8 @@ export const NavigationStyle = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  
+  signOutBtn: {
+    color: "#fff",
+    borderColor:"#fff!important"
+  }
 });

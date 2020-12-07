@@ -6,6 +6,9 @@ import { Drawer, CssBaseline, IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "./../NavBar/NavBar";
 import SideBar from "./../Sidebar/SideBar";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { signOut } from "../../../../../store/actions/authAction";
 
 class HomePage extends Component {
   constructor(props) {
@@ -23,12 +26,18 @@ class HomePage extends Component {
   };
 
   render() {
-    const { classes, Content, location } = this.props;
+    const { classes, Content, location, history } = this.props;
 
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <NavBar classes={classes} open={this.state.open} location={location}/>
+        <NavBar
+          classes={classes}
+          open={this.state.open}
+          location={location}
+          signOut={this.props.signOut}
+          history={this.props.history}
+        />
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
@@ -65,4 +74,16 @@ class HomePage extends Component {
   }
 }
 
-export default withStyles(NavigationStyle, { withTheme: true })(HomePage);
+const mapStateToProps = (state) => {
+  console.log("state", state);
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  signOut: (history) => dispatch(signOut(history)),
+});
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(NavigationStyle, { withTheme: true })
+)(HomePage);

@@ -11,6 +11,7 @@ class HomePage extends React.Component {
     return (
       <Navigation
         location={this.props.location.pathname}
+        history={this.props.history}
         Content={
           <Container
             maxWidth="lg"

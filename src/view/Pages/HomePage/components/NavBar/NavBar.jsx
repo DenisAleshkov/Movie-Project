@@ -25,10 +25,12 @@ class NavBar extends React.Component {
   };
   isActive = (url) =>
     this.props.location === url ? this.props.classes.activeNavLink : "";
-
+  signOut = () => {
+    this.props.signOut(this.props.history)
+  }
   render() {
     const { classes, open } = this.props;
-
+    console.log('this.props', this.props)
     return (
       <AppBar
         position="fixed"
@@ -57,7 +59,9 @@ class NavBar extends React.Component {
               component={Link}
               to="/home/movies"
               color="inherit"
-              className={this.isActive("/home/movies")||this.isActive("/home")}
+              className={
+                this.isActive("/home/movies") || this.isActive("/home")
+              }
             >
               Movies
             </Button>
@@ -78,6 +82,13 @@ class NavBar extends React.Component {
               onClick={this.isActive}
             >
               my Library
+            </Button>
+            <Button
+              className={classes.signOutBtn}
+              onClick={this.signOut}
+              variant="outlined"
+            >
+              Sign Out
             </Button>
           </Box>
         </Toolbar>
