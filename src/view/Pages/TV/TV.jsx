@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTV } from "../../../store/actions/movieAction";
+import { getTV, getGenres } from "../../../store/actions/movieAction";
 import PosterCard from "./../components/PosterCard";
 
 class TV extends Component {
   componentDidMount() {
     this.props.getTV(1);
+    this.props.getGenres("tv")
   }
   showTV = () =>
     this.props.tv.tvList.map((item) => (
@@ -26,5 +27,6 @@ const mapStateToProps = (state) => ({ tv: state.MoviesReducer.tv });
 
 const mapDispatchToProps = (dispatch) => ({
   getTV: (page) => dispatch(getTV(page)),
+  getGenres: (type) => dispatch(getGenres(type))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TV);

@@ -9,6 +9,7 @@ import SideBar from "./../Sidebar/SideBar";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { signOut } from "../../../../../store/actions/authAction";
+import { getGenres, searchMovies } from "../../../../../store/actions/movieAction";
 
 class HomePage extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class HomePage extends Component {
   };
 
   render() {
-    const { classes, Content, location, history } = this.props;
+    const { classes, Content, location } = this.props;
 
     return (
       <div className={classes.root}>
@@ -37,6 +38,10 @@ class HomePage extends Component {
           location={location}
           signOut={this.props.signOut}
           history={this.props.history}
+          getGenres={this.props.getGenres}
+          genres={this.props.genres}
+          movies={this.props.movies}
+          searchMovies={this.props.searchMovies}
         />
         <Drawer
           variant="permanent"
@@ -76,11 +81,16 @@ class HomePage extends Component {
 
 const mapStateToProps = (state) => {
   console.log("state", state);
-  return {};
+  return {
+    genres: state.MoviesReducer.genres,
+    movies: state.MoviesReducer.movies
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
+  getGenres: (type) => dispatch(getGenres(type)),
+  searchMovies: (data) => dispatch(searchMovies(data)) 
 });
 
 export default compose(

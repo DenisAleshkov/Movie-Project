@@ -36,6 +36,7 @@ export const FIREBASE_CONFIG = {
 
 export const SET_MOVIES = "SET_MOVIES";
 export const SET_TV = "SET_TV";
+export const SET_GENRES = "SET_GENRES";
 export const SET_MOVIE_TO_LIBRARY = "SET_MOVIE_TO_LIBRARY";
 export const GET_MOVIE_FROM_LIBRARY = "GET_MOVIE_FROM_LIBRARY";
 

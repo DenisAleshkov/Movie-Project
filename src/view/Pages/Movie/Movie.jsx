@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getMovies } from "./../../../store/actions/movieAction";
+import { getGenres, getMovies } from "./../../../store/actions/movieAction";
 import PosterCard from "./../components/PosterCard";
 
 class Movie extends Component {
   componentDidMount() {
     this.props.getMovies(1);
+    this.props.getGenres("movie")
   }
   showMovies = () => {
     return this.props.movies.moviesList.map((item) => {
@@ -31,5 +32,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),
+  getGenres: (type) => dispatch(getGenres(type))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Movie);

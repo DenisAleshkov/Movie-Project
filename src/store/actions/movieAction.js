@@ -4,13 +4,14 @@ import {
   SET_MOVIES,
   SET_ERROR,
   SET_MOVIE_TO_LIBRARY,
-  GET_MOVIE_FROM_LIBRARY,
+  SET_GENRES,
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading } from "./loadingAction";
 
 export const setMovies = (payload) => ({ type: SET_MOVIES, payload });
 export const setTV = (payload) => ({ type: SET_TV, payload });
+export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
 export const setMovieToLibraryAction = (payload) => ({
   type: SET_MOVIE_TO_LIBRARY,
@@ -78,3 +79,18 @@ export const removeItemFromLibrary = (id) => (dispatch) => {
     dispatch(setMovieToLibraryAction(items));
   }
 };
+
+export const getGenres = (type) => (dispatch) => {
+  axios
+    .get(MOVIE.GET_GENRES(type))
+    .then((result) => {
+      dispatch(setGenres(result.data.genres));
+    })
+    .catch((error) => {
+      dispatch(setError(error.response.data.errors[0]));
+    });
+};
+
+export const searchMovies = (data) => (dispatch) => {
+  console.log('data', data)
+}

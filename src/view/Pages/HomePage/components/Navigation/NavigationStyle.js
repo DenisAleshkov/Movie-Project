@@ -104,17 +104,6 @@ export const NavigationStyle = (theme) => ({
       width: "auto",
     },
   },
-  searchInput: {
-    padding: "0px 17px 0px 30px",
-  },
-  searchIcon: {
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   signOutBtn: {
     color: "#fff",
     borderColor:"#fff!important"

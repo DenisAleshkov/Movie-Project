@@ -1,36 +1,17 @@
 import React from "react";
 import clsx from "clsx";
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  AppBar,
-  Box,
-  Button,
-  Icon,
-  InputBase,
-  Toolbar,
-} from "@material-ui/core";
+import SearchForm from "./components/SearchForm/SearchForm";
+import { AppBar, Box, Button, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: "",
-    };
-  }
-  changeHandler = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
   isActive = (url) =>
     this.props.location === url ? this.props.classes.activeNavLink : "";
   signOut = () => {
-    this.props.signOut(this.props.history)
-  }
+    this.props.signOut(this.props.history);
+  };
   render() {
-    const { classes, open } = this.props;
-    console.log('this.props', this.props)
+    const { classes, open, genres, movies } = this.props;
     return (
       <AppBar
         position="fixed"
@@ -39,21 +20,13 @@ class NavBar extends React.Component {
         })}
       >
         <Toolbar className={classes.navBar}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              className={classes.searchInput}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              onChange={this.changeHandler}
-              inputProps={{ "aria-label": "search", id: "searchText" }}
-            />
-          </div>
+          <SearchForm
+            getGenres={this.props.getGenres}
+            genres={genres}
+            location={this.props.location}
+            movies={movies}
+            searchMovies={this.props.searchMovies}
+          />
           <Box className={clsx(classes.navMenu)}>
             <Button
               component={Link}
@@ -72,7 +45,7 @@ class NavBar extends React.Component {
               className={this.isActive("/home/tv")}
               onClick={this.isActive}
             >
-              Tv
+              TV Shows
             </Button>
             <Button
               component={Link}
