@@ -52,3 +52,5 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 
 export const SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS";
 export const SIGNOUT_ERROR = "SIGNOUT_ERROR";
+
+export const SET_DATA_TO_SEARCH = "SET_DATA_TO_SEARCH"; 

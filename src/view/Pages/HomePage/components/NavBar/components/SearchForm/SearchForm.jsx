@@ -17,6 +17,7 @@ class SearchForm extends Component {
     super(props);
     this.state = {
       open: false,
+      idList: []
     };
   }
 
@@ -36,7 +37,7 @@ class SearchForm extends Component {
             />
           }
           label={item.name}
-          onChange={this.handleCheckboxChange}
+          onChange={this.handleGenresChange}
           className={this.props.classes.genreItem}
         />
       );
@@ -52,6 +53,11 @@ class SearchForm extends Component {
       [e.target.id]: e.target.checked,
     });
   };
+  handleGenresChange = (e) => {
+    this.setState({
+      idList: [...this.state.idList, e.target.id]
+    });
+  }
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -63,11 +69,10 @@ class SearchForm extends Component {
   handleAverageChange = (event, value) =>{ this.setState({ average:value })};
 
   searchMovie = () => {
-    this.props.searchMovies(this.state)
+    this.props.searchMovies(this.props.movies, this.state)
   };
   render() {
     const { classes } = this.props;
-    console.log(this.state)
     return (
       <>
         <div className={classes.search}>

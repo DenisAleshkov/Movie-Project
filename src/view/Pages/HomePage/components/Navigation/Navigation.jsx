@@ -9,7 +9,10 @@ import SideBar from "./../Sidebar/SideBar";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { signOut } from "../../../../../store/actions/authAction";
-import { getGenres, searchMovies } from "../../../../../store/actions/movieAction";
+import {
+  getGenres,
+  searchMovies,
+} from "../../../../../store/actions/movieAction";
 
 class HomePage extends Component {
   constructor(props) {
@@ -80,17 +83,16 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("state", state);
   return {
     genres: state.MoviesReducer.genres,
-    movies: state.MoviesReducer.movies
+    movies: state.MoviesReducer.movies,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
   getGenres: (type) => dispatch(getGenres(type)),
-  searchMovies: (data) => dispatch(searchMovies(data)) 
+  searchMovies: (movies, data) => dispatch(searchMovies(movies, data)),
 });
 
 export default compose(

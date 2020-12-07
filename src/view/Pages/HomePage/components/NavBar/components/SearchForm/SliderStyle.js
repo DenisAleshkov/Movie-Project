@@ -2,17 +2,15 @@ import React from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 
-const setColor = (color) => {
-  return color;
-};
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 220,
+
   },
   margin: {
     height: theme.spacing(3),
   },
+ 
 }));
 
 const PrettoSlider = withStyles({
@@ -53,17 +51,15 @@ function CustomizedSlider({
 }) {
   const classes = useStyles();
   return (
-    <div className={classes.root} id={id}>
+    <div className={classes.root}>
       <PrettoSlider
         aria-label="pretto slider"
         getAriaValueText={value}
         defaultValue={defaultValue}
         min={min}
         max={max}
-        className={classes.track}
         valueLabelDisplay="auto"
         onChange={onChange}
-        id={id}
       />
     </div>
   );

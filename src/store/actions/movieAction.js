@@ -5,6 +5,7 @@ import {
   SET_ERROR,
   SET_MOVIE_TO_LIBRARY,
   SET_GENRES,
+  SET_DATA_TO_SEARCH,
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading } from "./loadingAction";
@@ -13,6 +14,10 @@ export const setMovies = (payload) => ({ type: SET_MOVIES, payload });
 export const setTV = (payload) => ({ type: SET_TV, payload });
 export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
+export const setDataToSearch = (payload) => ({
+  type: SET_DATA_TO_SEARCH,
+  payload,
+});
 export const setMovieToLibraryAction = (payload) => ({
   type: SET_MOVIE_TO_LIBRARY,
   payload,
@@ -91,6 +96,7 @@ export const getGenres = (type) => (dispatch) => {
     });
 };
 
-export const searchMovies = (data) => (dispatch) => {
-  console.log('data', data)
-}
+export const searchMovies = (movies, data) => (dispatch) => {
+  const searchArray = []
+  const {title, overview, average, idList, popularity, searchCheckbox } = data;
+};

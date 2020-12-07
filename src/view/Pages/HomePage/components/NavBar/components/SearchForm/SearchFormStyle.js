@@ -5,12 +5,6 @@ export const SearchFormStyles = (theme) => ({
     backgroundColor: "#565050",
     padding: "5px 15px",
     borderRadius: "30px",
-    // height: "100%",
-    // position: "absolute",
-    // pointerEvents: "none",
-    // display: "flex",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   searchIcon: {
     cursor: "pointer",
@@ -71,16 +65,18 @@ export const SearchFormStyles = (theme) => ({
     overflowY:"scroll",
     height:"200px",
     [theme.breakpoints.down("xs")]: {
-       justifyContent: "center"
+       justifyContent: "center",
+       width: "55%"
     },
   },
   genreItem: {
     width: "45%",
     margin: 0,
     color: "#565050",
+    [theme.breakpoints.down("xs")]: {
+        width: "51%",
+     },
   },
-  
-
   searchCheckbox: {
     color: "#565050",
     "&.span.MuiIconButton-label": {
@@ -96,7 +92,6 @@ export const SearchFormStyles = (theme) => ({
       color: "#fff",
     },
   },
-  ///slider
   slider: {
     color: "#52af77",
     "& .MuiSlider-root": {
@@ -107,8 +102,6 @@ export const SearchFormStyles = (theme) => ({
     height: 4,
     borderRadius: 2,
   },
-
-  ///
   genreItemCheckbox: {},
   dialogBody: {
     display: "flex",
@@ -134,4 +127,3 @@ export const SearchFormStyles = (theme) => ({
   },
 });
 
-// #565050
