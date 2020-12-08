@@ -1,30 +1,9 @@
-import Slideshow from "@material-ui/icons/Slideshow";
-import Tv from "@material-ui/icons/Tv";
-import Book from "@material-ui/icons/BookmarkBorder";
-
 export const GLOBALS = {
   API_KEY: "720082cb7997030cf3bdec52b8169388",
   BASE_URL: "https://api.themoviedb.org/3",
   LANG: "en-US",
+  BY_POPULARITY: "popularity.desc",
 };
-
-export const NAV_ICONS = (cssClass = "") => {
-  return [
-    {
-      component: <Slideshow className={cssClass} />,
-      url: "/home/movies",
-    },
-    {
-      component: <Tv className={cssClass} />,
-      url: "/home/tv",
-    },
-    {
-      component: <Book className={cssClass} />,
-      url: "/home/library",
-    },
-  ];
-};
-
 export const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAtadE3LWhSA3YpGcKSoVJfUjqF5hQ1JeY",
   authDomain: "movie-project-e25db.firebaseapp.com",
@@ -37,6 +16,7 @@ export const FIREBASE_CONFIG = {
 export const SET_MOVIES = "SET_MOVIES";
 export const SET_TV = "SET_TV";
 export const SET_GENRES = "SET_GENRES";
+export const SET_SEARCH_MOVIES = "SET_SEARCH_MOVIES";
 export const SET_MOVIE_TO_LIBRARY = "SET_MOVIE_TO_LIBRARY";
 export const GET_MOVIE_FROM_LIBRARY = "GET_MOVIE_FROM_LIBRARY";
 
@@ -53,4 +33,4 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS";
 export const SIGNOUT_ERROR = "SIGNOUT_ERROR";
 
-export const SET_DATA_TO_SEARCH = "SET_DATA_TO_SEARCH"; 
+export const SET_DATA_TO_SEARCH = "SET_DATA_TO_SEARCH";

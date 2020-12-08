@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import SearchForm from "./components/SearchForm/SearchForm";
-import { AppBar, Box, Button, Toolbar } from "@material-ui/core";
+import { AppBar, Badge, Box, Button, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class NavBar extends React.Component {
@@ -10,8 +10,25 @@ class NavBar extends React.Component {
   signOut = () => {
     this.props.signOut(this.props.history);
   };
+  showSearchForm() {
+    if (
+      this.props.location === "/home/movies" ||
+      this.props.location === "/home/tv"
+    ) {
+      return (
+        <SearchForm
+          getGenres={this.props.getGenres}
+          genres={this.props.genres}
+          location={this.props.location}
+          movies={this.props.movies}
+          searchMovies={this.props.searchMovies}
+          history={this.props.history}
+        />
+      );
+    }
+  }
   render() {
-    const { classes, open, genres, movies } = this.props;
+    const { classes, open, count } = this.props;
     return (
       <AppBar
         position="fixed"
@@ -20,13 +37,7 @@ class NavBar extends React.Component {
         })}
       >
         <Toolbar className={classes.navBar}>
-          <SearchForm
-            getGenres={this.props.getGenres}
-            genres={genres}
-            location={this.props.location}
-            movies={movies}
-            searchMovies={this.props.searchMovies}
-          />
+          {this.showSearchForm()}
           <Box className={clsx(classes.navMenu)}>
             <Button
               component={Link}
@@ -47,15 +58,15 @@ class NavBar extends React.Component {
             >
               TV Shows
             </Button>
-            <Button
-              component={Link}
-              to="/home/library"
-              color="inherit"
-              className={this.isActive("/home/library")}
-              onClick={this.isActive}
-            >
-              my Library
-            </Button>
+              <Button
+                component={Link}
+                to="/home/library"
+                color="inherit"
+                className={this.isActive("/home/library")}
+                onClick={this.isActive}
+              >
+                my Library
+              </Button>
             <Button
               className={classes.signOutBtn}
               onClick={this.signOut}

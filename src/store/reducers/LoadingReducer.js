@@ -1,7 +1,7 @@
 import { SET_LOADING } from "./../constants";
 
 const initialState = {
-  isLoaing: null,
+  isLoading: false,
 };
 
 const LoadingReducer = (state = initialState, action) => {
@@ -9,7 +9,7 @@ const LoadingReducer = (state = initialState, action) => {
     case SET_LOADING: {
       return {
         ...state,
-        isLoaing: action.payload,
+        isLoading: action.payload,
       };
     }
     default: {

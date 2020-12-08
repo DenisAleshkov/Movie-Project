@@ -58,6 +58,9 @@ export const NavigationStyle = (theme) => ({
     backgroundColor: "#57527b",
   },
   content: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     flexGrow: 1,
     paddingTop: theme.spacing(10),
     minHeight: "100vh",
@@ -65,6 +68,9 @@ export const NavigationStyle = (theme) => ({
   },
   items: {
     display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   navMenu: {
   },

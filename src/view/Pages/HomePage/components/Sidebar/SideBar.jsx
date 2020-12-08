@@ -1,10 +1,10 @@
 import React from "react";
 import clsx from "clsx";
-import { NAV_ICONS } from "./../../../../../store/constants";
+import { NAV_ICONS } from "./SideBarIcons";
 import { Link } from "react-router-dom";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
-const SideBar = ({ classes, location }) => {
+const SideBar = ({ classes, location, count }) => {
   return (
     <List>
       {["Movies", "TV Shows", "My Library"].map((text, index) => (
@@ -17,7 +17,7 @@ const SideBar = ({ classes, location }) => {
           selected={location === NAV_ICONS()[index].url}
         >
           <ListItemIcon>
-            {NAV_ICONS(clsx(classes.navIcon))[index].component}
+            {NAV_ICONS(clsx(classes.navIcon), count)[index].component}
           </ListItemIcon>
           <ListItemText className={clsx(classes.navIconText)} primary={text} />
         </ListItem>

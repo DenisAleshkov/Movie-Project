@@ -69,7 +69,7 @@ class SearchForm extends Component {
   handleAverageChange = (event, value) =>{ this.setState({ average:value })};
 
   searchMovie = () => {
-    this.props.searchMovies(this.props.movies, this.state)
+    this.props.searchMovies(this.state, this.props.history)
   };
   render() {
     const { classes } = this.props;

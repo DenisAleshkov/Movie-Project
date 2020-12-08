@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-import { PosterCardStyles } from "./PosterCardStyles";
+import { PosterCardStyles } from "./../../components/PosterCardStyles";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
@@ -14,7 +14,7 @@ import {
   getLibraryList,
   removeItemFromLibrary,
   setMovieToLibrary,
-} from "../../../store/actions/movieAction";
+} from "../../../../store/actions/movieAction";
 
 class PosterCard extends React.Component {
   componentDidMount() {
@@ -65,14 +65,14 @@ class PosterCard extends React.Component {
   };
 
   render() {
-    const { poster, title, classes } = this.props;
+    const { poster, title, classes, overview } = this.props;
     return (
       <Card className={classes.root}>
+        
         {this.isFavorite()}
         <CardMedia
           className={classes.media}
           image={`https://image.tmdb.org/t/p/w500/${poster}`}
-          title="Paella dish"
         />
 
         <CardContent className={classes.title}>

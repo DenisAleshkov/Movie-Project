@@ -5,7 +5,7 @@ import {
   SET_ERROR,
   SET_MOVIE_TO_LIBRARY,
   SET_GENRES,
-  SET_DATA_TO_SEARCH,
+  SET_SEARCH_MOVIES,
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading } from "./loadingAction";
@@ -14,8 +14,8 @@ export const setMovies = (payload) => ({ type: SET_MOVIES, payload });
 export const setTV = (payload) => ({ type: SET_TV, payload });
 export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
-export const setDataToSearch = (payload) => ({
-  type: SET_DATA_TO_SEARCH,
+export const setSearchMovies = (payload) => ({
+  type: SET_SEARCH_MOVIES,
   payload,
 });
 export const setMovieToLibraryAction = (payload) => ({
@@ -24,7 +24,7 @@ export const setMovieToLibraryAction = (payload) => ({
 });
 
 export const getMovies = (page) => (dispatch) => {
-  setLoading(true);
+  dispatch(setLoading(true));
   axios
     .get(MOVIE.GET_POPULAT_MOVIES(page))
     .then((result) => {
@@ -37,7 +37,7 @@ export const getMovies = (page) => (dispatch) => {
     });
 };
 export const getTV = (page) => (dispatch) => {
-  setLoading(true);
+  dispatch(setLoading(true));
   axios
     .get(MOVIE.GET_POPULAR_TV(page))
     .then((result) => {
@@ -46,7 +46,6 @@ export const getTV = (page) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(setError(error.response.data.errors[0]));
-      dispatch(setLoading(false));
     });
 };
 
@@ -86,17 +85,46 @@ export const removeItemFromLibrary = (id) => (dispatch) => {
 };
 
 export const getGenres = (type) => (dispatch) => {
+  dispatch(setLoading(true));
   axios
     .get(MOVIE.GET_GENRES(type))
     .then((result) => {
       dispatch(setGenres(result.data.genres));
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       dispatch(setError(error.response.data.errors[0]));
+      dispatch(setLoading(false));
     });
 };
 
-export const searchMovies = (movies, data) => (dispatch) => {
-  const searchArray = []
-  const {title, overview, average, idList, popularity, searchCheckbox } = data;
+export const searchMovies = (data, history) => (dispatch) => {
+  dispatch(setLoading(true));
+  const { title, average, idList, adultCheckbox } = data;
+  if (title) {
+    axios
+      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(title, 1, adultCheckbox))
+      .then((result) => {
+        dispatch(setSearchMovies(result.data));
+        history.push("search");
+        dispatch(setLoading(false));
+      })
+      .catch((error) => {
+        dispatch(setError(error.response.data.errors[0]));
+        dispatch(setLoading(false));
+      });
+  } else {
+    axios
+      .get(MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, title))
+      .then((result) => {
+        dispatch(setSearchMovies(result.data));
+        history.push("search");
+        dispatch(setLoading(false));
+      })
+      .catch((error) => {
+        dispatch(setError(error.response.data.errors[0]));
+        dispatch(setLoading(false));
+      });
+  }
+  dispatch(setLoading(false));
 };

@@ -4,6 +4,7 @@ import {
   SET_TV,
   SET_MOVIE_TO_LIBRARY,
   SET_GENRES,
+  SET_SEARCH_MOVIES
 } from "./../constants";
 
 const initialState = {
@@ -18,13 +19,7 @@ const initialState = {
   genres: [],
   library: [],
   error: null,
-  searchMovies: {
-    findByTitle: [],
-    findByGenres: [],
-    findByPopularity: [],
-    findByVote: [],
-    findByAdult:[]
-  },
+  searchMovies: []
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -67,6 +62,12 @@ const MoviesReducer = (state = initialState, action) => {
         ...state,
         library: action.payload,
       };
+    }
+    case SET_SEARCH_MOVIES: {
+      return {
+        ...state,
+        searchMovies: action.payload.results
+      }
     }
     default: {
       return state;
