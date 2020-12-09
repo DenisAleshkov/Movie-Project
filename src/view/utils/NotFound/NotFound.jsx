@@ -1,9 +1,9 @@
 import React from "react";
 import style from "./NotFound.module.css";
-const NotFound = () => {
+const NotFound = ({title}) => {
   return (
     <div className={style.circ}>
-      <div className={style.load}>Not Found</div>
+      <div className={style.load}>{title}</div>
       <div className={style.hands}></div>
       <div className={style.body}></div>
       <div className={style.head}>

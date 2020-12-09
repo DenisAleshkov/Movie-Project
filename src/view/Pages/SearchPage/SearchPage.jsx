@@ -19,7 +19,8 @@ class SearchPage extends Component {
           id={item.id}
           popularity={item.vote_count}
           poster={item.poster_path}
-          title={item.original_name}
+          titleMovie={item.title}
+          titleTv={item.original_name}
           vote={item.vote_average}
           popularity={item.popularity}
           overview={item.overview}
@@ -31,7 +32,7 @@ class SearchPage extends Component {
       );
     });
   }else{
-    return <NotFound />
+    return <NotFound title="Not Found" />
   }
   };
   render() {

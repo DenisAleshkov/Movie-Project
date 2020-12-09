@@ -8,7 +8,7 @@ import { SearchCardStyle } from "./SearchCardStyle";
 import DoneIcon from "@material-ui/icons/Done";
 import Delete from "@material-ui/icons/DeleteOutline";
 import { Chip } from "@material-ui/core";
-
+import EmptyPoster from "./../../../../utils/emptyposter.png";
 class SearchCard extends React.Component {
   componentDidMount() {
     this.props.getLibraryList();
@@ -59,7 +59,8 @@ class SearchCard extends React.Component {
       vote,
       popularity,
       overview,
-      title,
+      titleTv,
+      titleMovie,
       id,
     } = this.props;
 
@@ -67,8 +68,10 @@ class SearchCard extends React.Component {
       <Card className={classes.root}>
         <CardMedia
           className={classes.media}
-          image={`https://image.tmdb.org/t/p/w500/${poster}`}
-          title={title}
+          image={
+            poster ? `https://image.tmdb.org/t/p/w500/${poster}` : EmptyPoster
+          }
+          title={titleTv || titleMovie}
         />
         <CardHeader
           className={classes.header}
@@ -78,7 +81,7 @@ class SearchCard extends React.Component {
             </Avatar>
           }
           action={this.showChip()}
-          title={title}
+          title={titleTv || titleMovie}
         />
       </Card>
     );

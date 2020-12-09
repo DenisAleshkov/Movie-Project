@@ -17,7 +17,7 @@ export const SearchCardStyle = (theme) => ({
   },
   header:{
       alignItems: "center",
-      padding: "15px",
+      padding: "10px",
   },
   avatar: {
     backgroundColor: "#f50057",
