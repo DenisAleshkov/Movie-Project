@@ -98,13 +98,14 @@ export const getGenres = (type) => (dispatch) => {
     });
 };
 
-export const searchMovies = (data, history) => (dispatch) => {
+export const searchMovies = (data, history, type) => (dispatch) => {
   dispatch(setLoading(true));
-  const { title, average, idList, adultCheckbox } = data;
+  const { title, average, idList, adultCheckbox, popularity } = data;
   if (title) {
     axios
-      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(title, 1, adultCheckbox))
+      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(title, 1, adultCheckbox, type))
       .then((result) => {
+     
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));
@@ -115,14 +116,14 @@ export const searchMovies = (data, history) => (dispatch) => {
       });
   } else {
     axios
-      .get(MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, title))
+      .get(MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, popularity, type))
       .then((result) => {
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));
       })
       .catch((error) => {
-        dispatch(setError(error.response.data.errors[0]));
+        dispatch(setError(error.response.data));
         dispatch(setLoading(false));
       });
   }

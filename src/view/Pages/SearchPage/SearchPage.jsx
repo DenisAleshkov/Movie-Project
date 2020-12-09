@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SearchCard from "./components/SearchCard";
+import SearchCard from "./components/SearchCard/SearchCard";
 import { connect } from "react-redux";
 import {
   getLibraryList,
@@ -17,8 +17,9 @@ class SearchPage extends Component {
         <SearchCard
           key={item.id}
           id={item.id}
-          poster={item.backdrop_path}
-          title={item.title}
+          popularity={item.vote_count}
+          poster={item.poster_path}
+          title={item.original_name}
           vote={item.vote_average}
           popularity={item.popularity}
           overview={item.overview}
@@ -39,6 +40,7 @@ class SearchPage extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('state', state)
   return {
     searchMovies: state.MoviesReducer.searchMovies,
     library: state.MoviesReducer.library,

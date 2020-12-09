@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-import { PosterCardStyles } from "./PosterCardStyles";
+import { PosterCardStyle } from "./PosterCardStyle";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
@@ -28,40 +28,29 @@ class PosterCard extends React.Component {
     );
   };
   deleteHandler = (e) => {
-    this.props.removeItemFromLibrary(e.target.id)
-  }
+    this.props.removeItemFromLibrary(e.target.id);
+  };
   isFavorite = () => {
-    if (this.props.library.length) {
-      return this.props.library.map((item) =>
-        +item.id === +this.props.id ? (
-          <Favorite
-            key={item.id}
-            id={this.props.id}
-            className={this.props.classes.favoriteWithBorder}
-            color="secondary"
-            onClick={this.deleteHandler}
-          />
-        ) : (
-          <FavoriteBorder
-            key={item.id}
-            id={this.props.id}
-            className={this.props.classes.favoriteWithBorder}
-            color="secondary"
-            onClick={this.addHandler}
-          />
-        )
-      );
-    } else {
-      return (
-        <FavoriteBorder
-          key={this.props.id}
-          id={this.props.id}
-          className={this.props.classes.favoriteWithBorder}
-          color="secondary"
-          onClick={this.addHandler}
-        />
-      );
-    }
+    const inLibrary = this.props.library.filter(
+      (item) => +item.id === +this.props.id
+    );
+    return inLibrary.length ? (
+      <Favorite
+        key={this.props.id}
+        id={this.props.id}
+        className={this.props.classes.favoriteWithBorder}
+        color="secondary"
+        onClick={this.deleteHandler}
+      />
+    ) : (
+      <FavoriteBorder
+        key={this.props.id}
+        id={this.props.id}
+        className={this.props.classes.favoriteWithBorder}
+        color="secondary"
+        onClick={this.addHandler}
+      />
+    );
   };
 
   render() {
@@ -96,10 +85,10 @@ const mapDispatchToProps = (dispatch) => ({
   getLibraryList: () => dispatch(getLibraryList()),
   setMovieToLibrary: (id, title, poster) =>
     dispatch(setMovieToLibrary(id, title, poster)),
-    removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
+  removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
 });
 
 export default compose(
-  withStyles(PosterCardStyles, { withTheme: true }),
+  withStyles(PosterCardStyle, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(PosterCard);

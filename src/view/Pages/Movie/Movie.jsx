@@ -15,7 +15,7 @@ class Movie extends Component {
         <PosterCard
           key={item.id}
           id={item.id}
-          poster={item.backdrop_path}
+          poster={item.poster_path}
           title={item.title}
         />
       );

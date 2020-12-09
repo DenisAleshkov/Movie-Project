@@ -8,7 +8,7 @@ export const NAV_ICONS = (cssClass = "", count) => {
     return [
       {
         component: <Slideshow className={cssClass} />,
-        url: "/home/movies",
+        url: "/home/movie",
       },
       {
         component: <Tv className={cssClass} />,

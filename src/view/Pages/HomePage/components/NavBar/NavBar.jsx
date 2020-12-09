@@ -12,7 +12,7 @@ class NavBar extends React.Component {
   };
   showSearchForm() {
     if (
-      this.props.location === "/home/movies" ||
+      this.props.location === "/home/movie" ||
       this.props.location === "/home/tv"
     ) {
       return (
@@ -41,10 +41,10 @@ class NavBar extends React.Component {
           <Box className={clsx(classes.navMenu)}>
             <Button
               component={Link}
-              to="/home/movies"
+              to="/home/movie"
               color="inherit"
               className={
-                this.isActive("/home/movies") || this.isActive("/home")
+                this.isActive("/home/movie") || this.isActive("/home")
               }
             >
               Movies

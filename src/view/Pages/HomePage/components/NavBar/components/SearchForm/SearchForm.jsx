@@ -17,7 +17,11 @@ class SearchForm extends Component {
     super(props);
     this.state = {
       open: false,
-      idList: []
+      adultCheckbox: false,
+      idList: [],
+      popularity: 50,
+      average: 1,
+      title: "",
     };
   }
 
@@ -55,9 +59,9 @@ class SearchForm extends Component {
   };
   handleGenresChange = (e) => {
     this.setState({
-      idList: [...this.state.idList, e.target.id]
+      idList: [...this.state.idList, e.target.id],
     });
-  }
+  };
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -65,11 +69,17 @@ class SearchForm extends Component {
     this.setState({ open: false });
   };
 
-  handlePopularityChange = (event, value) =>{ this.setState({ popularity:value })};
-  handleAverageChange = (event, value) =>{ this.setState({ average:value })};
+  handlePopularityChange = (event, value) => {
+    this.setState({ popularity: value });
+  };
+  handleAverageChange = (event, value) => {
+    this.setState({ average: value });
+  };
 
   searchMovie = () => {
-    this.props.searchMovies(this.state, this.props.history)
+    const location = this.props.location;
+    const type = location.replace("/home/", "");
+    this.props.searchMovies(this.state, this.props.history, type);
   };
   render() {
     const { classes } = this.props;
@@ -151,13 +161,13 @@ class SearchForm extends Component {
                       Popularity
                     </Typography>
                     <CustomizedSlider
-                      defaultValue={100}
-                      min={100}
-                      max={2000}
+                      defaultValue={50}
+                      min={50}
+                      max={5000}
                       color="#9a7b07"
                       id="popularity"
                       value={this.state.value}
-                      onChange={this.handlePopularityChange} 
+                      onChange={this.handlePopularityChange}
                     />
                   </Box>
                   <Box className={classes.progressAverage}>
@@ -175,7 +185,7 @@ class SearchForm extends Component {
                       color="#0a8a26de"
                       id="average"
                       value={this.state.value}
-                      onChange={this.handleAverageChange} 
+                      onChange={this.handleAverageChange}
                     />
                   </Box>
                 </Box>

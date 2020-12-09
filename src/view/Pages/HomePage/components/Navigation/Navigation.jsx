@@ -96,7 +96,7 @@ class HomePage extends Component {
               <Route path="/home" exact>
                 <Movie />
               </Route>
-              <Route path="/home/movies" exact>
+              <Route path="/home/movie" exact>
                 <Movie />
               </Route>
               <Route path="/home/tv" exact>
@@ -128,7 +128,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
   getGenres: (type) => dispatch(getGenres(type)),
-  searchMovies: (data, histry) => dispatch(searchMovies(data, histry)),
+  searchMovies: (data, history, type) => dispatch(searchMovies(data, history, type)),
 });
 
 export default compose(
