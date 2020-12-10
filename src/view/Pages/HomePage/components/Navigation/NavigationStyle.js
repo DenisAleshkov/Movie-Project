@@ -66,6 +66,9 @@ export const NavigationStyle = (theme) => ({
     paddingTop: theme.spacing(10),
     minHeight: "100vh",
     backgroundColor: "#292121ed",
+    [theme.breakpoints.down("xs")]: {
+      paddingTop: theme.spacing(3)
+    },
   },
   items: {
     display: "flex",
@@ -85,6 +88,9 @@ export const NavigationStyle = (theme) => ({
     }
   },
   navBar: {
+    [theme.breakpoints.down('xs')]: {
+     display: "none"
+    },
   },
   navIcon: {
     color: "#fff",
@@ -115,5 +121,42 @@ export const NavigationStyle = (theme) => ({
   signOutBtn: {
     color: "#fff",
     borderColor:"#fff!important"
+  },
+  grid: {
+    width: "100%",
+    height: "100%"
+  },
+  scroll: {
+    display: "flex",
+    justifyContent: "center",
+    height: "99%",
+    marginTop: "20px",
+    padding: 0
+  },
+  scrollBtn: {
+    height: "100%",
+    maxWidth: 20,
+    border: "2px solid #1f1c1c",
+    borderRadius: "initial",
+    backgroundColor: "#292424",
+    "&:hover": {
+      color: "red"
+    }
+  },
+  scrollClose:{
+    display: "none"
+  },
+  extendedIcon: {
+    position: "fixed",
+    fontSize: "50px",
+    top: "45%",
+    color: "#565050"
+  },
+  extendedIconEnd: {
+    transform:" rotate(90deg)"
+  },
+  extendedIconStart: {
+    transform:" rotate(270deg)"
   }
+ 
 });

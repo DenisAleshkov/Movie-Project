@@ -24,16 +24,13 @@ export const setMovieToLibraryAction = (payload) => ({
 });
 
 export const getMovies = (page) => (dispatch) => {
-  dispatch(setLoading(true));
   axios
     .get(MOVIE.GET_POPULAT_MOVIES(page))
     .then((result) => {
       dispatch(setMovies(result.data));
-      dispatch(setLoading(false));
     })
     .catch((error) => {
       dispatch(setError(error.response.data.errors[0]));
-      dispatch(setLoading(false));
     });
 };
 export const getTV = (page) => (dispatch) => {
@@ -105,7 +102,6 @@ export const searchMovies = (data, history, type) => (dispatch) => {
     axios
       .get(MOVIE.SEARCH_MOVIE_BY_TITLE(title, 1, adultCheckbox, type))
       .then((result) => {
-     
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));
@@ -116,7 +112,9 @@ export const searchMovies = (data, history, type) => (dispatch) => {
       });
   } else {
     axios
-      .get(MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, popularity, type))
+      .get(
+        MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, popularity, type)
+      )
       .then((result) => {
         dispatch(setSearchMovies(result.data));
         history.push("search");
