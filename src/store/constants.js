@@ -14,6 +14,7 @@ export const FIREBASE_CONFIG = {
 };
 
 export const SET_MOVIES = "SET_MOVIES";
+export const SET_MOVIE_RATE =  "SET_MOVIE_RATE";
 export const SET_TV = "SET_TV";
 export const SET_GENRES = "SET_GENRES";
 export const SET_SEARCH_MOVIES = "SET_SEARCH_MOVIES";
@@ -34,3 +35,6 @@ export const SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS";
 export const SIGNOUT_ERROR = "SIGNOUT_ERROR";
 
 export const SET_DATA_TO_SEARCH = "SET_DATA_TO_SEARCH";
+
+export const SET_NOTIFICATION = "SET_NOTIFICATION";
+export const SET_NOTIFICATION_LOADING = "SET_NOTIFICATION_LOADING";

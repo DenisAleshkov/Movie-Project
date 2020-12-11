@@ -1,16 +1,18 @@
 import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  withStyles,
+  Typography,
+  Container,
+} from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { LoginStyles } from "./LoginStyles";
 import { login } from "./../../../store/actions/authAction";
 import { compose } from "redux";
@@ -38,7 +40,7 @@ class Login extends React.Component {
     this.setState({
       checked: e.target.checked,
     });
-  }
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -84,7 +86,7 @@ class Login extends React.Component {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
               onChange={this.handleCheckboxChange}
-            /> 
+            />
             <Button
               type="submit"
               fullWidth

@@ -67,7 +67,7 @@ export const NavigationStyle = (theme) => ({
     minHeight: "100vh",
     backgroundColor: "#292121ed",
     [theme.breakpoints.down("xs")]: {
-      paddingTop: theme.spacing(3)
+      paddingTop: theme.spacing(3),
     },
   },
   items: {
@@ -79,17 +79,17 @@ export const NavigationStyle = (theme) => ({
   navMenu: {
     display: "flex",
     width: "100%",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   activeNavLink: {
     backgroundColor: "#565050",
     "&:hover": {
       backgroundColor: "#565050",
-    }
+    },
   },
   navBar: {
-    [theme.breakpoints.down('xs')]: {
-     display: "none"
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
     },
   },
   navIcon: {
@@ -120,18 +120,18 @@ export const NavigationStyle = (theme) => ({
   },
   signOutBtn: {
     color: "#fff",
-    borderColor:"#fff!important"
+    borderColor: "#fff!important",
   },
   grid: {
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   scroll: {
     display: "flex",
     justifyContent: "center",
     height: "99%",
     marginTop: "20px",
-    padding: 0
+    padding: 0,
   },
   scrollBtn: {
     height: "100%",
@@ -140,23 +140,27 @@ export const NavigationStyle = (theme) => ({
     borderRadius: "initial",
     backgroundColor: "#292424",
     "&:hover": {
-      color: "red"
-    }
+      color: "red",
+    },
   },
-  scrollClose:{
-    display: "none"
+  scrollClose: {
+    display: "none",
   },
   extendedIcon: {
     position: "fixed",
     fontSize: "50px",
     top: "45%",
-    color: "#565050"
+    color: "#565050",
   },
   extendedIconEnd: {
-    transform:" rotate(90deg)"
+    transform: " rotate(90deg)",
   },
   extendedIconStart: {
-    transform:" rotate(270deg)"
-  }
- 
+    transform: " rotate(270deg)",
+  },
+  notifLoader: {
+    zIndex: 1000000,
+    position: "fixed",
+    bottom: "15px",
+  },
 });

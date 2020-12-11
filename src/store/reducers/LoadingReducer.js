@@ -1,7 +1,8 @@
-import { SET_LOADING } from "./../constants";
+import { SET_LOADING, SET_NOTIFICATION_LOADING } from "./../constants";
 
 const initialState = {
   isLoading: false,
+  isNotificationLoading: false,
 };
 
 const LoadingReducer = (state = initialState, action) => {
@@ -10,6 +11,12 @@ const LoadingReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: action.payload,
+      };
+    }
+    case SET_NOTIFICATION_LOADING: {
+      return {
+        ...state,
+        isNotificationLoading: action.payload,
       };
     }
     default: {

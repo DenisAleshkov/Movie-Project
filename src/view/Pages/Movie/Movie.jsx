@@ -1,23 +1,19 @@
 import React, { Component } from "react";
+import PosterCard from "./../components/PosterCard/PosterCard";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { connect } from "react-redux";
-import Loading from "../../utils/Loading/Loading";
 import {
   getGenres,
   getMovies,
   setMovies,
 } from "./../../../store/actions/movieAction";
-import PosterCard from "./../components/PosterCard";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import RootRef from "@material-ui/core/RootRef";
 class Movie extends Component {
   constructor() {
     super();
     this.state = {
-      page: 0,
       isLoading: false,
     };
     this.loader = React.createRef();
-    this.loader1 = React.createRef();
   }
 
   componentDidMount() {
@@ -26,7 +22,6 @@ class Movie extends Component {
       rootMargin: "0px",
       threshold: 0.25,
     };
-
     this.props.getGenres("movie");
     this.observer = new IntersectionObserver(this.loadMore, options);
     if (this.loader && this.loader.current) {
@@ -36,21 +31,19 @@ class Movie extends Component {
 
   componentWillUnmount() {
     this.observer.unobserve(this.loader.current);
-    this.props.setMovies({ results: [] });
   }
 
   loadMore = (entries) => {
+    this.setState({
+      isLoading: true,
+    });
     const target = entries[0];
     if (target.isIntersecting) {
+      this.props.getMovies(this.props.moviesCurrentPage + 1);
       this.setState({
-        page: this.state.page + 1,
-        idLoading: true,
+        isLoading: false,
       });
-      this.props.getMovies(this.state.page);
     }
-    this.setState({
-      idLoading: false,
-    });
   };
 
   showMovies = () => {
@@ -62,6 +55,7 @@ class Movie extends Component {
             id={item.id}
             poster={item.poster_path}
             title={item.title}
+            vote={item.vote_average}
           />
         );
       });
@@ -70,11 +64,11 @@ class Movie extends Component {
 
   render() {
     return (
-      <>
-        {this.showMovies()}
+      <>  
+        {this.showMovies()}      
         <div
           style={{
-            display: this.props.isLoading ? "flex" : "none",
+            display: this.state.isLoading ? "flex" : "none",
             width: "100%",
             display: "flex",
             justifyContent: "center",
@@ -82,11 +76,7 @@ class Movie extends Component {
           }}
           ref={this.loader}
         >
-          {this.state.isLoading && (
-            <RootRef rootRef={this.loader1}>
-              <CircularProgress />
-            </RootRef>
-          )}
+          {this.state.isLoading && <CircularProgress />}
         </div>
       </>
     );
@@ -96,7 +86,7 @@ class Movie extends Component {
 const mapStateToProps = (state) => {
   return {
     movies: state.MoviesReducer.movies,
-    moviePages: state.MoviesReducer.moviePages,
+    moviesCurrentPage: state.MoviesReducer.moviesCurrentPage,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

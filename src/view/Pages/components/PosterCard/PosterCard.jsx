@@ -1,20 +1,22 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core";
-import Favorite from "@material-ui/icons/Favorite";
-import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import { FavoriteBorder, Favorite } from "@material-ui/icons";
+import {
+  withStyles,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+} from "@material-ui/core";
 import { PosterCardStyle } from "./PosterCardStyle";
 import { compose } from "redux";
 import { connect } from "react-redux";
-
 import {
   getLibraryList,
   removeItemFromLibrary,
   setMovieToLibrary,
-} from "../../../store/actions/movieAction";
+  setMovieRate,
+} from "../../../../store/actions/movieAction";
+import Rating from "./../Rating/Rating";
 
 class PosterCard extends React.Component {
   componentDidMount() {
@@ -26,6 +28,9 @@ class PosterCard extends React.Component {
       this.props.title,
       this.props.poster
     );
+  };
+  handleRateChange = (event, value) => {
+    this.props.setMovieRate(+event.target.name, value);
   };
   deleteHandler = (e) => {
     this.props.removeItemFromLibrary(e.target.id);
@@ -54,7 +59,7 @@ class PosterCard extends React.Component {
   };
 
   render() {
-    const { poster, title, classes } = this.props;
+    const { poster, title, classes, id, vote } = this.props;
     return (
       <Card className={classes.root}>
         {this.isFavorite()}
@@ -63,11 +68,16 @@ class PosterCard extends React.Component {
           image={`https://image.tmdb.org/t/p/w500/${poster}`}
           title="Paella dish"
         />
-
         <CardContent className={classes.title}>
           <Typography variant="h4" gutterBottom className={classes.title}>
             {title}
           </Typography>
+          <Rating
+            id={id}
+            setMovieRate={this.props.setMovieRate}
+            vote={vote}
+            isNotificationLoading={this.props.isNotificationLoading}
+          />
         </CardContent>
       </Card>
     );
@@ -78,6 +88,7 @@ const mapStateToProps = (state) => {
   return {
     movies: state.MoviesReducer.movies,
     library: state.MoviesReducer.library,
+    isNotificationLoading: state.MoviesReducer.isNotificationLoading
   };
 };
 
@@ -86,6 +97,7 @@ const mapDispatchToProps = (dispatch) => ({
   setMovieToLibrary: (id, title, poster) =>
     dispatch(setMovieToLibrary(id, title, poster)),
   removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
+  setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
 });
 
 export default compose(

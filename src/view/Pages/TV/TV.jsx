@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTV, getGenres } from "../../../store/actions/movieAction";
 import Loading from "../../utils/Loading/Loading";
-import PosterCard from "./../components/PosterCard";
+import PosterCard from "./../components/PosterCard/PosterCard";
 
 class TV extends Component {
   componentDidMount() {
@@ -16,6 +16,7 @@ class TV extends Component {
         id={item.id}
         poster={item.poster_path}
         title={item.original_name}
+        vote={item.vote_average}
       />
     ));
   render() {

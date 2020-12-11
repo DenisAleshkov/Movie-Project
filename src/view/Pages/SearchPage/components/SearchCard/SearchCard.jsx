@@ -1,15 +1,21 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import Avatar from "@material-ui/core/Avatar";
-import { SearchCardStyle } from "./SearchCardStyle";
 import DoneIcon from "@material-ui/icons/Done";
 import Delete from "@material-ui/icons/DeleteOutline";
-import { Chip } from "@material-ui/core";
 import EmptyPoster from "./../../../../utils/emptyposter.png";
+import {
+  CardMedia,
+  CardHeader,
+  Card,
+  withStyles,
+  Avatar,
+  Chip,
+  Box,
+} from "@material-ui/core";
+import { SearchCardStyle } from "./SearchCardStyle";
+import Rating from "./../../../components/Rating/Rating";
+
 class SearchCard extends React.Component {
+
   componentDidMount() {
     this.props.getLibraryList();
   }
@@ -66,13 +72,6 @@ class SearchCard extends React.Component {
 
     return (
       <Card className={classes.root}>
-        <CardMedia
-          className={classes.media}
-          image={
-            poster ? `https://image.tmdb.org/t/p/w500/${poster}` : EmptyPoster
-          }
-          title={titleTv || titleMovie}
-        />
         <CardHeader
           className={classes.header}
           avatar={
@@ -83,6 +82,22 @@ class SearchCard extends React.Component {
           action={this.showChip()}
           title={titleTv || titleMovie}
         />
+        <CardMedia
+          className={classes.media}
+          image={
+            poster ? `https://image.tmdb.org/t/p/w500/${poster}` : EmptyPoster
+          }
+          title={titleTv || titleMovie}
+        />
+        <Box className={classes.cardAction}>
+          <Rating
+            style={{ margin: 0, padding: 0 }}
+            id={this.props.id}
+            isNotificationLoading={this.props.isNotificationLoading}
+            setMovieRate={this.props.setMovieRate}
+            vote={this.props.vote}
+          />
+        </Box>
       </Card>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import clsx from "clsx";
+import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
 import { NavigationStyle } from "./NavigationStyle";
 import {
@@ -22,12 +23,15 @@ import { signOut } from "../../../../../store/actions/authAction";
 import {
   getGenres,
   searchMovies,
+  setNotification,
 } from "../../../../../store/actions/movieAction";
 import { Route, Switch } from "react-router-dom";
 import Library from "../../../Library/Library";
 import Movie from "./../../../Movie/Movie";
 import TV from "./../../../TV/TV";
 import SearchPage from "./../../../SearchPage/SearchPage";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Alert } from "@material-ui/lab";
 
 class HomePage extends Component {
   constructor(props) {
@@ -37,7 +41,7 @@ class HomePage extends Component {
       isActive: false,
       searchText: "",
       icon: false,
-      scrollTop: 0,
+      showMessage: false,
     };
     this.pageToEndRef = React.createRef();
     this.pageToStartRef = React.createRef();
@@ -54,33 +58,69 @@ class HomePage extends Component {
     return this.props.isLoading && <Loading />;
   };
 
-  scrollHandler = (event) => {
-    if (event.target.value !== undefined) {
-      event.target.value === "true"
-        ? this.scrollTo("start", this.pageToStartRef)
-        : this.scrollTo("end", this.pageToEndRef);
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      showMessage: false,
+    });
+    this.props.setNotification(null);
+  };
+  showNotification = () => {
+    if (this.props.notification) {
+      return (
+        <Snackbar
+          open={!!this.props.notification}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          {this.props.notification && this.props.notification.error ? (
+            <Alert severity="error">{this.props.notification.message}</Alert>
+          ) : (
+            <Alert onClose={this.handleClose} severity="success">
+              {this.props.notification.message}
+            </Alert>
+          )}
+        </Snackbar>
+      );
     }
   };
-
+  scrollHandler = (event) => {
+  
+    if (event.target.value !== undefined && event.target.value === "false") {
+      this.scrollTo("end", this.pageToEndRef);
+    } else {
+      this.scrollTo("start", this.pageToStartRef);
+    }
+  };
   scrollTo = (to, position) => {
+    this.setState({
+      icon: !this.state.icon
+    })
     position.scrollIntoView &&
       position.scrollIntoView({
         block: to,
         behavior: "smooth",
       });
-    this.setState({
-      icon: !this.state.icon,
-    });
   };
-  scrollPage = (e) => {
-    console.log('e', e)
-  }
+  showScrollIcon = () => {
+    return (
+      <ForwardTwoToneIcon
+        className={clsx(this.props.classes.extendedIcon, {
+          [this.props.classes.extendedIconStart]: this.state.icon,
+          [this.props.classes.extendedIconEnd]: !this.state.icon,
+        })}
+      />
+    );
+  };
+
   render() {
     const { classes, location } = this.props;
     return (
-      <div className={classes.root}  onScroll={()=>console.log("scroll")}>
+      <div className={classes.root}>
         <div
-          className={classes.start}
+          onScroll={(e) => console.log("e", e)}
           ref={(el) => {
             this.pageToStartRef = el;
           }}
@@ -129,14 +169,9 @@ class HomePage extends Component {
           className={clsx(classes.content, {
             [classes.contentShift]: this.state.open,
           })}
-          onScroll={()=>console.log("scroll")}
-          ref={(el)=>console.log(el)}
-          style={{
-            overflowY:'auto'
-          }}
         >
-          <Grid container spacing={1} className={classes.grid}  onScroll={()=>console.log("scroll")}>
-            <Grid  onScroll={()=>console.log("scroll")}
+          <Grid container spacing={1} className={classes.grid}>
+            <Grid
               item
               xs={1}
               className={classes.scroll}
@@ -150,38 +185,50 @@ class HomePage extends Component {
                 component="button"
                 className={classes.scrollBtn}
                 value={this.state.icon}
-                onClick={(e)=>this.scrollHandler(e)}
+                onClick={(e) => this.scrollHandler(e)}
               >
-                <ForwardTwoToneIcon
-                  className={clsx(classes.extendedIcon, {
-                    [classes.extendedIconStart]: this.state.icon,
-                    [classes.extendedIconEnd]: !this.state.icon,
-                  })}
-                />
+                {this.showScrollIcon()}
               </Fab>
             </Grid>
-            <Grid item xs={11} className={classes.items}>
-              <Switch>
-                <Route path="/" exact>
-                  <Movie />
-                </Route>
-                <Route path="/home" exact>
-                  <Movie />
-                </Route>
-                <Route path="/home/movie" exact>
-                  <Movie />
-                </Route>
-                <Route path="/home/tv" exact>
-                  <TV />
-                </Route>
-                <Route path="/home/library" exact>
-                  <Library />
-                </Route>
-                <Route path="/home/search" exact>
-                  <SearchPage />
-                </Route>
-              </Switch>
-            </Grid>
+            {this.state.localLoading ? (
+              <Loading />
+            ) : (
+              <Grid
+                item
+                xs={11}
+                className={classes.items}
+                onScroll={() => console.log("scroll Grid")}
+              >
+                {this.props.isNotificationLoading ? (
+                  <CircularProgress
+                    color="secondary"
+                    className={this.props.classes.notifLoader}
+                  />
+                ) : (
+                  this.showNotification()
+                )}
+                <Switch>
+                  <Route path="/" exact>
+                    <Movie />
+                  </Route>
+                  <Route path="/home" exact>
+                    <Movie />
+                  </Route>
+                  <Route path="/home/movie" exact>
+                    <Movie />
+                  </Route>
+                  <Route path="/home/tv" exact>
+                    <TV />
+                  </Route>
+                  <Route path="/home/library" exact>
+                    <Library />
+                  </Route>
+                  <Route path="/home/search" exact>
+                    <SearchPage />
+                  </Route>
+                </Switch>
+              </Grid>
+            )}
           </Grid>
         </main>
         <div
@@ -201,6 +248,9 @@ const mapStateToProps = (state) => {
     movies: state.MoviesReducer.movies,
     library: state.MoviesReducer.library,
     isLoading: state.LoadingReducer.isLoading,
+    notification: state.MoviesReducer.notification,
+    error: state.MoviesReducer.error,
+    isNotificationLoading: state.LoadingReducer.isNotificationLoading,
   };
 };
 
@@ -209,6 +259,7 @@ const mapDispatchToProps = (dispatch) => ({
   getGenres: (type) => dispatch(getGenres(type)),
   searchMovies: (data, history, type) =>
     dispatch(searchMovies(data, history, type)),
+  setNotification: (payload) => dispatch(setNotification(payload)),
 });
 
 export default compose(

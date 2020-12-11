@@ -6,11 +6,18 @@ import {
   SET_MOVIE_TO_LIBRARY,
   SET_GENRES,
   SET_SEARCH_MOVIES,
+  SET_MOVIE_RATE,
+  SET_NOTIFICATION,
 } from "./../constants";
 import { MOVIE } from "./../api";
-import { setLoading } from "./loadingAction";
+import { setLoading, setNotificationLoading } from "./loadingAction";
 
 export const setMovies = (payload) => ({ type: SET_MOVIES, payload });
+export const setRate = (payload) => ({ type: SET_MOVIE_RATE, payload });
+export const setNotification = (payload) => ({
+  type: SET_NOTIFICATION,
+  payload,
+});
 export const setTV = (payload) => ({ type: SET_TV, payload });
 export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
@@ -121,9 +128,35 @@ export const searchMovies = (data, history, type) => (dispatch) => {
         dispatch(setLoading(false));
       })
       .catch((error) => {
-        dispatch(setError(error.response.data));
+        dispatch(setError(error.response));
         dispatch(setLoading(false));
       });
   }
   dispatch(setLoading(false));
+};
+
+export const setMovieRate = (id, value) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post(
+      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=720082cb7997030cf3bdec52b8169388&guest_session_id=cc406e911e3a2428546b492185ad39cd`,
+      {
+        value: value,
+      }
+    )
+    .then((res) => {
+      dispatch(
+        setNotification({ error: false, message: res.data.status_message })
+      );
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      dispatch(
+        setNotification({
+          error: true,
+          message: error.response.data.status_message,
+        })
+      );
+      dispatch(setNotificationLoading(false));
+    });
 };

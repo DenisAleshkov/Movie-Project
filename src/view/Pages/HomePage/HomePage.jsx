@@ -2,6 +2,9 @@ import React from "react";
 import Navigation from "./components/Navigation/Navigation";
 import { withRouter } from "react-router-dom";
 class HomePage extends React.Component {
+  onScroll = () => {
+    
+  }
   render() {
     return (
       <Navigation

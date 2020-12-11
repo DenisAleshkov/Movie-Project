@@ -1,12 +1,12 @@
 export const PosterCardStyle = (theme) => ({
   root: {
     position: "relative",
-    backgroundColor: "#1c045a",
+    backgroundColor: "#545454",
     width: 300,
     height: 450,
     margin: "20px",
     "&:hover $media": {
-      opacity: "0.5",
+      opacity: "0.05",
     },
     "&:hover $favoriteWithBorder": {
       opacity: 1,
