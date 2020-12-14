@@ -6,6 +6,7 @@ import {
   removeItemFromLibrary,
   setMovieRate,
   setMovieToLibrary,
+  setTvRate,
 } from "../../../store/actions/movieAction";
 import Loading from "../../utils/Loading/Loading";
 import NotFound from "../../utils/NotFound/NotFound";
@@ -16,12 +17,14 @@ class SearchPage extends Component {
       return this.props.searchMovies.map((item) => {
         return (
           <SearchCard
+            setTvRate={this.props.setTvRate}
             key={item.id}
             id={item.id}
             popularity={item.vote_count}
             poster={item.poster_path}
             titleMovie={item.title}
             titleTv={item.original_name}
+            type={item.title ? "movie" : "tv"}
             vote={item.vote_average}
             popularity={item.popularity}
             library={this.props.library}
@@ -29,7 +32,6 @@ class SearchPage extends Component {
             setMovieToLibrary={this.props.setMovieToLibrary}
             removeItemFromLibrary={this.props.removeItemFromLibrary}
             setMovieRate={this.props.setMovieRate}
-            isNotificationLoading={this.props.isNotificationLoading}
           />
         );
       });
@@ -56,6 +58,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setMovieToLibrary(id, title, poster)),
   removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
   setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
+  setTvRate: (id, value) => dispatch(setTvRate(id, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

@@ -22,13 +22,15 @@ class NavBar extends React.Component {
           location={this.props.location}
           movies={this.props.movies}
           searchMovies={this.props.searchMovies}
+          searchTV={this.props.searchTV}
           history={this.props.history}
+          rememberInput={this.props.rememberInput}
         />
       );
     }
   }
   render() {
-    const { classes, open, count } = this.props;
+    const { classes, open } = this.props;
     return (
       <AppBar
         position="fixed"

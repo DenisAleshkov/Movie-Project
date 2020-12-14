@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import clsx from "clsx";
 import Snackbar from "@material-ui/core/Snackbar";
+import Details from "./../../../Details/Details";
 import { withStyles } from "@material-ui/core/styles";
 import { NavigationStyle } from "./NavigationStyle";
 import {
@@ -23,6 +24,7 @@ import { signOut } from "../../../../../store/actions/authAction";
 import {
   getGenres,
   searchMovies,
+  searchTV,
   setNotification,
 } from "../../../../../store/actions/movieAction";
 import { Route, Switch } from "react-router-dom";
@@ -87,7 +89,6 @@ class HomePage extends Component {
     }
   };
   scrollHandler = (event) => {
-  
     if (event.target.value !== undefined && event.target.value === "false") {
       this.scrollTo("end", this.pageToEndRef);
     } else {
@@ -96,8 +97,8 @@ class HomePage extends Component {
   };
   scrollTo = (to, position) => {
     this.setState({
-      icon: !this.state.icon
-    })
+      icon: !this.state.icon,
+    });
     position.scrollIntoView &&
       position.scrollIntoView({
         block: to,
@@ -117,6 +118,7 @@ class HomePage extends Component {
 
   render() {
     const { classes, location } = this.props;
+
     return (
       <div className={classes.root}>
         <div
@@ -136,7 +138,9 @@ class HomePage extends Component {
           genres={this.props.genres}
           movies={this.props.movies}
           searchMovies={this.props.searchMovies}
+          searchTV={this.props.searchTV}
           count={this.props.library.length}
+          rememberInput={this.props.rememberInput}
         />
         <Drawer
           variant="permanent"
@@ -170,7 +174,7 @@ class HomePage extends Component {
             [classes.contentShift]: this.state.open,
           })}
         >
-          <Grid container spacing={1} className={classes.grid}>
+          <Grid container className={classes.grid} style={{padding: 0}}>
             <Grid
               item
               xs={1}
@@ -180,15 +184,17 @@ class HomePage extends Component {
                 [classes.scrollClose]: !this.state.open,
               })}
             >
-              <Fab
-                variant="extended"
-                component="button"
-                className={classes.scrollBtn}
-                value={this.state.icon}
-                onClick={(e) => this.scrollHandler(e)}
-              >
-                {this.showScrollIcon()}
-              </Fab>
+             
+                <Fab
+                  variant="extended"
+                  component="button"
+                  className={classes.scrollBtn}
+                  value={this.state.icon}
+                  onClick={(e) => this.scrollHandler(e)}
+                >
+                  {this.showScrollIcon()}
+                </Fab>
+             
             </Grid>
             {this.state.localLoading ? (
               <Loading />
@@ -226,6 +232,11 @@ class HomePage extends Component {
                   <Route path="/home/search" exact>
                     <SearchPage />
                   </Route>
+                  <Route
+                    path="/home/details/:id"
+                    exact
+                    render={(props) => <Details {...props} />}
+                  />
                 </Switch>
               </Grid>
             )}
@@ -251,14 +262,15 @@ const mapStateToProps = (state) => {
     notification: state.MoviesReducer.notification,
     error: state.MoviesReducer.error,
     isNotificationLoading: state.LoadingReducer.isNotificationLoading,
+    rememberInput: state.MoviesReducer.rememberInput,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
   getGenres: (type) => dispatch(getGenres(type)),
-  searchMovies: (data, history, type) =>
-    dispatch(searchMovies(data, history, type)),
+  searchMovies: (data, history) => dispatch(searchMovies(data, history)),
+  searchTV: (data, history) => dispatch(searchTV(data, history)),
   setNotification: (payload) => dispatch(setNotification(payload)),
 });
 

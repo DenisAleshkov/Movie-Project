@@ -63,11 +63,8 @@ class SearchCard extends React.Component {
       classes,
       poster,
       vote,
-      popularity,
-      overview,
       titleTv,
       titleMovie,
-      id,
     } = this.props;
 
     return (
@@ -95,7 +92,9 @@ class SearchCard extends React.Component {
             id={this.props.id}
             isNotificationLoading={this.props.isNotificationLoading}
             setMovieRate={this.props.setMovieRate}
+            setTvRate={this.props.setTvRate}
             vote={this.props.vote}
+            type={this.props.type}
           />
         </Box>
       </Card>

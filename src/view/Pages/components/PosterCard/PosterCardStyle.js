@@ -13,6 +13,12 @@ export const PosterCardStyle = (theme) => ({
       transform: "scale(1)",
       transition: "transform .2s ease, opacity 1s ease",
     },
+    "&:hover $detailsBtn": {
+      opacity: 1,
+      cursor: "pointer",
+      transform: "scale(1)",
+      transition: "transform .2s ease, opacity 1s ease",
+    },
     "&:hover $title": {
       opacity: 1,
       cursor: "pointer",
@@ -49,4 +55,14 @@ export const PosterCardStyle = (theme) => ({
     transition: "transform .5s ease, opacity .7s ease",
     zIndex: "10"
   },
+  detailsBtn: {
+    cursor: "pointer",
+    position: "absolute",
+    left: 30,
+    right: 30,
+    bottom: 60,
+    transform: "scale(0)",
+    transition: "transform .5s ease, opacity .7s ease",
+    zIndex: "10"
+  }
 });

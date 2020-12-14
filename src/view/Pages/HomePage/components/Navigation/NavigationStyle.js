@@ -63,7 +63,7 @@ export const NavigationStyle = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
     flexGrow: 1,
-    paddingTop: theme.spacing(10),
+    paddingTop: theme.spacing(8),
     minHeight: "100vh",
     backgroundColor: "#292121ed",
     [theme.breakpoints.down("xs")]: {
@@ -125,6 +125,7 @@ export const NavigationStyle = (theme) => ({
   grid: {
     width: "100%",
     height: "100%",
+    padding: 0
   },
   scroll: {
     display: "flex",

@@ -5,22 +5,27 @@ import { withStyles } from "@material-ui/core";
 
 class Rating extends Component {
   handleRateChange = (event, value) => {
-    this.props.setMovieRate(+event.target.name, value);
+    if (this.props.type === "movie") {
+      this.props.setMovieRate(+event.target.name, value);
+    } else {
+      this.props.setTvRate(+event.target.name, value);
+    }
   };
 
   render() {
     const { classes, style } = this.props;
-    return (<>
-      <MuiRating
-        style={style}
-        name={`${this.props.id}`}
-        className={classes.rate}
-        onChange={this.handleRateChange}
-        defaultValue={this.props.vote}
-        precision={0.5}
-        min={0.5}
-        max={10}
-      />
+    return (
+      <>
+        <MuiRating
+          style={style}
+          name={`${this.props.id}`}
+          className={classes.rate}
+          onChange={this.handleRateChange}
+          defaultValue={this.props.vote}
+          precision={0.5}
+          min={0.5}
+          max={10}
+        />
       </>
     );
   }

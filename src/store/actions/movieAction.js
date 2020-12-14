@@ -8,6 +8,7 @@ import {
   SET_SEARCH_MOVIES,
   SET_MOVIE_RATE,
   SET_NOTIFICATION,
+  SET_REMEMBER_INPUTS,
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
@@ -21,6 +22,10 @@ export const setNotification = (payload) => ({
 export const setTV = (payload) => ({ type: SET_TV, payload });
 export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
+export const setRememberInputs = (payload) => ({
+  type: SET_REMEMBER_INPUTS,
+  payload,
+});
 export const setSearchMovies = (payload) => ({
   type: SET_SEARCH_MOVIES,
   payload,
@@ -102,26 +107,79 @@ export const getGenres = (type) => (dispatch) => {
     });
 };
 
-export const searchMovies = (data, history, type) => (dispatch) => {
+export const searchMovies = (data, history) => (dispatch) => {
   dispatch(setLoading(true));
+
   const { title, average, idList, adultCheckbox, popularity } = data;
   if (title) {
     axios
-      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(title, 1, adultCheckbox, type))
+      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(), {
+        params: { include_adult: adultCheckbox, page: 1, query: title },
+      })
+      .then((result) => {
+        if (data.searchCheckbox) dispatch(setRememberInputs(data));
+        dispatch(setSearchMovies(result.data));
+        history.push("search");
+        dispatch(setLoading(false));
+      })
+      .catch((error) => {
+        dispatch(setError(error.response));
+        dispatch(setLoading(false));
+      });
+  } else {
+    axios
+      .get(MOVIE.SEARCH_MOVIE(), {
+        params: {
+          include_adult: adultCheckbox,
+          page: 1,
+          ["vote_count.gte"]: popularity,
+          ["vote_average.gte"]: average,
+          with_genres: idList.join(),
+        },
+      })
       .then((result) => {
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));
       })
       .catch((error) => {
-        dispatch(setError(error.response.data.errors[0]));
+        dispatch(setError(error.response));
+        dispatch(setLoading(false));
+      });
+  }
+  dispatch(setLoading(false));
+};
+
+export const searchTV = (data, history) => (dispatch) => {
+  dispatch(setLoading(true));
+
+  const { title, average, idList, adultCheckbox, popularity } = data;
+  if (title) {
+    axios
+      .get(MOVIE.SEARCH_TV_BY_TITLE(), {
+        params: { include_adult: adultCheckbox, page: 1, query: title },
+      })
+      .then((result) => {
+        if (data.searchCheckbox) dispatch(setRememberInputs(data));
+        dispatch(setSearchMovies(result.data));
+        history.push("search");
+        dispatch(setLoading(false));
+      })
+      .catch((error) => {
+        dispatch(setError(error.response));
         dispatch(setLoading(false));
       });
   } else {
     axios
-      .get(
-        MOVIE.SEARCH_MOVIE(adultCheckbox, 1, average, idList, popularity, type)
-      )
+      .get(MOVIE.SEARCH_TV(), {
+        params: {
+          include_adult: adultCheckbox,
+          page: 1,
+          ["vote_count.gte"]: popularity,
+          ["vote_average.gte"]: average,
+          with_genres: idList.join(),
+        },
+      })
       .then((result) => {
         dispatch(setSearchMovies(result.data));
         history.push("search");
@@ -138,12 +196,32 @@ export const searchMovies = (data, history, type) => (dispatch) => {
 export const setMovieRate = (id, value) => (dispatch) => {
   dispatch(setNotificationLoading(true));
   axios
-    .post(
-      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=720082cb7997030cf3bdec52b8169388&guest_session_id=cc406e911e3a2428546b492185ad39cd`,
-      {
-        value: value,
-      }
-    )
+    .post(MOVIE.SET_RATING_MOVIE(id), {
+      value: value,
+    })
+    .then((res) => {
+      dispatch(
+        setNotification({ error: false, message: res.data.status_message })
+      );
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      dispatch(
+        setNotification({
+          error: true,
+          message: error.response.data.status_message,
+        })
+      );
+      dispatch(setNotificationLoading(false));
+    });
+};
+
+export const setTvRate = (id, value) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post(MOVIE.SET_RATING_TV(id), {
+      value: value,
+    })
     .then((res) => {
       dispatch(
         setNotification({ error: false, message: res.data.status_message })

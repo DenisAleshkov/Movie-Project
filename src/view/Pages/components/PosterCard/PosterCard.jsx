@@ -1,4 +1,5 @@
 import React from "react";
+import Rating from "./../Rating/Rating";
 import { FavoriteBorder, Favorite } from "@material-ui/icons";
 import {
   withStyles,
@@ -6,6 +7,7 @@ import {
   CardMedia,
   CardContent,
   Typography,
+  Button,
 } from "@material-ui/core";
 import { PosterCardStyle } from "./PosterCardStyle";
 import { compose } from "redux";
@@ -15,8 +17,10 @@ import {
   removeItemFromLibrary,
   setMovieToLibrary,
   setMovieRate,
+  setTvRate,
 } from "../../../../store/actions/movieAction";
-import Rating from "./../Rating/Rating";
+import { Link } from "react-router-dom"
+
 
 class PosterCard extends React.Component {
   componentDidMount() {
@@ -28,9 +32,6 @@ class PosterCard extends React.Component {
       this.props.title,
       this.props.poster
     );
-  };
-  handleRateChange = (event, value) => {
-    this.props.setMovieRate(+event.target.name, value);
   };
   deleteHandler = (e) => {
     this.props.removeItemFromLibrary(e.target.id);
@@ -74,11 +75,15 @@ class PosterCard extends React.Component {
           </Typography>
           <Rating
             id={id}
+            setTvRate={this.props.setTvRate}
             setMovieRate={this.props.setMovieRate}
             vote={vote}
-            isNotificationLoading={this.props.isNotificationLoading}
+            type={this.props.type}
           />
         </CardContent>
+        <Button variant="outlined" className={classes.detailsBtn} component={Link} to={`/home/details/${this.props.id}`}>
+          Details
+        </Button>
       </Card>
     );
   }
@@ -88,7 +93,7 @@ const mapStateToProps = (state) => {
   return {
     movies: state.MoviesReducer.movies,
     library: state.MoviesReducer.library,
-    isNotificationLoading: state.MoviesReducer.isNotificationLoading
+    isNotificationLoading: state.MoviesReducer.isNotificationLoading,
   };
 };
 
@@ -98,6 +103,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setMovieToLibrary(id, title, poster)),
   removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
   setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
+  setTvRate: (id, value) => dispatch(setTvRate(id, value)),
 });
 
 export default compose(

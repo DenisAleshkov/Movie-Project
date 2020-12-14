@@ -12,6 +12,7 @@ class TV extends Component {
   showTV = () =>
     this.props.tv.tvList.map((item) => (
       <PosterCard
+        type="tv"
         key={item.id}
         id={item.id}
         poster={item.poster_path}

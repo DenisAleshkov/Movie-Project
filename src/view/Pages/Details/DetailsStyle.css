@@ -1,0 +1,41 @@
+.root{
+  height: 100%;
+}
+.title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 74%;
+  background-image: linear-gradient(to right, rgba(3.92%, 4.31%, 6.27%, 1.00) 150px, rgba(3.92%, 4.31%, 6.27%, 0.74) 100%);
+}
+.box {
+  display: flex;
+  padding: 20px;
+}
+
+.titleWrapper {
+  border-bottom: 1px solid #000000;
+  background-position: right -200px top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  position: relative;
+}
+
+.rightTitle {
+ height: 100px;
+}
+.leftTitle {
+  padding: 30px;
+  color: #fff;
+}
+.titleText {
+  display: flex;
+  align-items: center;
+}
+.year{
+  font-size: 33px;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-left: 15px;
+}

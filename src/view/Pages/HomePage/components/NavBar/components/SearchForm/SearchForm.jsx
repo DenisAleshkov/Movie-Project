@@ -11,6 +11,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { SearchFormStyles } from "./SearchFormStyle";
 import Checkbox from "@material-ui/core/Checkbox";
 import CustomizedSlider from "./SliderStyle";
+import GenresCheckbox from "../GenresCheckbox/GenresCheckbox";
+import { Flag } from "@material-ui/icons";
 
 class SearchForm extends Component {
   constructor(props) {
@@ -22,27 +24,20 @@ class SearchForm extends Component {
       popularity: 50,
       average: 1,
       title: "",
+      overview: "",
     };
   }
-
   showCheckboxList = () => {
     return this.props.genres.map((item) => {
       return (
-        <FormControlLabel
+        <GenresCheckbox
           key={item.id}
-          control={
-            <Checkbox
-              className={this.props.classes.genreItemCheckbox}
-              value="remember"
-              color="primary"
-              style={{ color: "#565050" }}
-              id={`${item.id}`}
-              className={this.props.classes.genreItem}
-            />
-          }
-          label={item.name}
-          onChange={this.handleGenresChange}
-          className={this.props.classes.genreItem}
+          genreItemCheckboxStyle={this.props.classes.genreItemCheckbox}
+          genreItemStyle={this.props.classes.genreItem}
+          id={item.id}
+          name={item.name}
+          handleGenresChange={this.handleGenresChange}
+          idList={this.state.idList}
         />
       );
     });
@@ -77,9 +72,11 @@ class SearchForm extends Component {
   };
 
   searchMovie = () => {
-    const location = this.props.location;
-    const type = location.replace("/home/", "");
-    this.props.searchMovies(this.state, this.props.history, type);
+    if (this.props.location === "/home/movie") {
+      this.props.searchMovies(this.state, this.props.history);
+    } else if (this.props.location === "/home/tv") {
+      this.props.searchTV(this.state, this.props.history);
+    }
   };
   render() {
     const { classes } = this.props;
@@ -118,10 +115,12 @@ class SearchForm extends Component {
                       Title
                     </Typography>
                     <TextField
-                      id="title"
                       className={classes.dialogInput}
+                      value={this.state.title}
                       variant="outlined"
                       label="Title"
+                      variant="outlined"
+                      id="title"
                       onChange={this.changeHandler}
                     />
                   </Box>
@@ -131,6 +130,7 @@ class SearchForm extends Component {
                     </Typography>
                     <TextField
                       className={classes.dialogInput}
+                      value={this.state.overview}
                       variant="outlined"
                       label="Overview"
                       multiline

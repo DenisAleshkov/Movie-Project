@@ -17,12 +17,12 @@ class Movie extends Component {
   }
 
   componentDidMount() {
+    this.props.getGenres("movie");
     const options = {
       root: null,
       rootMargin: "0px",
       threshold: 0.25,
     };
-    this.props.getGenres("movie");
     this.observer = new IntersectionObserver(this.loadMore, options);
     if (this.loader && this.loader.current) {
       this.observer.observe(this.loader.current);
@@ -45,12 +45,13 @@ class Movie extends Component {
       });
     }
   };
-
+  
   showMovies = () => {
     if (this.props.movies.length) {
       return this.props.movies.map((item) => {
         return (
           <PosterCard
+            type="movie"
             key={item.id}
             id={item.id}
             poster={item.poster_path}
@@ -64,8 +65,8 @@ class Movie extends Component {
 
   render() {
     return (
-      <>  
-        {this.showMovies()}      
+      <>
+        {this.showMovies()}
         <div
           style={{
             display: this.state.isLoading ? "flex" : "none",
