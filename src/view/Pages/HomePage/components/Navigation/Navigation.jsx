@@ -27,6 +27,12 @@ import {
   searchTV,
   setNotification,
 } from "../../../../../store/actions/movieAction";
+import {
+  getDetailsMovie,
+  getDetailsTv,
+  getSimilarMovies,
+  getSimilarTv,
+} from "./../../../../../store/actions/detailsAction";
 import { Route, Switch } from "react-router-dom";
 import Library from "../../../Library/Library";
 import Movie from "./../../../Movie/Movie";
@@ -174,7 +180,7 @@ class HomePage extends Component {
             [classes.contentShift]: this.state.open,
           })}
         >
-          <Grid container className={classes.grid} style={{padding: 0}}>
+          <Grid container className={classes.grid} style={{ padding: 0 }}>
             <Grid
               item
               xs={1}
@@ -184,17 +190,15 @@ class HomePage extends Component {
                 [classes.scrollClose]: !this.state.open,
               })}
             >
-             
-                <Fab
-                  variant="extended"
-                  component="button"
-                  className={classes.scrollBtn}
-                  value={this.state.icon}
-                  onClick={(e) => this.scrollHandler(e)}
-                >
-                  {this.showScrollIcon()}
-                </Fab>
-             
+              <Fab
+                variant="extended"
+                component="button"
+                className={classes.scrollBtn}
+                value={this.state.icon}
+                onClick={(e) => this.scrollHandler(e)}
+              >
+                {this.showScrollIcon()}
+              </Fab>
             </Grid>
             {this.state.localLoading ? (
               <Loading />
@@ -233,9 +237,26 @@ class HomePage extends Component {
                     <SearchPage />
                   </Route>
                   <Route
-                    path="/home/details/:id"
+                    path="/home/details/movies/:id"
                     exact
-                    render={(props) => <Details {...props} />}
+                    render={(props) => (
+                      <Details
+                        getDetails={this.props.getDetailsMovie}
+                        getSimilar={this.props.getSimilarMovies}
+                        {...props}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/home/details/tv/:id"
+                    exact
+                    render={(props) => (
+                      <Details
+                        getDetails={this.props.getDetailsTv}
+                        getSimilar={this.props.getSimilarTv}
+                        {...props}
+                      />
+                    )}
                   />
                 </Switch>
               </Grid>
@@ -272,6 +293,10 @@ const mapDispatchToProps = (dispatch) => ({
   searchMovies: (data, history) => dispatch(searchMovies(data, history)),
   searchTV: (data, history) => dispatch(searchTV(data, history)),
   setNotification: (payload) => dispatch(setNotification(payload)),
+  getDetailsMovie: (id) => dispatch(getDetailsMovie(id)),
+  getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
+  getDetailsTv: (id) => dispatch(getDetailsTv(id)),
+  getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
 });
 
 export default compose(

@@ -19,8 +19,7 @@ import {
   setMovieRate,
   setTvRate,
 } from "../../../../store/actions/movieAction";
-import { Link } from "react-router-dom"
-
+import { Link } from "react-router-dom";
 
 class PosterCard extends React.Component {
   componentDidMount() {
@@ -60,7 +59,7 @@ class PosterCard extends React.Component {
   };
 
   render() {
-    const { poster, title, classes, id, vote } = this.props;
+    const { poster, title, classes, id, vote, to } = this.props;
     return (
       <Card className={classes.root}>
         {this.isFavorite()}
@@ -81,8 +80,13 @@ class PosterCard extends React.Component {
             type={this.props.type}
           />
         </CardContent>
-        <Button variant="outlined" className={classes.detailsBtn} component={Link} to={`/home/details/${this.props.id}`}>
-          Details
+        <Button
+          variant="outlined"
+          className={classes.detailsBtn}
+          component={Link}
+          to={`${to}/${this.props.id}`}
+        >
+         Details
         </Button>
       </Card>
     );

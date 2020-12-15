@@ -7,6 +7,10 @@ import {
   getMovies,
   setMovies,
 } from "./../../../store/actions/movieAction";
+import { 
+  getDetailsMovie,
+  getSimilarMovies,
+} from "./../../../store/actions/detailsAction"
 class Movie extends Component {
   constructor() {
     super();
@@ -52,11 +56,14 @@ class Movie extends Component {
         return (
           <PosterCard
             type="movie"
+            to="/home/details/movies"
             key={item.id}
             id={item.id}
             poster={item.poster_path}
             title={item.title}
             vote={item.vote_average}
+            getDetalis={this.props.getDetailsMovie}
+            getSimilar={this.props.getSimilarMovies}
           />
         );
       });
@@ -94,5 +101,7 @@ const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),
   getGenres: (type) => dispatch(getGenres(type)),
   setMovies: (payload) => dispatch(setMovies(payload)),
+  getDetailsMovie: (id) => dispatch(getDetailsMovie(id)),
+  getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Movie);
