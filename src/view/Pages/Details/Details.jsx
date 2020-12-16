@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SimilarMovies from "./components/Companies/SimilarMovies";
+import SimilarMovies from "./components/SimilarMovies/SimilarMovies";
 import Loading from "./../../utils/Loading/Loading";
 import { Rating } from "@material-ui/lab";
 import {
@@ -14,12 +14,6 @@ import {
 import { DetailsStyle } from "./DetailsStyle.js";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import {
-  getDetailsMovie,
-  getDetailsTv,
-  getSimilarMovies,
-  getSimilarTv,
-} from "../../../store/actions/detailsAction";
 import { formatMoney, timeConvert, FormatDate } from "./../../utils/functions";
 import { withRouter } from "react-router-dom";
 
@@ -73,8 +67,11 @@ class Details extends Component {
             Similar movies
           </Typography>
           <SimilarMovies
+            type={this.props.type}
             movies={this.props.similarMovies}
             history={this.props.history}
+            getDetails={this.props.getDetails}
+            getSimilar={this.props.getSimilar}
           />
         </Box>
       );
@@ -82,7 +79,6 @@ class Details extends Component {
   };
   render() {
     const { classes, details, isLoading } = this.props;
-    console.log('details', details)
     if (isLoading) return <Loading />;
     return (
       <Container maxWidth="md" className={classes.root}>
@@ -150,13 +146,13 @@ class Details extends Component {
             <CardMedia
               image={`https://image.tmdb.org/t/p/w500/${details.poster_path}`}
               title="Paella dish"
-              style={{ width: 300, height: "100%" }}
+              style={{ width: 265, height: "100%" }}
             />
           </Box>
           <Box className={classes.overview}>
             <Box className={classes.overviewheader}>
               <Typography variant="h5" gutterBottom>
-                {details.title}
+                {details.title || details.name}
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -258,22 +254,34 @@ class Details extends Component {
           </Box>
         </Box>
         {this.showSimilarMovies()}
-        {details.created_by && (
-          <Box className={classes.poster} style={{ height: 400 }}>
-            <Box className={classes.boxOverview}>
-              <Box className={classes.poster} style={{ height: 400 }}>
-                <CardMedia
-                  image={`https://image.tmdb.org/t/p/w500/${details.created_by[0].profile_path}`}
-                  title="Paella dish"
-                  style={{ width: 300, height: "100%" }}
-                />
-              </Box>
-              <Box className={classes.overview}>
-                <Box className={classes.overviewheader}>
-                  <Typography variant="h5" gutterBottom>
-                    {details.created_by[0].name}
-                  </Typography>
-                </Box>
+        {details.seasons && (
+          <Box className={classes.currentSeason}>
+            <Typography
+              className={this.props.classes.similarText}
+              variant="h4"
+              gutterBottom
+            >
+              Current season
+            </Typography>
+            <Box className={classes.currentSeasonTitle}>
+              <CardMedia
+                image={`https://image.tmdb.org/t/p/w500/${details.seasons[0].poster_path}`}
+                title="Paella dish"
+                style={{ width: "130px", height: "200px" }}
+              />
+              <Box className={classes.titleSeason}>
+                <Typography variant="h6" gutterBottom>
+                  {details.seasons[0].name}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {new Date(details.seasons[0].air_date).getFullYear()}|{" "}
+                  {details.seasons[0].episode_count} episodes
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {details.seasons[0].name} {details.name}
+                  {",released "}
+                  {FormatDate(details.seasons[0].air_date)}
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -291,12 +299,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getDetailsMovie: (id) => dispatch(getDetailsMovie(id)),
-  getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
-  getDetailsTv: (id) => dispatch(getDetailsTv(id)),
-  getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),

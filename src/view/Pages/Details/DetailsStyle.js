@@ -93,4 +93,16 @@ export const DetailsStyle = (theme) => ({
     backgroundImage:
     "linear-gradient(to right, rgba(3.92%, 4.31%, 6.27%, 1.00) 250px, rgba(3.92%, 4.31%, 6.27%, 0.74) 100%)",
   },
+  currentSeason:{
+    backgroundImage: "linear-gradient(to right, rgba(3.92%, 4.31%, 6.27%, 1.00) 250px, rgba(3.92%, 4.31%, 6.27%, 0.74) 100%)",
+    color: "#fff"
+  },
+  currentSeasonTitle: {
+    display: "flex"
+  },
+  titleSeason: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "30px",
+  }
 });

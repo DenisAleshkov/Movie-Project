@@ -41,7 +41,7 @@ import SearchPage from "./../../../SearchPage/SearchPage";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Alert } from "@material-ui/lab";
 
-class HomePage extends Component {
+class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -241,6 +241,7 @@ class HomePage extends Component {
                     exact
                     render={(props) => (
                       <Details
+                        type="movies"
                         getDetails={this.props.getDetailsMovie}
                         getSimilar={this.props.getSimilarMovies}
                         {...props}
@@ -252,6 +253,7 @@ class HomePage extends Component {
                     exact
                     render={(props) => (
                       <Details
+                        type="tv"
                         getDetails={this.props.getDetailsTv}
                         getSimilar={this.props.getSimilarTv}
                         {...props}
@@ -302,4 +304,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(NavigationStyle, { withTheme: true })
-)(HomePage);
+)(Navigation);

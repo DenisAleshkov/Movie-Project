@@ -8,31 +8,21 @@ import { SimilarMoviesStyle } from "./SimilarMoviesStyle";
 import { withStyles } from "@material-ui/core";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { Rating } from "@material-ui/lab";
-import { compose } from "redux";
 class SimilarMovies extends Component {
-  constructor(){
-    super()
-    this.state={
-      redirect: null
-    }
-  }
   clickHandler = (id) => {
-    this.setState({
-      redirect: id
-    })
+    this.props.getDetails(id);
+    this.props.getSimilar(id, 1);
   };
  
   render() {
-    if(this.state.redirect){
-      return <Redirect to={`/home/details/movies/${this.state.redirect}`} />
-    }
-    const { classes, movies, history } = this.props;
+    const { classes, movies } = this.props;
     return (
       <div className={classes.root}>
         <GridList className={classes.gridList} cols={2.5} >
           {movies.map((item) => (
             <GridListTile
             component={Link}
+            to={`/home/details/${this.props.type}/${item.id}`}
             onClick={() => this.clickHandler(item.id)}
               key={item.id}
               style={{ width: "25%", height: "380px" }}
