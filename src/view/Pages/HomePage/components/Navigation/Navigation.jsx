@@ -40,6 +40,8 @@ import TV from "./../../../TV/TV";
 import SearchPage from "./../../../SearchPage/SearchPage";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Alert } from "@material-ui/lab";
+import Blog from "../../../Blog/Blog";
+import Profile from "../../../Profile/Profile";
 
 class Navigation extends Component {
   constructor(props) {
@@ -260,6 +262,12 @@ class Navigation extends Component {
                       />
                     )}
                   />
+                  <Route path="/home/blog" exact>
+                    <Blog />
+                  </Route>
+                  <Route path="/home/profile" exact>
+                    <Profile />
+                  </Route>
                 </Switch>
               </Grid>
             )}

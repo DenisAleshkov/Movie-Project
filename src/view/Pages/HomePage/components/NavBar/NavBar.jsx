@@ -45,9 +45,7 @@ class NavBar extends React.Component {
               component={Link}
               to="/home/movie"
               color="inherit"
-              className={
-                this.isActive("/home/movie") || this.isActive("/home")
-              }
+              className={this.isActive("/home/movie") || this.isActive("/home")}
             >
               Movies
             </Button>
@@ -60,15 +58,24 @@ class NavBar extends React.Component {
             >
               TV Shows
             </Button>
-              <Button
-                component={Link}
-                to="/home/library"
-                color="inherit"
-                className={this.isActive("/home/library")}
-                onClick={this.isActive}
-              >
-                my Library
-              </Button>
+            <Button
+              component={Link}
+              to="/home/library"
+              color="inherit"
+              className={this.isActive("/home/library")}
+              onClick={this.isActive}
+            >
+              my Library
+            </Button>
+            <Button
+              component={Link}
+              to="/blog"
+              color="inherit"
+              className={this.isActive("/blog")}
+              onClick={this.isActive}
+            >
+              Blog
+            </Button>
             <Button
               className={classes.signOutBtn}
               onClick={this.signOut}

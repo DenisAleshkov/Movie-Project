@@ -5,9 +5,11 @@ import {
   LOGIN_ERROR,
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR,
+  SET_USER,
 } from "./../constants";
 
 const initialState = {
+  profileInfo: null,
   isAuth: false,
   userId: null,
   firstName: "",
@@ -70,7 +72,17 @@ const LoadingReducer = (state = initialState, action) => {
       console.log(action.payload);
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+      };
+    }
+    case SET_USER: {
+      return {
+        ...state,
+        isAuth: true,
+        userId: action.payload.id,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        email: action.payload.email,
       };
     }
     default: {

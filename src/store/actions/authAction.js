@@ -6,6 +6,7 @@ import {
   LOGIN_ERROR,
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR,
+  SET_USER
 } from "./../constants";
 
 export const registerSuccess = () => ({ type: REGISTER_SUCCESS });
@@ -16,6 +17,8 @@ export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
 
 export const signOutSucces = () => ({ type: SIGNOUT_SUCCESS });
 export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
+
+export const setUser = payload => ({type: SET_USER, payload})
 
 const getUserInfo = async (id, email) => {
   const userData = await firebase.firestore().collection("users").get(id);
@@ -55,7 +58,7 @@ export const register = (credentials) => (dispatch) => {
     .auth()
     .createUserWithEmailAndPassword(credentials.email, credentials.password)
     .then((res) => {
-      db.doc(res.user.id).set({
+      db.doc(res.user.uid).set({
         firstName: credentials.firstName,
         lastName: credentials.lastName,
         email: credentials.email,

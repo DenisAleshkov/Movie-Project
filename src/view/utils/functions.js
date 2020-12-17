@@ -38,10 +38,27 @@ export const formatMoney = (
 };
 
 export const FormatDate = (date) => {
-  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const myDate = new Date(date)  
-  const day = myDate.getDate()
-  const month = MONTHS[myDate.getMonth()]
-  const year = myDate.getFullYear() 
-  return `${day} ${month} ${year}`
-}
+  const MONTHS = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const myDate = new Date(date);
+  const day = myDate.getDate();
+  const month = MONTHS[myDate.getMonth()];
+  const year = myDate.getFullYear();
+  return `${day} ${month} ${year}`;
+};
+
+export const setDefaultAvatar = (fName, lName) => {
+  return `${fName.slice(0, 1).toUpperCase()}${lName.slice(0, 1).toUpperCase()}`;
+};

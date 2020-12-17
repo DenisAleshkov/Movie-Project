@@ -2,10 +2,16 @@ import Slideshow from "@material-ui/icons/Slideshow";
 import Tv from "@material-ui/icons/Tv";
 import Book from "@material-ui/icons/BookmarkBorder";
 import Badge from "@material-ui/core/Badge";
+import Avatar from '@material-ui/core/Avatar';
+import ChatIcon from '@material-ui/icons/Chat';
 import { IconButton } from "@material-ui/core";
 
 export const NAV_ICONS = (cssClass = "", count) => {
     return [
+      {
+        component: <Avatar src="/static/images/avatar/1.jpg" className={cssClass} />,
+        url: "/home/profile",
+      },
       {
         component: <Slideshow className={cssClass} />,
         url: "/home/movie",
@@ -23,6 +29,10 @@ export const NAV_ICONS = (cssClass = "", count) => {
           </IconButton>
         ),
         url: "/home/library",
+      },
+      {
+        component: <ChatIcon className={cssClass} />,
+        url: "/blog",
       },
     ];
   };
