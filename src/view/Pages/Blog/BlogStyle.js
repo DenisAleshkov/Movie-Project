@@ -48,4 +48,17 @@ export const BlogStyle = (theme) => ({
     height: "100px",
     fontSize: "4.25rem",
   },
+  blog:  {
+    width: "100%",
+    height: "100%",
+  },
+  loadingBox:{
+    position: "fixed",
+    top: 0
+  },
+  loader: {
+    position: "fixed",
+    top: 0,
+    width: "100%",
+  }
 });

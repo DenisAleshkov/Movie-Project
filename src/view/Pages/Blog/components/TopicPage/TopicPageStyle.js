@@ -43,5 +43,12 @@ export const TopicPageStyle = (theme) => ({
   replyBtn:{
     marginTop: 10,
     width: 100
+  },
+  stylesBadge: {
+    padding: 7
+  },
+  footerAction: {
+    color: "#fff"
   }
+ 
 });

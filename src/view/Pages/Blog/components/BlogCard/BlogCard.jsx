@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { BlogCardStyle } from "./BlogCardStyle";
 import { withStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { FormatDate } from "./../../../../utils/functions"
 
 class BlogCard extends React.Component {
   render() {
@@ -23,7 +24,7 @@ class BlogCard extends React.Component {
             </Typography>
 
             <Typography gutterBottom component="h6">
-              Last reply by {`${fName} ${lName}`}
+              Last reply by {`${fName} ${lName}`},
             </Typography>
           </CardContent>
         </CardActionArea>

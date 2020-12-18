@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TopicMessage from "./../TopicMessage/TopicMessage";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import TextField from "@material-ui/core/TextField";
@@ -8,15 +9,15 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Box, Button, withStyles,Badge } from "@material-ui/core";
+import { Box, Button, withStyles, Badge } from "@material-ui/core";
 import { TopicPageStyle } from "./TopicPageStyle";
+import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import ThumbDownAltOutlinedIcon from "@material-ui/icons/ThumbDownAltOutlined";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Link, withRouter } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import { compose } from "redux";
-import { setDefaultAvatar } from "./../../../../utils/functions";
+import { setDefaultAvatar, FormatDate } from "./../../../../utils/functions";
 
 class TopicPage extends Component {
   constructor() {
@@ -26,8 +27,11 @@ class TopicPage extends Component {
     };
   }
   componentDidMount() {
+    if(this.props.match.params.id){
     this.props.getTopicInfo(this.props.match.params.id);
     this.props.getMessages(this.props.match.params.id);
+    }
+    <Redirect to="blog/topics" />
   }
   changeHandler = (e) => {
     this.setState({
@@ -42,51 +46,46 @@ class TopicPage extends Component {
       lName: this.props.lastName,
     });
   };
-  handleClick = (e) => {
-      console.log('e', e.target.id)
-
+  likesHandler = (e) => {
+    if(e.target.id){
+    this.props.updateLikesInHeader(
+      this.props.userId,
+      e.target.id, {
+      likes: this.props.topicInfo.likes + 1,
+      disLikes: this.props.topicInfo.disLikes,
+    });
   }
+  };
+  disLikesHandler = (e) => {
+    if(e.target.id){
+    this.props.updateLikesInHeader(
+      this.props.userId,
+      e.target.id, {
+      likes: this.props.topicInfo.likes,
+      disLikes: this.props.topicInfo.disLikes + 1,
+    });
+  }
+  };
   showMessages = () => {
     return this.props.messages.map((item) => {
-        console.log('item', )
       return (
-        <Card
-          className={this.props.classes.root}
+        <TopicMessage
           key={item.id}
-          style={{ marginBottom: 30 }}
-        >
-          <CardHeader
-            className={this.props.classes.headerCard}
-            avatar={
-              <Avatar aria-label="recipe" className={this.props.classes.avatar}>
-                {setDefaultAvatar(item.fName, item.lName)}
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={`Answer from ${item.fName} ${item.lName}`}
-          />
-          <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {item.message}
-            </Typography>
-          </CardContent>
-          <CardActions className={this.props.classes.footerCard} disableSpacing>
-            <Badge color="secondary" badgeContent={5}>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon/>
-              </IconButton>
-            </Badge>
-          </CardActions>
-        </Card>
+          fName={item.fName}
+          lName={item.lName}
+          message={item.message}
+          likes={item.likes}
+          disLikes={item.disLikes}
+          id={item.id}
+          userId={this.props.userId}
+          date={item.date}
+          updateMessagesLikes={this.props.updateMessagesLikes}
+        />
       );
     });
   };
   render() {
-    const { classes, topicInfo, isLoading } = this.props;
+    const { classes, topicInfo, isLoading, userId } = this.props;
     if (isLoading || topicInfo === null) return <CircularProgress />;
     return (
       <Box className={classes.topicPage}>
@@ -109,7 +108,7 @@ class TopicPage extends Component {
               </IconButton>
             }
             title={topicInfo.title}
-            subheader={`published by ${topicInfo.fName} ${topicInfo.lName}`}
+            subheader={`published by ${topicInfo.fName} ${topicInfo.lName}, ${FormatDate(topicInfo.dateTime.toDate())}`}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -117,11 +116,45 @@ class TopicPage extends Component {
             </Typography>
           </CardContent>
           <CardActions className={classes.footerCard} disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
+            <IconButton
+              className={classes.footerAction}
+              aria-label="add to favorites"
+              id={topicInfo.topicId}
+              onClick={(e) => this.likesHandler(e)}
+            >
+              <Badge
+                color="secondary"
+                badgeContent={topicInfo.likes}
+                className={classes.stylesBadge}
+                showZero
+                id={topicInfo.topicId}
+              >
+                <ThumbUpAltOutlinedIcon
+                  className={classes.iconBtnwithBudge}
+                  id={topicInfo.topicId}
+                />
+              </Badge>
             </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
+
+            <IconButton
+              className={classes.footerAction}
+              aria-label="add to favorites"
+              id={topicInfo.topicId}
+              onClick={(e) => this.disLikesHandler(e)}
+            >
+              <Badge
+                color="secondary"
+                className={classes.stylesBadge}
+                badgeContent={topicInfo.disLikes}
+                style={{ padding: 7 }}
+                showZero
+                id={topicInfo.topicId}
+              >
+                <ThumbDownAltOutlinedIcon
+                  className={classes.iconBtnwithBudge}
+                  id={topicInfo.topicId}
+                />
+              </Badge>
             </IconButton>
           </CardActions>
         </Card>

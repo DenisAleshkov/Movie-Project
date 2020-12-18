@@ -1,15 +1,18 @@
-import { act } from "react-dom/test-utils";
 import {
   SET_TOPIC,
   SET_ALL_TOPICS,
   SET_TOPIC_INFO,
   SET_MESSAGES,
   UPDATE_MESSAGES,
+  SET_LIKES,
+  SET_NOTIFICATION,
 } from "./../constants";
+
 const initialState = {
   topics: [],
   topicInfo: null,
   messages: [],
+  notification: null
 };
 
 const BlogReducer = (state = initialState, action) => {
@@ -44,6 +47,22 @@ const BlogReducer = (state = initialState, action) => {
         ...state,
         messages: [...state.messages, action.payload],
       };
+    }
+    case SET_LIKES: {
+      return {
+        ...state,
+        topicInfo: {
+          ...state.topicInfo,
+          likes: action.payload.likes,
+          disLikes: action.payload.disLikes,
+        }
+      }
+    }
+    case SET_NOTIFICATION: {
+      return {
+        ...state,
+        notification: action.payload
+      }
     }
     default: {
       return state;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase from "firebase";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,7 +18,9 @@ import {
   getTopics,
   getTopicInfo,
   sendMessage,
-  getMessages
+  getMessages,
+  updateLikesInHeader,
+  updateMessagesLikes,
 } from "./../../../store/actions/blogAction";
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, Link } from "react-router-dom";
@@ -42,7 +45,11 @@ class Blog extends Component {
       }
     });
   }
-
+  showLoading = () => {
+    if (this.props.isMessageLoading) {
+      return <LinearProgress className={this.props.classes.loader} />;
+    }
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -56,7 +63,6 @@ class Blog extends Component {
           }}
           anchor="left"
         >
-          <div className={classes.toolbar} />
           <Box className={classes.avatarBox}>
             <Avatar className={classes.avatar}>
               {setDefaultAvatar(this.props.firstName, this.props.lastName)}
@@ -84,7 +90,7 @@ class Blog extends Component {
           </List>
         </Drawer>
         <main className={classes.content}>
-          <div className={classes.toolbar} />
+          {this.showLoading()}
           <Switch>
             <Route path="/blog/createTopic" exact>
               <CreateTopic
@@ -92,7 +98,7 @@ class Blog extends Component {
                 createTopic={this.props.createTopic}
                 firstName={this.props.firstName}
                 lastName={this.props.lastName}
-                id={this.props.id}
+                id={this.props.userId}
               />
             </Route>
             <Route path="/blog" exact>
@@ -117,10 +123,12 @@ class Blog extends Component {
                 isLoading={this.props.isLoading}
                 sendMessage={this.props.sendMessage}
                 getMessages={this.props.getMessages}
-                userID={this.props.id}
+                userId={this.props.userId}
                 firstName={this.props.firstName}
                 lastName={this.props.lastName}
                 messages={this.props.messages}
+                updateLikesInHeader={this.props.updateLikesInHeader}
+                updateMessagesLikes={this.props.updateMessagesLikes}
               />
             </Route>
           </Switch>
@@ -132,13 +140,14 @@ class Blog extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    id: state.AuthReducer.userId,
+    userId: state.AuthReducer.userId,
     firstName: state.AuthReducer.firstName,
     lastName: state.AuthReducer.lastName,
     topics: state.BlogReducer.topics,
     topicInfo: state.BlogReducer.topicInfo,
     isLoading: state.LoadingReducer.isLoading,
-    messages: state.BlogReducer.messages
+    isMessageLoading: state.LoadingReducer.isMessageLoading,
+    messages: state.BlogReducer.messages,
   };
 };
 
@@ -149,6 +158,9 @@ const mapDispatchToProps = (dispatch) => ({
   getTopicInfo: (id) => dispatch(getTopicInfo(id)),
   sendMessage: (id, data) => dispatch(sendMessage(id, data)),
   getMessages: (id) => dispatch(getMessages(id)),
+  updateLikesInHeader: (userId, id, data) =>
+    dispatch(updateLikesInHeader(userId, id, data)),
+  updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
 });
 
 export default compose(
