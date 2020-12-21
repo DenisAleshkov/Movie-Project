@@ -7,6 +7,7 @@ import {
   UPDATE_MESSAGES,
   SET_LIKES,
   SET_MESSAGES_LIKES,
+  UPDATE_TOPIC_LIKES,
 } from "./../constants";
 import { setMessageLoading } from "./../actions/loadingAction";
 import { setLoading } from "./loadingAction";
@@ -16,11 +17,10 @@ export const setAllTopics = (payload) => ({ type: SET_ALL_TOPICS, payload });
 export const setTopicInfo = (payload) => ({ type: SET_TOPIC_INFO, payload });
 export const setMessages = (payload) => ({ type: SET_MESSAGES, payload });
 export const setHeaderLikes = (payload) => ({ type: SET_LIKES, payload });
-export const setMessagesLikes = (payload) => ({
-  type: SET_MESSAGES_LIKES,
+export const setTopicLikes = (payload) => ({
+  type: UPDATE_TOPIC_LIKES,
   payload,
 });
-
 export const updateMessages = (payload) => ({ type: UPDATE_MESSAGES, payload });
 
 export const createTopic = (data, credentials) => (dispatch) => {
@@ -104,7 +104,7 @@ export const getTopicInfo = (id) => (dispatch) => {
 };
 
 export const getMessages = (id) => (dispatch) => {
-  dispatch(setMessageLoading(true))
+  dispatch(setMessageLoading(true));
   const messages = [];
   firebase
     .firestore()
@@ -120,12 +120,12 @@ export const getMessages = (id) => (dispatch) => {
         });
       });
       dispatch(setMessages(messages));
-      dispatch(setMessageLoading(false))
+      dispatch(setMessageLoading(false));
     });
 };
 
 export const sendMessage = (id, data) => (dispatch) => {
-  dispatch(setMessageLoading(true))
+  dispatch(setMessageLoading(true));
   const db = firebase
     .firestore()
     .collection("blog")
@@ -152,54 +152,98 @@ export const sendMessage = (id, data) => (dispatch) => {
       dispatch(
         updateMessages({ ...data, likes: 0, disLikes: 0, id: result.id })
       );
-      dispatch(setMessageLoading(false))
+      dispatch(setMessageLoading(false));
     })
     .catch((error) => {
       console.log("error");
-      dispatch(setMessageLoading(false))
+      dispatch(setMessageLoading(false));
     });
 };
 
-export const updateLikesInHeader = (userId, id, data) => async (dispatch) => {
-  dispatch(setMessageLoading(true))
-  const db = firebase.firestore().collection("blog").doc(id);
+export const updateLikesInHeader = (ID, data) => async (dispatch) => {
+  dispatch(setMessageLoading(true));
+  const db = firebase.firestore().collection("blog").doc(ID.topic);
   const dbLikes = firebase
     .firestore()
     .collection("blog")
-    .doc(id)
+    .doc(ID.topic)
     .collection("isLiked");
   const LikesResponse = await dbLikes.get();
   const isLiked = LikesResponse.docs.filter(
-    (item) => item.data().userId === userId
+    (item) => item.data().userId === ID.user
   );
   if (!isLiked.length) {
     dbLikes.add({
-      userId: userId,
+      userId: ID.user,
+      type: data.type,
     });
     db.update({
       likes: data.likes,
       disLikes: data.disLikes,
     })
-      .then((res) => {
-        console.log("UPDATE LIKES");
-        dispatch(
-          setHeaderLikes({
-            likes: data.likes,
-            disLikes: data.disLikes,
-          })
-        );
-        dispatch(setMessageLoading(false))
+      .then((result) => {
+        dispatch(setTopicLikes({ likes: data.likes, disLikes: data.disLikes }));
+        dispatch(setMessageLoading(false));
       })
       .catch((error) => {
-        console.log("error", error);
-        console.log("UPDATE ERROR");
-        dispatch(setMessageLoading(false))
+        console.log("ERROR", error);
+        dispatch(setMessageLoading(false));
+      });
+  } else {
+    const likesUserID = LikesResponse.docs.filter(
+      (item) => item.data().userId === ID.user
+    )[0];
+    const user = likesUserID.data();
+    if (data.changed.changedType === user.type && user.userId === ID.user) {
+      dbLikes
+        .doc(likesUserID.id)
+        .delete()
+        .then(() => {
+          db.update({
+            [data.changed.changedType]: data.changed.changedValue - 1,
+          })
+            .then(() => {
+              dispatch(
+                setTopicLikes({
+                  [data.changed.changedType]: data.changed.changedValue - 1,
+                  [data.changed.notChangedType]: data.changed.notChangedValue,
+                })
+              );
+              dispatch(setMessageLoading(false));
+            })
+            .catch((error) => {
+              console.log("ERROR", error);
+            });
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        });
+      return false;
+    }
+    dbLikes.doc(likesUserID.id).update({
+      type: data.type,
+    });
+    db.update({
+      [data.changed.changedType]: data.changed.changedValue + 1,
+      [data.changed.notChangedType]: data.changed.notChangedValue - 1,
+    })
+      .then(() => {
+        dispatch(
+          setTopicLikes({
+            [data.changed.changedType]: data.changed.changedValue + 1,
+            [data.changed.notChangedType]: data.changed.notChangedValue - 1,
+          })
+        );
+        dispatch(setMessageLoading(false));
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+        dispatch(setMessageLoading(false));
       });
   }
 };
 
 export const updateMessagesLikes = (ID, data) => async (dispatch) => {
-  console.log('ID, data', ID, data)
   dispatch(setMessageLoading(true));
   const db = firebase
     .firestore()
@@ -221,6 +265,7 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
   if (!isLiked.length) {
     dbLikes.add({
       userId: ID.user,
+      type: data.type,
     });
     db.update({
       likes: data.likes,
@@ -228,37 +273,47 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
     })
       .then((result) => {
         dispatch(getMessages(ID.topic));
-        console.log("UPDATE LIKES");
         dispatch(setMessageLoading(false));
       })
       .catch((error) => {
         console.log("ERROR", error);
         dispatch(setMessageLoading(false));
       });
-  }else {
-    const LikesResponse = await dbLikes.get();
-    const likesUserID = LikesResponse.docs.filter(item=>item.data().userId===ID.user)[0].id
-    if("likes"=== data.changed.notChangedType)
-    {
-      dbLikes.doc(likesUserID).delete().then(()=>{
-        db.update({
-          [data.changed.notChangedType]: data.changed.notChangedValue - 1
+  } else {
+    const likesUserID = LikesResponse.docs.filter(
+      (item) => item.data().userId === ID.user
+    )[0];
+    const user = likesUserID.data();
+    if (data.changed.changedType === user.type && user.userId === ID.user) {
+      dbLikes
+        .doc(likesUserID.id)
+        .delete()
+        .then(() => {
+          db.update({
+            [data.changed.changedType]: data.changed.changedValue - 1,
+          })
+            .then(() => {
+              dispatch(getMessages(ID.topic));
+              dispatch(setMessageLoading(false));
+            })
+            .catch((error) => {
+              console.log("ERROR", error);
+            });
         })
-        dispatch(getMessages(ID.topic));
-        console.log("UPDATE LIKES");
-        dispatch(setMessageLoading(false));
-      }).catch(error=>{
-        console.log("ERROR", error);
-      })
-      return false
+        .catch((error) => {
+          console.log("ERROR", error);
+        });
+      return false;
     }
+    dbLikes.doc(likesUserID.id).update({
+      type: data.type,
+    });
     db.update({
-      [data.changed.changedType]: data.changed.changedvalue,
-      [data.changed.notChangedType]:data.changed.notChangedValue,
+      [data.changed.changedType]: data.changed.changedValue + 1,
+      [data.changed.notChangedType]: data.changed.notChangedValue - 1,
     })
-      .then((result) => {
+      .then(() => {
         dispatch(getMessages(ID.topic));
-        console.log("UPDATE LIKES");
         dispatch(setMessageLoading(false));
       })
       .catch((error) => {

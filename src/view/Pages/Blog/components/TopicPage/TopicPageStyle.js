@@ -1,5 +1,4 @@
 export const TopicPageStyle = (theme) => ({
- 
   topicPage: {
     width: "100%",
     height: "100%",
@@ -7,10 +6,9 @@ export const TopicPageStyle = (theme) => ({
   root: {
     width: "100%",
     border: "2px solid #57527b",
-   
   },
   ".MuiCardHeader-root": {
-    color: "#fff"
+    color: "#fff",
   },
   expand: {
     transform: "rotate(0deg)",
@@ -33,22 +31,24 @@ export const TopicPageStyle = (theme) => ({
     backgroundColor: "#57527b",
     color: "#fff",
   },
-  formSubmit:{
+  formSubmit: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
-  messagesBox:{
-    marginTop: 30
+  messagesBox: {
+    marginTop: 30,
   },
-  replyBtn:{
+  replyBtn: {
     marginTop: 10,
-    width: 100
+    width: 100,
   },
   stylesBadge: {
-    padding: 7
+    padding: 7,
   },
   footerAction: {
-    color: "#fff"
-  }
- 
+    color: "#fff",
+    "&.Mui-disabled": {
+      color: "#FFF",
+    },
+  },
 });

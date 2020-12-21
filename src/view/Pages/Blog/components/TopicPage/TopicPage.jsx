@@ -18,6 +18,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { setDefaultAvatar, FormatDate } from "./../../../../utils/functions";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 class TopicPage extends Component {
   constructor() {
@@ -27,11 +28,10 @@ class TopicPage extends Component {
     };
   }
   componentDidMount() {
-    if(this.props.match.params.id){
-    this.props.getTopicInfo(this.props.match.params.id);
-    this.props.getMessages(this.props.match.params.id);
+    if (this.props.match.params.id) {
+      this.props.getTopicInfo(this.props.match.params.id);
+      this.props.getMessages(this.props.match.params.id);
     }
-    <Redirect to="blog/topics" />
   }
   changeHandler = (e) => {
     this.setState({
@@ -47,24 +47,46 @@ class TopicPage extends Component {
     });
   };
   likesHandler = (e) => {
-    if(e.target.id){
-    this.props.updateLikesInHeader(
-      this.props.userId,
-      e.target.id, {
-      likes: this.props.topicInfo.likes + 1,
-      disLikes: this.props.topicInfo.disLikes,
-    });
-  }
+    if (e.target.id) {
+      this.props.updateLikesInHeader(
+        {
+          topic: this.props.match.params.id,
+          user: this.props.userId,
+        },
+        {
+          type: "likes",
+          likes: this.props.topicInfo.likes + 1,
+          disLikes: this.props.topicInfo.disLikes,
+          changed: {
+            changedType: "likes",
+            changedValue: this.props.topicInfo.likes,
+            notChangedType: "disLikes",
+            notChangedValue: this.props.topicInfo.disLikes,
+          },
+        }
+      );
+    }
   };
   disLikesHandler = (e) => {
-    if(e.target.id){
-    this.props.updateLikesInHeader(
-      this.props.userId,
-      e.target.id, {
-      likes: this.props.topicInfo.likes,
-      disLikes: this.props.topicInfo.disLikes + 1,
-    });
-  }
+    if (e.target.id) {
+      this.props.updateLikesInHeader(
+        {
+          topic: this.props.match.params.id,
+          user: this.props.userId,
+        },
+        {
+          type: "disLikes",
+          likes: this.props.topicInfo.likes,
+          disLikes: this.props.topicInfo.disLikes + 1,
+          changed: {
+            changedType: "disLikes",
+            changedValue: this.props.topicInfo.disLikes,
+            notChangedType: "likes",
+            notChangedValue: this.props.topicInfo.likes,
+          },
+        }
+      );
+    }
   };
   showMessages = () => {
     return this.props.messages.map((item) => {
@@ -80,13 +102,14 @@ class TopicPage extends Component {
           userId={this.props.userId}
           date={item.date}
           updateMessagesLikes={this.props.updateMessagesLikes}
+          isMessageLoading={this.props.isMessageLoading}
         />
       );
     });
   };
   render() {
-    const { classes, topicInfo, isLoading, userId } = this.props;
-    if (isLoading || topicInfo === null) return <CircularProgress />;
+    const { classes, topicInfo, isLoading, isMessageLoading } = this.props;
+    if (isLoading || topicInfo === null) return  <LinearProgress />;
     return (
       <Box className={classes.topicPage}>
         <Breadcrumbs aria-label="breadcrumb">
@@ -108,7 +131,9 @@ class TopicPage extends Component {
               </IconButton>
             }
             title={topicInfo.title}
-            subheader={`published by ${topicInfo.fName} ${topicInfo.lName}, ${FormatDate(topicInfo.dateTime.toDate())}`}
+            subheader={`published by ${topicInfo.fName} ${
+              topicInfo.lName
+            }, ${FormatDate(topicInfo.dateTime.toDate())}`}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -121,6 +146,7 @@ class TopicPage extends Component {
               aria-label="add to favorites"
               id={topicInfo.topicId}
               onClick={(e) => this.likesHandler(e)}
+              disabled={isMessageLoading}
             >
               <Badge
                 color="secondary"
@@ -141,6 +167,7 @@ class TopicPage extends Component {
               aria-label="add to favorites"
               id={topicInfo.topicId}
               onClick={(e) => this.disLikesHandler(e)}
+              disabled={isMessageLoading}
             >
               <Badge
                 color="secondary"

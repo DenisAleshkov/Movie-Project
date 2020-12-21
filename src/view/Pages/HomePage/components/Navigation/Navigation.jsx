@@ -209,7 +209,6 @@ class Navigation extends Component {
                 item
                 xs={11}
                 className={classes.items}
-                onScroll={() => console.log("scroll Grid")}
               >
                 {this.props.isNotificationLoading ? (
                   <CircularProgress

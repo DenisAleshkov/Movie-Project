@@ -129,6 +129,7 @@ class Blog extends Component {
                 messages={this.props.messages}
                 updateLikesInHeader={this.props.updateLikesInHeader}
                 updateMessagesLikes={this.props.updateMessagesLikes}
+                isMessageLoading={this.props.isMessageLoading}
               />
             </Route>
           </Switch>
@@ -158,8 +159,8 @@ const mapDispatchToProps = (dispatch) => ({
   getTopicInfo: (id) => dispatch(getTopicInfo(id)),
   sendMessage: (id, data) => dispatch(sendMessage(id, data)),
   getMessages: (id) => dispatch(getMessages(id)),
-  updateLikesInHeader: (userId, id, data) =>
-    dispatch(updateLikesInHeader(userId, id, data)),
+  updateLikesInHeader: (ID, data) =>
+    dispatch(updateLikesInHeader(ID, data)),
   updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
 });
 

@@ -6,13 +6,14 @@ import {
   UPDATE_MESSAGES,
   SET_LIKES,
   SET_NOTIFICATION,
+  UPDATE_TOPIC_LIKES,
 } from "./../constants";
 
 const initialState = {
   topics: [],
   topicInfo: null,
   messages: [],
-  notification: null
+  notification: null,
 };
 
 const BlogReducer = (state = initialState, action) => {
@@ -35,34 +36,34 @@ const BlogReducer = (state = initialState, action) => {
         topicInfo: action.payload,
       };
     }
-    case SET_MESSAGES: {
-      return {
-        ...state,
-        messages: action.payload.sort((prev,next)=>prev.date - next.date),
-      };
-    }
-    
-    case UPDATE_MESSAGES: {
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
-    }
-    case SET_LIKES: {
+    case UPDATE_TOPIC_LIKES: {
       return {
         ...state,
         topicInfo: {
           ...state.topicInfo,
           likes: action.payload.likes,
           disLikes: action.payload.disLikes,
-        }
-      }
+        },
+      };
+    }
+    case SET_MESSAGES: {
+      return {
+        ...state,
+        messages: action.payload.sort((prev, next) => prev.date - next.date),
+      };
+    }
+
+    case UPDATE_MESSAGES: {
+      return {
+        ...state,
+        messages: [...state.messages, action.payload],
+      };
     }
     case SET_NOTIFICATION: {
       return {
         ...state,
-        notification: action.payload
-      }
+        notification: action.payload,
+      };
     }
     default: {
       return state;
