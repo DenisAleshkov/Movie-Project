@@ -21,7 +21,8 @@ import {
   getMessages,
   updateLikesInHeader,
   updateMessagesLikes,
-  deleteMessage
+  deleteMessage,
+  setNotification
 } from "./../../../store/actions/blogAction";
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, Link } from "react-router-dom";
@@ -99,6 +100,9 @@ class Blog extends Component {
                 firstName={this.props.firstName}
                 lastName={this.props.lastName}
                 id={this.props.userId}
+                setNotification={this.props.setNotification}
+                notification={this.props.notification}
+                isNotificationLoading={this.props.isNotificationLoading}
               />
             </Route>
             <Route path="/blog" exact>
@@ -142,6 +146,7 @@ class Blog extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('state', state.BlogReducer.notification)
   return {
     userId: state.AuthReducer.userId,
     firstName: state.AuthReducer.firstName,
@@ -149,8 +154,10 @@ const mapStateToProps = (state) => {
     topics: state.BlogReducer.topics,
     topicInfo: state.BlogReducer.topicInfo,
     isLoading: state.LoadingReducer.isLoading,
+    isNotificationLoading: state.LoadingReducer.isNotificationLoading,
     isMessageLoading: state.LoadingReducer.isMessageLoading,
     messages: state.BlogReducer.messages,
+    notification: state.BlogReducer.notification
   };
 };
 
@@ -164,7 +171,8 @@ const mapDispatchToProps = (dispatch) => ({
   updateLikesInHeader: (ID, data) =>
     dispatch(updateLikesInHeader(ID, data)),
   updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
-  deleteMessage: (ID) => dispatch(deleteMessage(ID))
+  deleteMessage: (ID) => dispatch(deleteMessage(ID)),
+  setNotification: (payload) => dispatch(setNotification(payload))
 });
 
 export default compose(

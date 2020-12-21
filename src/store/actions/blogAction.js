@@ -6,12 +6,13 @@ import {
   SET_MESSAGES,
   UPDATE_MESSAGES,
   SET_LIKES,
-  SET_MESSAGES_LIKES,
   UPDATE_TOPIC_LIKES,
+  SET_NOTIFICATION_BLOG
 } from "./../constants";
 import { setMessageLoading } from "./../actions/loadingAction";
-import { setLoading } from "./loadingAction";
+import { setLoading, setNotificationLoading } from "./loadingAction";
 
+export const setNotification = payload => ({type: SET_NOTIFICATION_BLOG, payload})
 export const setTopic = (payload) => ({ type: SET_TOPIC, payload });
 export const setAllTopics = (payload) => ({ type: SET_ALL_TOPICS, payload });
 export const setTopicInfo = (payload) => ({ type: SET_TOPIC_INFO, payload });
@@ -24,6 +25,7 @@ export const setTopicLikes = (payload) => ({
 export const updateMessages = (payload) => ({ type: UPDATE_MESSAGES, payload });
 
 export const createTopic = (data, credentials) => (dispatch) => {
+  dispatch(setNotificationLoading(true))
   dispatch(setLoading(true));
   firebase
     .firestore()
@@ -53,12 +55,12 @@ export const createTopic = (data, credentials) => (dispatch) => {
           id: res.id,
         })
       );
-      dispatch(setLoading(false));
-      console.log("CREATED");
+      dispatch(setNotification({ error: false, message: "Topic is created" }))
+      dispatch(setNotificationLoading(false))
     })
     .catch(() => {
-      console.log("ERROR");
-      dispatch(setLoading(false));
+      dispatch(setNotification({ error: false, message: "ERROR" }))
+      dispatch(setNotificationLoading(false))
     });
 };
 

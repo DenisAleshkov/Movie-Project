@@ -5,7 +5,7 @@ import {
   SET_MESSAGES,
   UPDATE_MESSAGES,
   SET_LIKES,
-  SET_NOTIFICATION,
+  SET_NOTIFICATION_BLOG,
   UPDATE_TOPIC_LIKES,
 } from "./../constants";
 
@@ -58,7 +58,7 @@ const BlogReducer = (state = initialState, action) => {
         messages: [...state.messages, action.payload],
       };
     }
-    case SET_NOTIFICATION: {
+    case SET_NOTIFICATION_BLOG: {
       return {
         ...state,
         notification: action.payload,

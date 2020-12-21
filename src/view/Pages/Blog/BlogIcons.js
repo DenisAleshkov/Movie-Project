@@ -1,17 +1,19 @@
 
-import ChatIcon from '@material-ui/icons/Chat';
+import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
+import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
+import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
 export const BLOG_ICONS = (cssClass = "") => {
     return [
       {
-        component: <ChatIcon className={cssClass}/>,
+        component: <PermIdentityOutlinedIcon className={cssClass}/>,
         url: "/blog/profile",
       },
       {
-        component: <ChatIcon className={cssClass} />,
+        component: <InsertDriveFileOutlinedIcon className={cssClass} />,
         url: "/blog/createTopic",
       },
       {
-        component: <ChatIcon className={cssClass} />,
+        component: <CommentOutlinedIcon className={cssClass} />,
         url: "/blog/topics",
       },
     ];

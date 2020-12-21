@@ -2,10 +2,30 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import { Alert } from "@material-ui/lab";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { Box, withStyles } from "@material-ui/core";
 import { CreateTopicStyle } from "./CreateTopicStyle";
 
 class CreateTopic extends Component {
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+    };
+  }
+  handleClick = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.props.setNotification(null)
+    this.setState({ open: false });
+  };
   changeHandler = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
@@ -19,8 +39,28 @@ class CreateTopic extends Component {
       lName: this.props.lastName,
     });
   };
+  showNotification = () => {
+    if (this.props.notification) {
+      return (
+        <Snackbar
+          open={!!this.props.notification}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+          className={this.props.classes.notifSnackbar}
+        >
+          {this.props.notification && this.props.notification.error ? (
+            <Alert severity="error">{this.props.notification.message}</Alert>
+          ) : (
+            <Alert onClose={this.handleClose} severity="success">
+              {this.props.notification.message}
+            </Alert>
+          )}
+        </Snackbar>
+      );
+    }
+  };
   render() {
-    const { classes } = this.props;
+    const { classes, isNotificationLoading } = this.props;
     return (
       <Box className={classes.boxForm}>
         <form
@@ -72,6 +112,11 @@ class CreateTopic extends Component {
             </Button>
           </div>
         </form>
+        {isNotificationLoading ? (
+          <CircularProgress className={classes.notifLoader} />
+        ) : (
+          this.showNotification()
+        )}
       </Box>
     );
   }
