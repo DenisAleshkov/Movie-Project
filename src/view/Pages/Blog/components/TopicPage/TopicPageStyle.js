@@ -7,9 +7,6 @@ export const TopicPageStyle = (theme) => ({
     width: "100%",
     border: "2px solid #57527b",
   },
-  ".MuiCardHeader-root": {
-    color: "#fff",
-  },
   expand: {
     transform: "rotate(0deg)",
     marginLeft: "auto",
@@ -24,8 +21,7 @@ export const TopicPageStyle = (theme) => ({
     backgroundColor: "red",
   },
   headerCard: {
-    backgroundColor: "#57527b",
-    color: "#fff",
+    backgroundColor: "rgba(0,0,0,0.06)"
   },
   footerCard: {
     backgroundColor: "#57527b",

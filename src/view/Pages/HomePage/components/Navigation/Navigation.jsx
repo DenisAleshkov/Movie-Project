@@ -55,7 +55,6 @@ class Navigation extends Component {
     };
     this.pageToEndRef = React.createRef();
     this.pageToStartRef = React.createRef();
-    this.scrollRef = React.createRef();
   }
 
   toggleDrawerOpen = (value) => {

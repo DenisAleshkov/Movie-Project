@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,7 +17,21 @@ import { Link, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { setDefaultAvatar, FormatDate } from "./../../../../utils/functions";
 
+const ITEM_HEIGHT = 48;
+
 class TopicMessage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      anchorEl: null,
+    };
+  }
+
+  handleClick = (e) => {
+    this.setState({
+      anchorEl: e.currentTarget,
+    });
+  };
   likesHandler = (e) => {
     e.target.id &&
       this.props.updateMessagesLikes(
@@ -30,9 +46,9 @@ class TopicMessage extends Component {
           disLikes: this.props.disLikes,
           changed: {
             changedType: "likes",
-            changedValue:this.props.likes,
+            changedValue: this.props.likes,
             notChangedType: "disLikes",
-            notChangedValue:  this.props.disLikes,
+            notChangedValue: this.props.disLikes,
           },
         }
       );
@@ -41,7 +57,6 @@ class TopicMessage extends Component {
     e.target.id &&
       this.props.updateMessagesLikes(
         {
-         
           message: e.target.id,
           topic: this.props.match.params.id,
           user: this.props.userId,
@@ -52,12 +67,63 @@ class TopicMessage extends Component {
           disLikes: this.props.disLikes + 1,
           changed: {
             changedType: "disLikes",
-            changedValue:  this.props.disLikes,
+            changedValue: this.props.disLikes,
             notChangedType: "likes",
-            notChangedValue:this.props.likes,
+            notChangedValue: this.props.likes,
           },
         }
       );
+  };
+  deleteHandler = (e) => {
+    this.props.deleteMessage({
+      topic: this.props.match.params.id,
+      message: e.target.id,
+    });
+  };
+  handleClose = () => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
+  getOptions = () => {
+    const option = [
+      {
+        name: "Delete",
+      },
+    ];
+    if (this.props.myId === this.props.userId) {
+      return option.map((option) => {
+        return (
+          <div key={this.props.id}>
+            <IconButton
+              aria-label="more"
+              aria-controls="long-menu"
+              aria-haspopup="true"
+              onClick={this.handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              anchorEl={this.state.anchorEl}
+              keepMounted
+              open={Boolean(this.state.anchorEl)}
+              onClose={this.handleClose}
+              PaperProps={{
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "20ch",
+                },
+              }}
+            >
+              <MenuItem id={this.props.id} onClick={this.deleteHandler}>
+                {option.name}
+              </MenuItem>
+            </Menu>
+          </div>
+        );
+      });
+    }
   };
   render() {
     const {
@@ -69,9 +135,9 @@ class TopicMessage extends Component {
       disLikes,
       id,
       date,
-      isMessageLoading
-
+      isMessageLoading,
     } = this.props;
+
     return (
       <Card className={classes.root}>
         <CardHeader
@@ -81,13 +147,9 @@ class TopicMessage extends Component {
               {setDefaultAvatar(fName, lName)}
             </Avatar>
           }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={`reply by ${fName} ${lName}`}
-          subheader={"FormatDate(date.toDate())"}
+          action={this.getOptions()}
+          title={`reply by ${fName} ${lName},`}
+          subheader={FormatDate(date.toDate())}
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">

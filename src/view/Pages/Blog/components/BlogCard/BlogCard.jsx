@@ -13,8 +13,7 @@ import { FormatDate } from "./../../../../utils/functions"
 
 class BlogCard extends React.Component {
   render() {
-    const { classes, title, desctiption, id, lastMessageDate, fName, lName} = this.props;
-    console.log("lastMessage", lastMessageDate);
+    const { classes, title, id, fName, lName} = this.props;
     return (
       <Card className={classes.root}>
         <CardActionArea>

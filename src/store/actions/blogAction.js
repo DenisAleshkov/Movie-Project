@@ -124,7 +124,7 @@ export const getMessages = (id) => (dispatch) => {
     });
 };
 
-export const sendMessage = (id, data) => (dispatch) => {
+export const sendMessage = (userId, id, data) => (dispatch) => {
   dispatch(setMessageLoading(true));
   const db = firebase
     .firestore()
@@ -133,6 +133,8 @@ export const sendMessage = (id, data) => (dispatch) => {
     .collection("messages");
   const dbOnUpdate = firebase.firestore().collection("blog").doc(id);
   db.add({
+    id: id,
+    userId: userId,
     message: data.message,
     fName: data.fName,
     lName: data.lName,
@@ -141,21 +143,26 @@ export const sendMessage = (id, data) => (dispatch) => {
     date: new Date(),
   })
     .then((result) => {
-      dbOnUpdate
-        .update({
-          lastMessage: data.message,
-          lastMessageDate: new Date(),
-          MessageFName: data.fName,
-          MessageLName: data.lName,
-        })
-        .then((result) => console.log(result));
+      dbOnUpdate.update({
+        lastMessage: data.message,
+        lastMessageDate: new Date(),
+        MessageFName: data.fName,
+        MessageLName: data.lName,
+      });
       dispatch(
-        updateMessages({ ...data, likes: 0, disLikes: 0, id: result.id })
+        updateMessages({
+          ...data,
+          likes: 0,
+          disLikes: 0,
+          id: result.id,
+          userId: userId,
+          date: firebase.firestore.Timestamp.fromDate(new Date()),
+        })
       );
       dispatch(setMessageLoading(false));
     })
     .catch((error) => {
-      console.log("error");
+      console.log("Error", error);
       dispatch(setMessageLoading(false));
     });
 };
@@ -321,4 +328,23 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
         dispatch(setMessageLoading(false));
       });
   }
+};
+
+export const deleteMessage = (ID) => (dispatch) => {
+  dispatch(setMessageLoading(true));
+  const db = firebase
+    .firestore()
+    .collection("blog")
+    .doc(ID.topic)
+    .collection("messages")
+    .doc(ID.message);
+  db.delete()
+    .then(() => {
+      dispatch(getMessages(ID.topic));
+      dispatch(setMessageLoading(false));
+    })
+    .catch((error) => {
+      console.log("Error", error);
+      dispatch(setMessageLoading(false));
+    });
 };

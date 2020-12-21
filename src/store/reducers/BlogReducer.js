@@ -52,7 +52,6 @@ const BlogReducer = (state = initialState, action) => {
         messages: action.payload.sort((prev, next) => prev.date - next.date),
       };
     }
-
     case UPDATE_MESSAGES: {
       return {
         ...state,

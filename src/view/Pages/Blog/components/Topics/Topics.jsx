@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import BlogCard from "./../BlogCard/BlogCard";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Link from "@material-ui/core/Link";
 import { Box, withStyles } from "@material-ui/core";
 import { TopicsStyle } from "./TopicsStyle";
@@ -11,26 +12,35 @@ class Topics extends Component {
     super();
     this.state = {};
   }
+  componentDidMount() {
+    this.props.getTopics();
+  }
   showTopics = () => {
-    return this.props.topics.map((item) => {
-      console.log('item', item)
-      return (
-        <BlogCard
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          description={item.description}
-          date={item.date}
-          lastMessageDate={ item.lastMessage}
-          fName={item.MessageFName}
-          lName={item.MessageLName}
-        />
-      );
-    });
+    return (
+      this.props.topics &&
+      this.props.topics.map((item) => {
+        return (
+          <BlogCard
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            date={item.date}
+            lastMessageDate={item.lastMessage}
+            fName={item.MessageFName}
+            lName={item.MessageLName}
+          />
+        );
+      })
+    );
   };
   render() {
-    const { classes } = this.props;
-    return <Box className={classes.topicsBox}>{this.showTopics()}</Box>;
+    const { classes, isLoading } = this.props;
+    return isLoading ? (
+      <CircularProgress />
+    ) : (
+      <Box className={classes.topicsBox}>{this.showTopics()}</Box>
+    );
   }
 }
 

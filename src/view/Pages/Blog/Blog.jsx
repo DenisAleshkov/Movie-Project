@@ -21,6 +21,7 @@ import {
   getMessages,
   updateLikesInHeader,
   updateMessagesLikes,
+  deleteMessage
 } from "./../../../store/actions/blogAction";
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, Link } from "react-router-dom";
@@ -31,7 +32,6 @@ import TopicPage from "./components/TopicPage/TopicPage";
 
 class Blog extends Component {
   componentDidMount() {
-    this.props.getTopics();
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         firebase
@@ -113,6 +113,7 @@ class Blog extends Component {
                 className={classes.topics}
                 topics={this.props.topics}
                 getTopics={this.props.getTopics}
+                isLoading={this.props.isLoading}
               />
             </Route>
             <Route path="/blog/topic/:id" exact>
@@ -130,6 +131,7 @@ class Blog extends Component {
                 updateLikesInHeader={this.props.updateLikesInHeader}
                 updateMessagesLikes={this.props.updateMessagesLikes}
                 isMessageLoading={this.props.isMessageLoading}
+                deleteMessage={this.props.deleteMessage}
               />
             </Route>
           </Switch>
@@ -157,11 +159,12 @@ const mapDispatchToProps = (dispatch) => ({
   createTopic: (data, credentials) => dispatch(createTopic(data, credentials)),
   getTopics: () => dispatch(getTopics()),
   getTopicInfo: (id) => dispatch(getTopicInfo(id)),
-  sendMessage: (id, data) => dispatch(sendMessage(id, data)),
+  sendMessage: (userId, id, data) => dispatch(sendMessage(userId, id, data)),
   getMessages: (id) => dispatch(getMessages(id)),
   updateLikesInHeader: (ID, data) =>
     dispatch(updateLikesInHeader(ID, data)),
   updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
+  deleteMessage: (ID) => dispatch(deleteMessage(ID))
 });
 
 export default compose(

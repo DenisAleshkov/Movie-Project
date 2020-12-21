@@ -34,8 +34,7 @@ export const BlogStyle = (theme) => ({
   },
   avatarBox: {
     display: "flex",
-    paddingLeft: 16,
-    paddingRight: 16,
+    padding: 16,
     justifyContent: "center"
   },
   topics: {
@@ -46,7 +45,7 @@ export const BlogStyle = (theme) => ({
   avatar: {
     width: "100px",
     height: "100px",
-    fontSize: "4.25rem",
+    fontSize: "3.25rem",
   },
   blog:  {
     width: "100%",
@@ -60,5 +59,5 @@ export const BlogStyle = (theme) => ({
     position: "fixed",
     top: 0,
     width: "100%",
-  }
+  },
 });

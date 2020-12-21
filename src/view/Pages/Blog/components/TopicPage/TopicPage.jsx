@@ -40,7 +40,7 @@ class TopicPage extends Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.sendMessage(this.props.match.params.id, {
+    this.props.sendMessage(this.props.userId ,this.props.match.params.id, {
       ...this.state,
       fName: this.props.firstName,
       lName: this.props.lastName,
@@ -93,16 +93,18 @@ class TopicPage extends Component {
       return (
         <TopicMessage
           key={item.id}
+          userId={item.userId}
+          myId={this.props.userId}
           fName={item.fName}
           lName={item.lName}
           message={item.message}
           likes={item.likes}
           disLikes={item.disLikes}
           id={item.id}
-          userId={this.props.userId}
           date={item.date}
           updateMessagesLikes={this.props.updateMessagesLikes}
           isMessageLoading={this.props.isMessageLoading}
+          deleteMessage={this.props.deleteMessage}
         />
       );
     });
