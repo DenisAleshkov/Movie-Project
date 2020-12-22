@@ -20,11 +20,9 @@ export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
 
 export const setUser = payload => ({type: SET_USER, payload})
 
-const getUserInfo = async (id, email) => {
-  const userData = await firebase.firestore().collection("users").get(id);
-  const user = userData.docs
-    .filter((doc) => doc.data().email === email)
-    .map((doc) => doc.data())[0];
+const getUserInfo = async (id) => {
+  const userData = await firebase.firestore().collection("users").doc(id).get();
+  const user = userData.data()
   return user;
 };
 
@@ -33,7 +31,7 @@ export const login = (credentials) => (dispatch) => {
     .auth()
     .signInWithEmailAndPassword(credentials.email, credentials.password)
     .then(async (res) => {
-      const user = await getUserInfo(res.user.email, credentials.email);
+      const user = await getUserInfo(res.user.uid);
       if (credentials.checked) {
         localStorage.setItem("token", res.user.uid);
       }

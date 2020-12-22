@@ -3,7 +3,9 @@ export const GLOBALS = {
   BASE_URL: "https://api.themoviedb.org/3",
   LANG: "en-US",
   BY_POPULARITY: "popularity.desc",
-  SESSION: "guest_session_id=cc406e911e3a2428546b492185ad39cd",
+  GUEST_SESSION: "guest_session_id=cc406e911e3a2428546b492185ad39cd",
+  request_token: "9c9299be11d6dffa4fae3e7b9217d58eea1b8604",
+  SESSION_ID: "20701734e99f356279f850fc4af8e20d8e8e486b",
 };
 export const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAtadE3LWhSA3YpGcKSoVJfUjqF5hQ1JeY",
@@ -22,6 +24,8 @@ export const SET_SEARCH_MOVIES = "SET_SEARCH_MOVIES";
 export const SET_SEARCH_TV = "SET_SEARCH_TV";
 export const SET_MOVIE_TO_LIBRARY = "SET_MOVIE_TO_LIBRARY";
 export const GET_MOVIE_FROM_LIBRARY = "GET_MOVIE_FROM_LIBRARY";
+export const SET_RATE_MOVIES = "SET_RATE_MOVIES";
+export const SET_RATE_TV = "SET_RATE_TV";
 
 export const SET_LOADING = "SET_LOADING";
 

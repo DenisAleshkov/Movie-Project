@@ -1,6 +1,6 @@
 import { GLOBALS } from "./constants";
 
-const { BASE_URL, API_KEY, LANG, BY_POPULARITY, SESSION } = GLOBALS;
+const { BASE_URL, API_KEY, LANG, BY_POPULARITY, SESSION_ID } = GLOBALS;
 
 export const MOVIE = {
   GET_POPULAT_MOVIES: (page) =>
@@ -18,9 +18,13 @@ export const MOVIE = {
   SEARCH_TV_BY_TITLE: () =>
     `${BASE_URL}/search/tv?api_key=${API_KEY}&language==${LANG}`,
   SET_RATING_MOVIE: (id) =>
-    `${BASE_URL}/movie/${id}/rating?api_key=${API_KEY}&${SESSION}`,
+    `${BASE_URL}/movie/${id}/rating?api_key=${API_KEY}&session_id=${SESSION_ID}`,
   SET_RATING_TV: (id) =>
-    `${BASE_URL}/tv/${id}/rating?api_key=${API_KEY}&${SESSION}`,
+    `${BASE_URL}/tv/${id}/rating?api_key=${API_KEY}&session_id=${SESSION_ID}`,
+  GET_RATED_MOVIES: (page) =>
+    `${BASE_URL}/account/${API_KEY}/rated/movies?api_key=${API_KEY}&language=${LANG}&session_id=${SESSION_ID}&sort_by=created_at.asc&page=${page}`,
+  GET_RATED_TV: (page) =>
+    `${BASE_URL}/account/${API_KEY}/rated/tv?api_key=${API_KEY}&language=${LANG}&session_id=${SESSION_ID}&sort_by=created_at.asc&page=${page}`,
 };
 
 export const DETAILS = {

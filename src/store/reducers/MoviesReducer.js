@@ -9,6 +9,8 @@ import {
   SET_SEARCH_TV,
   SET_NOTIFICATION,
   SET_REMEMBER_INPUTS,
+  SET_RATE_MOVIES,
+  SET_RATE_TV,
 } from "./../constants";
 
 const initialState = {
@@ -25,6 +27,10 @@ const initialState = {
   error: null,
   searchMovies: [],
   rememberInput: null,
+  rateTv: [],
+  myAverageTv: 0,
+  rateMovies: [],
+  myAverageMovies: 0,
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -85,6 +91,20 @@ const MoviesReducer = (state = initialState, action) => {
       return {
         ...state,
         rememberInput: action.payload,
+      };
+    }
+    case SET_RATE_MOVIES: {
+      return {
+        ...state,
+        rateMovies: action.payload.movies,
+        myAverageMovies: action.payload.myAverageMovies
+      };
+    }
+    case SET_RATE_TV: {
+      return {
+        ...state,
+        rateTv: action.payload.tv,
+        myAverageTv: action.payload.myAverageTv,
       };
     }
     default: {

@@ -22,7 +22,7 @@ import {
   updateLikesInHeader,
   updateMessagesLikes,
   deleteMessage,
-  setNotification
+  setNotification,
 } from "./../../../store/actions/blogAction";
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, Link } from "react-router-dom";
@@ -30,6 +30,9 @@ import CreateTopic from "./components/CreateTopic/CreateTopic";
 import { BLOG_ICONS } from "./BlogIcons";
 import Topics from "./components/Topics/Topics";
 import TopicPage from "./components/TopicPage/TopicPage";
+import Axios from "axios";
+import { getRateMovies, getRateTv } from "../../../store/actions/movieAction";
+import Profile from "./components/Profile/Profile";
 
 class Blog extends Component {
   componentDidMount() {
@@ -71,23 +74,25 @@ class Blog extends Component {
           </Box>
 
           <List>
-            {["Profile", "Create topic", "Topics"].map((text, index) => (
-              <ListItem
-                button
-                component={Link}
-                to={BLOG_ICONS()[index].url}
-                key={text}
-                className={classes.sideMenuSelected}
-              >
-                <ListItemIcon>
-                  {BLOG_ICONS(clsx(classes.navIcon))[index].component}
-                </ListItemIcon>
-                <ListItemText
-                  className={clsx(classes.navIconText)}
-                  primary={text}
-                />
-              </ListItem>
-            ))}
+            {["Profile", "Create topic", "Topics", "Back"].map(
+              (text, index) => (
+                <ListItem
+                  button
+                  component={Link}
+                  to={BLOG_ICONS()[index].url}
+                  key={text}
+                  className={classes.sideMenuSelected}
+                >
+                  <ListItemIcon>
+                    {BLOG_ICONS(clsx(classes.navIcon))[index].component}
+                  </ListItemIcon>
+                  <ListItemText
+                    className={clsx(classes.navIconText)}
+                    primary={text}
+                  />
+                </ListItem>
+              )
+            )}
           </List>
         </Drawer>
         <main className={classes.content}>
@@ -138,6 +143,19 @@ class Blog extends Component {
                 deleteMessage={this.props.deleteMessage}
               />
             </Route>
+            <Route path="/blog/profile" exact>
+              <Profile
+                firstName={this.props.firstName}
+                lastName={this.props.lastName}
+                email={this.props.email}
+                getRatedMovies={this.props.getRatedMovies}
+                getRateTv={this.props.getRateTv}
+                rateMovies={this.props.rateMovies}
+                rateTv={this.props.rateTv}
+                myAverageMovies={this.props.myAverageMovies}
+                myAverageTv={this.props.myAverageTv}
+              />
+            </Route>
           </Switch>
         </main>
       </div>
@@ -146,9 +164,9 @@ class Blog extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state', state.BlogReducer.notification)
   return {
     userId: state.AuthReducer.userId,
+    email: state.AuthReducer.email,
     firstName: state.AuthReducer.firstName,
     lastName: state.AuthReducer.lastName,
     topics: state.BlogReducer.topics,
@@ -157,7 +175,11 @@ const mapStateToProps = (state) => {
     isNotificationLoading: state.LoadingReducer.isNotificationLoading,
     isMessageLoading: state.LoadingReducer.isMessageLoading,
     messages: state.BlogReducer.messages,
-    notification: state.BlogReducer.notification
+    notification: state.BlogReducer.notification,
+    rateMovies: state.MoviesReducer.rateMovies,
+    rateTv: state.MoviesReducer.rateTv,
+    myAverageMovies: state.MoviesReducer.myAverageMovies,
+    myAverageTv: state.MoviesReducer.myAverageTv,
   };
 };
 
@@ -168,11 +190,12 @@ const mapDispatchToProps = (dispatch) => ({
   getTopicInfo: (id) => dispatch(getTopicInfo(id)),
   sendMessage: (userId, id, data) => dispatch(sendMessage(userId, id, data)),
   getMessages: (id) => dispatch(getMessages(id)),
-  updateLikesInHeader: (ID, data) =>
-    dispatch(updateLikesInHeader(ID, data)),
+  updateLikesInHeader: (ID, data) => dispatch(updateLikesInHeader(ID, data)),
   updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
   deleteMessage: (ID) => dispatch(deleteMessage(ID)),
-  setNotification: (payload) => dispatch(setNotification(payload))
+  setNotification: (payload) => dispatch(setNotification(payload)),
+  getRatedMovies: (page) => dispatch(getRateMovies(page)),
+  getRateTv: (page) => dispatch(getRateTv(page)),
 });
 
 export default compose(

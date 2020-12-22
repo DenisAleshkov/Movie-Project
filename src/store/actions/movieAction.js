@@ -9,10 +9,14 @@ import {
   SET_MOVIE_RATE,
   SET_NOTIFICATION,
   SET_REMEMBER_INPUTS,
+  SET_RATE_MOVIES,
+  SET_RATE_TV,
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 
+export const setRateMovies = (payload) => ({ type: SET_RATE_MOVIES, payload });
+export const setRateTv = (payload) => ({ type: SET_RATE_TV, payload });
 export const setMovies = (payload) => ({ type: SET_MOVIES, payload });
 export const setRate = (payload) => ({ type: SET_MOVIE_RATE, payload });
 export const setNotification = (payload) => ({
@@ -236,5 +240,46 @@ export const setTvRate = (id, value) => (dispatch) => {
         })
       );
       dispatch(setNotificationLoading(false));
+    });
+};
+
+export const getRateMovies = (page) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .get(MOVIE.GET_RATED_MOVIES(page))
+    .then((result) => {
+      const average =
+        result.data.results.length &&
+        result.data.results.reduce((accum, current) => {
+          return accum + current.rating;
+        }, 0) / result.data.results.length;
+      console.log("average", average);
+      dispatch(
+        setRateMovies({ movies: result.data.results, myAverageMovies: average })
+      );
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      dispatch(setError(error.response.data.status_message));
+      dispatch(setLoading(false));
+    });
+};
+
+export const getRateTv = (page) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .get(MOVIE.GET_RATED_TV(page))
+    .then((result) => {
+      const average =
+        result.data.results.length &&
+        result.data.results.reduce((accum, current) => {
+          return accum + current.rating;
+        }, 0) / result.data.results.length;
+      dispatch(setRateTv({ tv: result.data.results, myAverageTv: average }));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      dispatch(setError(error.response.data.status_message));
+      dispatch(setLoading(false));
     });
 };

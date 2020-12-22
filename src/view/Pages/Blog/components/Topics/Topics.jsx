@@ -29,6 +29,7 @@ class Topics extends Component {
             lastMessageDate={item.lastMessage}
             fName={item.MessageFName}
             lName={item.MessageLName}
+            lastMessageDate={item.lastMessageDate}
           />
         );
       })

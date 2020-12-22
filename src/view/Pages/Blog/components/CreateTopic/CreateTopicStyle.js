@@ -2,7 +2,8 @@ export const CreateTopicStyle = (theme) => ({
   boxForm:{
     width: "100%",
     height: "100%",
-    textAlign: "center"
+    textAlign: "center",
+    padding: 16
   },
   createTopic:{
     textAlign: "left"

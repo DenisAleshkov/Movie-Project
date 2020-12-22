@@ -33,12 +33,13 @@ class TopicMessage extends Component {
     });
   };
   likesHandler = (e) => {
+    console.log('user:', this.props.myId)
     e.target.id &&
       this.props.updateMessagesLikes(
         {
           message: e.target.id,
           topic: this.props.match.params.id,
-          user: this.props.userId,
+          user: this.props.myId,
         },
         {
           type: "likes",
@@ -59,7 +60,7 @@ class TopicMessage extends Component {
         {
           message: e.target.id,
           topic: this.props.match.params.id,
-          user: this.props.userId,
+          user: this.props.myId,
         },
         {
           type: "disLikes",

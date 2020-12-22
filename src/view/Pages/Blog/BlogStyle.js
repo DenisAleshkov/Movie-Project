@@ -2,7 +2,7 @@ const drawerWidth = 200;
 export const BlogStyle = (theme) => ({
   root: {
     display: "flex",
-    width: "100%"
+    width: "100%",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -20,7 +20,6 @@ export const BlogStyle = (theme) => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

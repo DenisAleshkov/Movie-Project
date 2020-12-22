@@ -13,7 +13,7 @@ import { FormatDate } from "./../../../../utils/functions"
 
 class BlogCard extends React.Component {
   render() {
-    const { classes, title, id, fName, lName} = this.props;
+    const { classes, title, id, fName, lName, lastMessageDate} = this.props;
     return (
       <Card className={classes.root}>
         <CardActionArea>
@@ -23,7 +23,7 @@ class BlogCard extends React.Component {
             </Typography>
 
             <Typography gutterBottom component="h6">
-              Last reply by {`${fName} ${lName}`},
+              Last reply by {`${fName} ${lName}`}, {FormatDate(lastMessageDate.toDate())}
             </Typography>
           </CardContent>
         </CardActionArea>
