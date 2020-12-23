@@ -5,12 +5,7 @@ import { connect } from "react-redux";
 import {
   getGenres,
   getMovies,
-  setMovies,
 } from "./../../../store/actions/movieAction";
-import { 
-  getDetailsMovie,
-  getSimilarMovies,
-} from "./../../../store/actions/detailsAction"
 class Movie extends Component {
   constructor() {
     super();
@@ -69,7 +64,6 @@ class Movie extends Component {
       });
     }
   };
-
   render() {
     return (
       <>
@@ -100,8 +94,5 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),
   getGenres: (type) => dispatch(getGenres(type)),
-  setMovies: (payload) => dispatch(setMovies(payload)),
-  getDetailsMovie: (id) => dispatch(getDetailsMovie(id)),
-  getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Movie);

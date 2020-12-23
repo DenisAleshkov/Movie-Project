@@ -28,6 +28,7 @@ export const SET_RATE_MOVIES = "SET_RATE_MOVIES";
 export const SET_RATE_TV = "SET_RATE_TV";
 
 export const SET_LOADING = "SET_LOADING";
+export const SET_AVATAR_LOADING = "SET_AVATAR_LOADING";
 
 export const SET_ERROR = "SET_ERROR";
 
@@ -41,6 +42,8 @@ export const SET_USER = "SET_USER";
 
 export const SIGNOUT_SUCCESS = "SIGNOUT_SUCCESS";
 export const SIGNOUT_ERROR = "SIGNOUT_ERROR";
+
+export const SET_PHOTO = "SET_PHOTO";
 
 export const SET_DATA_TO_SEARCH = "SET_DATA_TO_SEARCH";
 

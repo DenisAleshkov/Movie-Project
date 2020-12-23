@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import firebase from "firebase";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import clsx from "clsx";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { Avatar, Box, withStyles } from "@material-ui/core";
-import { BlogStyle } from "./BlogStyle";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { setUser } from "./../../../store/actions/authAction";
+import CreateTopic from "./components/CreateTopic/CreateTopic";
+import Profile from "./components/Profile/Profile";
+import Topics from "./components/Topics/Topics";
+import TopicPage from "./components/TopicPage/TopicPage";
+import {
+  LinearProgress,
+  Drawer,
+  CssBaseline,
+  List,
+  ListItemIcon,
+  ListItem,
+  ListItemText,
+  Avatar,
+  Box,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import {
   createTopic,
   getTopics,
@@ -24,15 +29,14 @@ import {
   deleteMessage,
   setNotification,
 } from "./../../../store/actions/blogAction";
+import { getRateMovies, getRateTv } from "../../../store/actions/movieAction";
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, Link } from "react-router-dom";
-import CreateTopic from "./components/CreateTopic/CreateTopic";
 import { BLOG_ICONS } from "./BlogIcons";
-import Topics from "./components/Topics/Topics";
-import TopicPage from "./components/TopicPage/TopicPage";
-import Axios from "axios";
-import { getRateMovies, getRateTv } from "../../../store/actions/movieAction";
-import Profile from "./components/Profile/Profile";
+import { BlogStyle } from "./BlogStyle";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { setUser, updatePhoto } from "./../../../store/actions/authAction";
 
 class Blog extends Component {
   componentDidMount() {
@@ -54,6 +58,24 @@ class Blog extends Component {
       return <LinearProgress className={this.props.classes.loader} />;
     }
   };
+  showAvatar = (styles) => {
+    const { width, height, margin } = styles;
+    return (
+      <Avatar style={{ width: width, height: height, marginTop: margin }}>
+        {this.props.photoUrl ? (
+          <img
+            src={this.props.photoUrl}
+            className={this.props.classes.profilePhoto}
+            style={{ width: width, height: height }}
+          />
+        ) : (
+          <Typography className={this.props.classes.avatarText} variant="h3">
+            {setDefaultAvatar(this.props.firstName, this.props.lastName)}
+          </Typography>
+        )}
+      </Avatar>
+    );
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -68,9 +90,7 @@ class Blog extends Component {
           anchor="left"
         >
           <Box className={classes.avatarBox}>
-            <Avatar className={classes.avatar}>
-              {setDefaultAvatar(this.props.firstName, this.props.lastName)}
-            </Avatar>
+            {this.showAvatar({ width: "100px", height: "100px", margin: 0 })}
           </Box>
 
           <List>
@@ -141,12 +161,15 @@ class Blog extends Component {
                 updateMessagesLikes={this.props.updateMessagesLikes}
                 isMessageLoading={this.props.isMessageLoading}
                 deleteMessage={this.props.deleteMessage}
+                showAvatar={this.showAvatar}
+                updatePhoto={this.props.updatePhoto}
               />
             </Route>
             <Route path="/blog/profile" exact>
               <Profile
                 firstName={this.props.firstName}
                 lastName={this.props.lastName}
+                photoUrl={this.props.photoUrl}
                 email={this.props.email}
                 getRatedMovies={this.props.getRatedMovies}
                 getRateTv={this.props.getRateTv}
@@ -154,6 +177,7 @@ class Blog extends Component {
                 rateTv={this.props.rateTv}
                 myAverageMovies={this.props.myAverageMovies}
                 myAverageTv={this.props.myAverageTv}
+                showAvatar={this.showAvatar}
               />
             </Route>
           </Switch>
@@ -169,6 +193,7 @@ const mapStateToProps = (state) => {
     email: state.AuthReducer.email,
     firstName: state.AuthReducer.firstName,
     lastName: state.AuthReducer.lastName,
+    photoUrl: state.AuthReducer.photoUrl,
     topics: state.BlogReducer.topics,
     topicInfo: state.BlogReducer.topicInfo,
     isLoading: state.LoadingReducer.isLoading,
@@ -196,6 +221,7 @@ const mapDispatchToProps = (dispatch) => ({
   setNotification: (payload) => dispatch(setNotification(payload)),
   getRatedMovies: (page) => dispatch(getRateMovies(page)),
   getRateTv: (page) => dispatch(getRateTv(page)),
+  updatePhoto: (ID, photoUrl) => dispatch(updatePhoto(ID, photoUrl)),
 });
 
 export default compose(

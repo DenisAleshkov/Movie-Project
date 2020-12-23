@@ -7,12 +7,16 @@ import {
   UPDATE_MESSAGES,
   SET_LIKES,
   UPDATE_TOPIC_LIKES,
-  SET_NOTIFICATION_BLOG
+  SET_NOTIFICATION_BLOG,
 } from "./../constants";
 import { setMessageLoading } from "./../actions/loadingAction";
 import { setLoading, setNotificationLoading } from "./loadingAction";
+import { getUserInfo } from "./authAction";
 
-export const setNotification = payload => ({type: SET_NOTIFICATION_BLOG, payload})
+export const setNotification = (payload) => ({
+  type: SET_NOTIFICATION_BLOG,
+  payload,
+});
 export const setTopic = (payload) => ({ type: SET_TOPIC, payload });
 export const setAllTopics = (payload) => ({ type: SET_ALL_TOPICS, payload });
 export const setTopicInfo = (payload) => ({ type: SET_TOPIC_INFO, payload });
@@ -24,9 +28,10 @@ export const setTopicLikes = (payload) => ({
 });
 export const updateMessages = (payload) => ({ type: UPDATE_MESSAGES, payload });
 
-export const createTopic = (data, credentials) => (dispatch) => {
-  dispatch(setNotificationLoading(true))
+export const createTopic = (data, credentials) => async (dispatch) => {
+  dispatch(setNotificationLoading(true));
   dispatch(setLoading(true));
+  const user = await getUserInfo(credentials.userId)
   firebase
     .firestore()
     .collection("blog")
@@ -43,6 +48,7 @@ export const createTopic = (data, credentials) => (dispatch) => {
       likes: 0,
       disLikes: 0,
       dateTime: firebase.firestore.FieldValue.serverTimestamp(),
+      photoUrl: user.photoUrl
     })
     .then((res) => {
       dispatch(
@@ -52,15 +58,16 @@ export const createTopic = (data, credentials) => (dispatch) => {
           lastMessageDate: new Date(),
           MessageFName: credentials.fName,
           MessageLName: credentials.lName,
+          photoUrl: user.photoUrl,
           id: res.id,
         })
       );
-      dispatch(setNotification({ error: false, message: "Topic is created" }))
-      dispatch(setNotificationLoading(false))
+      dispatch(setNotification({ error: false, message: "Topic is created" }));
+      dispatch(setNotificationLoading(false));
     })
     .catch(() => {
-      dispatch(setNotification({ error: false, message: "ERROR" }))
-      dispatch(setNotificationLoading(false))
+      dispatch(setNotification({ error: false, message: "ERROR" }));
+      dispatch(setNotificationLoading(false));
     });
 };
 
@@ -87,7 +94,7 @@ export const getTopics = (id) => (dispatch) => {
     });
 };
 
-export const getTopicInfo = (id) => (dispatch) => {
+export const getTopicInfo = (id) => async (dispatch) => {
   dispatch(setLoading(true));
   firebase
     .firestore()
@@ -105,29 +112,30 @@ export const getTopicInfo = (id) => (dispatch) => {
     });
 };
 
-export const getMessages = (id) => (dispatch) => {
+export const getMessages = (id) => async (dispatch) => {
   dispatch(setMessageLoading(true));
   const messages = [];
-  firebase
+  const db = firebase
     .firestore()
     .collection("blog")
     .doc(id)
-    .collection("messages")
-    .get()
-    .then((result) => {
-      result.docs.forEach((item) => {
-        messages.push({
-          ...item.data(),
-          id: item.id,
-        });
+    .collection("messages");
+
+  db.get().then((result) => {
+    result.docs.forEach((item) => {
+      messages.push({
+        ...item.data(),
+        id: item.id,
       });
-      dispatch(setMessages(messages));
-      dispatch(setMessageLoading(false));
     });
+    dispatch(setMessages(messages));
+    dispatch(setMessageLoading(false));
+  });
 };
 
-export const sendMessage = (userId, id, data) => (dispatch) => {
+export const sendMessage = (userId, id, data) => async (dispatch) => {
   dispatch(setMessageLoading(true));
+  const user = await getUserInfo(userId);
   const db = firebase
     .firestore()
     .collection("blog")
@@ -143,6 +151,7 @@ export const sendMessage = (userId, id, data) => (dispatch) => {
     likes: 0,
     disLikes: 0,
     date: new Date(),
+    photoUrl: user.photoUrl,
   })
     .then((result) => {
       dbOnUpdate.update({
@@ -159,6 +168,7 @@ export const sendMessage = (userId, id, data) => (dispatch) => {
           id: result.id,
           userId: userId,
           date: firebase.firestore.Timestamp.fromDate(new Date()),
+          photoUrl: user.photoUrl,
         })
       );
       dispatch(setMessageLoading(false));

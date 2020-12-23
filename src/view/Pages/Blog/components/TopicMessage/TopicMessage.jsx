@@ -33,7 +33,6 @@ class TopicMessage extends Component {
     });
   };
   likesHandler = (e) => {
-    console.log('user:', this.props.myId)
     e.target.id &&
       this.props.updateMessagesLikes(
         {
@@ -126,6 +125,23 @@ class TopicMessage extends Component {
       });
     }
   };
+  showAvatar = () => {
+    return (
+      <Avatar>
+        {this.props.photoUrl ? (
+          <img
+            src={this.props.photoUrl}
+            className={this.props.classes.profilePhoto}
+            style={{ width: 40, height: 40 }}
+          />
+        ) : (
+          <Typography className={this.props.classes.avatarText} variant="subtitle1">
+            {setDefaultAvatar(this.props.fName, this.props.lName)}
+          </Typography>
+        )}
+      </Avatar>
+    );
+  };
   render() {
     const {
       classes,
@@ -143,11 +159,7 @@ class TopicMessage extends Component {
       <Card className={classes.root}>
         <CardHeader
           className={classes.headerCard}
-          avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {setDefaultAvatar(fName, lName)}
-            </Avatar>
-          }
+          avatar={this.showAvatar()}
           action={this.getOptions()}
           title={`reply by ${fName} ${lName},`}
           subheader={FormatDate(date.toDate())}

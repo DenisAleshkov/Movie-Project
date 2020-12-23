@@ -6,8 +6,10 @@ import {
   LOGIN_ERROR,
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR,
-  SET_USER
+  SET_USER,
+  SET_PHOTO,
 } from "./../constants";
+import { setLoading, setAvatarLoading } from "./loadingAction";
 
 export const registerSuccess = () => ({ type: REGISTER_SUCCESS });
 export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
@@ -18,20 +20,24 @@ export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
 export const signOutSucces = () => ({ type: SIGNOUT_SUCCESS });
 export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
 
-export const setUser = payload => ({type: SET_USER, payload})
+export const setUser = (payload) => ({ type: SET_USER, payload });
 
-const getUserInfo = async (id) => {
+export const setPhoto = (payload) => ({ type: SET_PHOTO, payload });
+
+export const getUserInfo = async (id) => {
   const userData = await firebase.firestore().collection("users").doc(id).get();
-  const user = userData.data()
+  const user = { ...userData.data(), id: userData.id };
   return user;
 };
 
 export const login = (credentials) => (dispatch) => {
+  dispatch(setLoading(true));
   firebase
     .auth()
     .signInWithEmailAndPassword(credentials.email, credentials.password)
     .then(async (res) => {
       const user = await getUserInfo(res.user.uid);
+      console.log("user", user);
       if (credentials.checked) {
         localStorage.setItem("token", res.user.uid);
       }
@@ -42,15 +48,19 @@ export const login = (credentials) => (dispatch) => {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
+          photoUrl: "",
         })
       );
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       dispatch(loginError(error.message));
+      dispatch(setLoading(false));
     });
 };
 
 export const register = (credentials) => (dispatch) => {
+  dispatch(setLoading(true));
   const db = firebase.firestore().collection("users");
   firebase
     .auth()
@@ -60,11 +70,14 @@ export const register = (credentials) => (dispatch) => {
         firstName: credentials.firstName,
         lastName: credentials.lastName,
         email: credentials.email,
+        photoUrl: "",
       });
       dispatch(registerSuccess());
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       dispatch(registerError(error.message));
+      dispatch(setLoading(false));
     });
 };
 
@@ -80,4 +93,52 @@ export const signOut = (history) => (dispatch) => {
     .catch((error) => {
       dispatch(signOutError(error.response));
     });
+};
+
+export const uploadPhoto = (data) => (dispatch) => {
+  dispatch(setAvatarLoading(true));
+  const { file, userId } = data;
+  const imageStorage = firebase.storage().ref("/images").child(userId);
+  const db = firebase.firestore().collection("users").doc(userId);
+  imageStorage.put(file).then(() => {
+    imageStorage
+      .getDownloadURL()
+      .then((url) => {
+        db.update({ photoUrl: url });
+        dispatch(setPhoto(url));
+        dispatch(setAvatarLoading(false));
+      })
+      .catch((error) => {
+        console.log("Error", error);
+        dispatch(setAvatarLoading(false));
+      });
+  });
+};
+
+export const updatePhoto = (ID, photoUrl) => async (dispatch) => {
+  const user = await getUserInfo(ID.userId);
+  const topic = firebase.firestore().collection("blog");
+  const messages = firebase
+    .firestore()
+    .collection("blog")
+    .doc(ID.topic)
+    .collection("messages");
+  messages.get().then((res) => {
+    res.docs.forEach((item) => {
+      if (item.data().userId === user.id) {
+        messages.doc(item.id).update({
+          photoUrl: user.photoUrl,
+        });
+      }
+    });
+  });
+  topic.get().then((res) => {
+    res.docs.forEach((item) => {
+      if (item.data().id === user.id) {
+        topic.doc(item.id).update({
+          photoUrl: user.photoUrl,
+        });
+      }
+    });
+  });
 };

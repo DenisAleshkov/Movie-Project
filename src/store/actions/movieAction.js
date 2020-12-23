@@ -253,7 +253,6 @@ export const getRateMovies = (page) => (dispatch) => {
         result.data.results.reduce((accum, current) => {
           return accum + current.rating;
         }, 0) / result.data.results.length;
-      console.log("average", average);
       dispatch(
         setRateMovies({ movies: result.data.results, myAverageMovies: average })
       );

@@ -7,9 +7,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ImageIcon from "@material-ui/icons/Image";
-import WorkIcon from "@material-ui/icons/Work";
-import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
 import Panel from "./components/Panel/Panel";
@@ -40,11 +37,7 @@ class Profile extends Component {
         ></Box>
         <Box className={classes.content}>
           <Box className={classes.profileInfo}>
-            <Avatar className={classes.avatar}>
-              <Typography className={classes.avatarText} variant="h1">
-                {setDefaultAvatar(firstName, lastName)}
-              </Typography>
-            </Avatar>
+          {this.props.showAvatar({width: "200px", height:"200px", margin: "-140px"})}
             <Box className={classes.fullName}>
               <Typography className={classes.avatarText} variant="h4">
                 {firstName} {lastName}
@@ -60,7 +53,7 @@ class Profile extends Component {
               />
             </Box>
             <Box className={classes.totalRatings}>
-            <Typography className={classes.avatarText} variant="h5">
+              <Typography className={classes.avatarText} variant="h5">
                 Total ratings:{" "}
                 {this.props.rateTv.length + this.props.rateMovies.length}
               </Typography>
@@ -74,7 +67,7 @@ class Profile extends Component {
                       />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Average movie rating"/>
+                  <ListItemText primary="Average movie rating" />
                 </ListItem>
                 <Divider variant="inset" component="li" />
                 <ListItem>
@@ -86,7 +79,7 @@ class Profile extends Component {
                       />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary=" Average tv rating"/>
+                  <ListItemText primary=" Average tv rating" />
                 </ListItem>
                 <Divider variant="inset" component="li" />
               </List>

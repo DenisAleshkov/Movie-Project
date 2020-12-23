@@ -17,10 +17,8 @@ const initialState = {
   movies: [],
   moviesCurrentPage: 0,
   moviesRating: [],
-  tv: {
-    page: null,
-    tvList: [],
-  },
+  tv: [],
+  tvCurrentPage: 0,
   notification: null,
   genres: [],
   library: [],
@@ -42,6 +40,13 @@ const MoviesReducer = (state = initialState, action) => {
         movies: [...state.movies, ...action.payload.results],
       };
     }
+    case SET_TV: {
+      return {
+        ...state,
+        tvCurrentPage: state.tvCurrentPage + 1,
+        tv: [...state.tv, ...action.payload.results],
+      };
+    }
     case SET_NOTIFICATION: {
       return {
         ...state,
@@ -52,15 +57,6 @@ const MoviesReducer = (state = initialState, action) => {
       return {
         ...state,
         moviesRating: [...state.moviesRating, action.payload],
-      };
-    }
-    case SET_TV: {
-      return {
-        ...state,
-        tv: {
-          page: action.payload.page,
-          tvList: action.payload.results,
-        },
       };
     }
     case SET_GENRES: {
@@ -97,7 +93,7 @@ const MoviesReducer = (state = initialState, action) => {
       return {
         ...state,
         rateMovies: action.payload.movies,
-        myAverageMovies: action.payload.myAverageMovies
+        myAverageMovies: action.payload.myAverageMovies,
       };
     }
     case SET_RATE_TV: {

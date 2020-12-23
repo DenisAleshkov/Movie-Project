@@ -1,5 +1,6 @@
 import React from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { Link } from "react-router-dom";
 import {
   withStyles,
@@ -9,7 +10,7 @@ import {
   TextField,
   Grid,
   Container,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { RegisterStyles } from "./RegisterStyles";
 import { compose } from "redux";
@@ -34,10 +35,16 @@ class Register extends React.Component {
       [e.target.id]: e.target.value,
     });
   };
+  showLoading = () => {
+    if (this.props.isLoading) {
+      return <LinearProgress className={this.props.classes.authLoading} />;
+    }
+  };
   render() {
     const { classes } = this.props;
     return (
       <Container component="div" maxWidth="xs">
+        {this.showLoading()}
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -126,6 +133,7 @@ class Register extends React.Component {
 
 const mapStateToProps = (state) => ({
   error: state.AuthReducer.error,
+  isLoading: state.LoadingReducer.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({

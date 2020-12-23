@@ -6,6 +6,7 @@ import {
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR,
   SET_USER,
+  SET_PHOTO,
 } from "./../constants";
 
 const initialState = {
@@ -16,9 +17,10 @@ const initialState = {
   lastName: "",
   email: "",
   error: null,
+  photoUrl: null,
 };
 
-const LoadingReducer = (state = initialState, action) => {
+const AuthReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS: {
       console.log("LOGIN_SUCCESS");
@@ -30,6 +32,7 @@ const LoadingReducer = (state = initialState, action) => {
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
         email: action.payload.email,
+        photoUrl: action.payload.photoUrl
       };
     }
     case LOGIN_ERROR: {
@@ -83,6 +86,13 @@ const LoadingReducer = (state = initialState, action) => {
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
         email: action.payload.email,
+        photoUrl: action.payload.photoUrl
+      };
+    }
+    case SET_PHOTO: {
+      return {
+        ...state,
+        photoUrl: action.payload,
       };
     }
     default: {
@@ -91,4 +101,4 @@ const LoadingReducer = (state = initialState, action) => {
   }
 };
 
-export default LoadingReducer;
+export default AuthReducer;

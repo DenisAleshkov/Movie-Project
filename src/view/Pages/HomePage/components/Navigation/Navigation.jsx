@@ -8,10 +8,8 @@ import {
   Drawer,
   CssBaseline,
   IconButton,
-  Container,
   Fab,
   Grid,
-  Box,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "./../NavBar/NavBar";
@@ -129,7 +127,6 @@ class Navigation extends Component {
     return (
       <div className={classes.root}>
         <div
-          onScroll={(e) => console.log("e", e)}
           ref={(el) => {
             this.pageToStartRef = el;
           }}
@@ -182,7 +179,7 @@ class Navigation extends Component {
           })}
         >
           <Grid container className={classes.grid} style={{ padding: 0 }}>
-            <Grid
+            {this.state.open&&<Grid
               item
               xs={1}
               className={classes.scroll}
@@ -200,13 +197,13 @@ class Navigation extends Component {
               >
                 {this.showScrollIcon()}
               </Fab>
-            </Grid>
+            </Grid>}
             {this.state.localLoading ? (
               <Loading />
             ) : (
               <Grid
                 item
-                xs={11}
+                xs={this.state.open ? 11 : 12}
                 className={classes.items}
               >
                 {this.props.isNotificationLoading ? (
