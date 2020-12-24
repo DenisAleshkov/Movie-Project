@@ -146,6 +146,7 @@ class Profile extends Component {
             <Panel
               rateTv={this.props.rateTv}
               rateMovies={this.props.rateMovies}
+              className={classes.homePanel}
             />
           </Box>
         </Box>

@@ -42,7 +42,7 @@ export const setMovieToLibraryAction = (payload) => ({
 
 export const getMovies = (page) => (dispatch) => {
   axios
-    .get(MOVIE.GET_POPULAT_MOVIES(page))
+    .get(MOVIE.GET_POPULAR_MOVIES(page))
     .then((result) => {
       dispatch(setMovies(result.data));
     })

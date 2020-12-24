@@ -30,7 +30,6 @@ class SearchForm extends Component {
   }
   componentDidMount() {
     if (this.props.searchInputs) {
-      console.log('this.props.searchInputs', this.props.searchInputs.idList)
       const {
         title,
         average,

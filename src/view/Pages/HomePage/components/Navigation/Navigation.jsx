@@ -42,7 +42,28 @@ class Navigation extends Component {
     };
     this.pageToEndRef = React.createRef();
     this.pageToStartRef = React.createRef();
+    this.scrollRef = React.createRef();
   }
+
+  componentDidMount(){
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  };
+  
+  handleScroll = (event) => {
+    if(window.pageYOffset>2500){
+      this.setState({
+        icon: true,
+      });
+    }else{
+      this.setState({
+        icon: false,
+      });
+    }
+  };
 
   toggleDrawerOpen = (value) => {
     this.setState({
@@ -83,16 +104,13 @@ class Navigation extends Component {
     }
   };
   scrollHandler = (event) => {
-    if (event.target.value !== undefined && event.target.value === "false") {
+    if (event.target.value !== undefined && this.state.icon === false) {
       this.scrollTo("end", this.pageToEndRef);
     } else {
       this.scrollTo("start", this.pageToStartRef);
     }
   };
   scrollTo = (to, position) => {
-    this.setState({
-      icon: !this.state.icon,
-    });
     position.scrollIntoView &&
       position.scrollIntoView({
         block: to,
@@ -109,10 +127,8 @@ class Navigation extends Component {
       />
     );
   };
-
   render() {
     const { classes, location } = this.props;
-
     return (
       <div className={classes.root}>
         <div
@@ -173,7 +189,6 @@ class Navigation extends Component {
               <Grid
                 item
                 xs={1}
-                className={classes.scroll}
                 className={clsx(classes.scroll, {
                   [classes.scrollOpen]: this.state.open,
                   [classes.scrollClose]: !this.state.open,

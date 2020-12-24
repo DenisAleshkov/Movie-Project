@@ -45,16 +45,12 @@ function CustomizedSlider({
   max,
   defaultValue,
   onChange,
-  id,
-  value,
-  color
 }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <PrettoSlider
         aria-label="pretto slider"
-        getAriaValueText={value}
         defaultValue={defaultValue}
         min={min}
         max={max}

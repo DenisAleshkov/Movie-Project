@@ -1,1 +1,5 @@
-export const PanelStyle = (theme) => ({})
+export const PanelStyle = (theme) => ({
+    rateNav: {
+        backgroundColor: "#fff"
+    }
+})

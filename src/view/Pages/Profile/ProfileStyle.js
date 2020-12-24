@@ -35,6 +35,7 @@ export const ProfileStyle = (theme) => ({
   },
   profileNav: {
     width: "70%",
+    backgroundColor: "#fff"
   },
   totalRatings: {
     display: "flex",
@@ -63,4 +64,7 @@ export const ProfileStyle = (theme) => ({
   avatarLoading:{
     marginTop: "-140px",
   },
+  homePanel: {
+    backgroundColor: "#fff"
+  }
 });
