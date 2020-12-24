@@ -95,7 +95,6 @@ export const getTopics = (id) => (dispatch) => {
 };
 
 export const getTopicInfo = (id) => async (dispatch) => {
-  dispatch(setLoading(true));
   firebase
     .firestore()
     .collection("blog")
@@ -108,7 +107,6 @@ export const getTopicInfo = (id) => async (dispatch) => {
           topicId: result.id,
         })
       );
-      dispatch(setLoading(false));
     });
 };
 

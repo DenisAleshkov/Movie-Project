@@ -14,6 +14,7 @@ import {
 } from "./../constants";
 import { MOVIE } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
+import { setInputs } from "./searchAction";
 
 export const setRateMovies = (payload) => ({ type: SET_RATE_MOVIES, payload });
 export const setRateTv = (payload) => ({ type: SET_RATE_TV, payload });
@@ -113,8 +114,27 @@ export const getGenres = (type) => (dispatch) => {
 
 export const searchMovies = (data, history) => (dispatch) => {
   dispatch(setLoading(true));
-
-  const { title, average, idList, adultCheckbox, popularity } = data;
+  const {
+    title,
+    average,
+    idList,
+    adultCheckbox,
+    popularity,
+    overview,
+    searchCheckbox,
+  } = data;
+  if (searchCheckbox) {
+    dispatch(
+      setInputs({
+        title,
+        average,
+        idList,
+        adultCheckbox,
+        popularity,
+        overview,
+      })
+    );
+  }
   if (title) {
     axios
       .get(MOVIE.SEARCH_MOVIE_BY_TITLE(), {
@@ -138,7 +158,7 @@ export const searchMovies = (data, history) => (dispatch) => {
           page: 1,
           ["vote_count.gte"]: popularity,
           ["vote_average.gte"]: average,
-          with_genres: idList.join(),
+          with_genres: Array.from(idList.keys()).join(),
         },
       })
       .then((result) => {
@@ -157,7 +177,19 @@ export const searchMovies = (data, history) => (dispatch) => {
 export const searchTV = (data, history) => (dispatch) => {
   dispatch(setLoading(true));
 
-  const { title, average, idList, adultCheckbox, popularity } = data;
+  const { title, average, idList, adultCheckbox, popularity, searchCheckbox, overview } = data;
+  if (searchCheckbox) {
+    dispatch(
+      setInputs({
+        title,
+        average,
+        idList,
+        adultCheckbox,
+        popularity,
+        overview,
+      })
+    );
+  }
   if (title) {
     axios
       .get(MOVIE.SEARCH_TV_BY_TITLE(), {
@@ -181,7 +213,7 @@ export const searchTV = (data, history) => (dispatch) => {
           page: 1,
           ["vote_count.gte"]: popularity,
           ["vote_average.gte"]: average,
-          with_genres: idList.join(),
+          with_genres: Array.from(idList.keys()).join(),
         },
       })
       .then((result) => {

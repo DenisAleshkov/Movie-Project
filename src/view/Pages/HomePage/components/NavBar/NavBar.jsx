@@ -24,7 +24,8 @@ class NavBar extends React.Component {
           searchMovies={this.props.searchMovies}
           searchTV={this.props.searchTV}
           history={this.props.history}
-          rememberInput={this.props.rememberInput}
+          searchInputs={this.props.searchInputs}
+          setInputs={this.props.setInputs}
         />
       );
     }

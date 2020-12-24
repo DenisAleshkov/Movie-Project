@@ -34,8 +34,6 @@ class TopicPage extends Component {
   }
   componentDidMount() {
     const userId = localStorage.getItem("token");
-    this.props.getTopicInfo(this.props.match.params.id);
-    this.props.getMessages(this.props.match.params.id);
     this.props.updatePhoto(
       { topic: this.props.match.params.id, userId: userId },
       this.props.photoUrl
@@ -119,7 +117,6 @@ class TopicPage extends Component {
     });
   };
   showAvatar = () => {
-    console.log("this.props.topicInfo", this.props.topicInfo);
     const { photoUrl, fName, lName } = this.props.topicInfo;
     return (
       <Avatar>

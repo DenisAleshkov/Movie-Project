@@ -67,3 +67,5 @@ export const SET_MESSAGES = "SET_MESSAGES";
 
 export const SET_LIKES = "SET_LIKES";
 export const SET_MESSAGES_LIKES = "SET_MESSAGES_LIKES";
+
+export const SET_INPUTS = "SET_INPUTS";

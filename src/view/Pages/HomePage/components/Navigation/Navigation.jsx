@@ -1,16 +1,9 @@
 import React, { Component } from "react";
 import clsx from "clsx";
 import Snackbar from "@material-ui/core/Snackbar";
-import Details from "./../../../Details/Details";
 import { withStyles } from "@material-ui/core/styles";
 import { NavigationStyle } from "./NavigationStyle";
-import {
-  Drawer,
-  CssBaseline,
-  IconButton,
-  Fab,
-  Grid,
-} from "@material-ui/core";
+import { Drawer, CssBaseline, IconButton, Fab, Grid } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "./../NavBar/NavBar";
 import SideBar from "./../Sidebar/SideBar";
@@ -31,16 +24,12 @@ import {
   getSimilarMovies,
   getSimilarTv,
 } from "./../../../../../store/actions/detailsAction";
-import { Route, Switch } from "react-router-dom";
-import Library from "../../../Library/Library";
-import Movie from "./../../../Movie/Movie";
-import TV from "./../../../TV/TV";
-import SearchPage from "./../../../SearchPage/SearchPage";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Alert } from "@material-ui/lab";
-import Blog from "../../../Blog/Blog";
-import Profile from "../../../Profile/Profile";
 
+import RouteContent from "../RouteContent/RouteContent";
+import { setInputs } from "../../../../../store/actions/searchAction";
 class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -144,7 +133,8 @@ class Navigation extends Component {
           searchMovies={this.props.searchMovies}
           searchTV={this.props.searchTV}
           count={this.props.library.length}
-          rememberInput={this.props.rememberInput}
+          searchInputs={this.props.searchInputs}
+          setInputs={this.props.setInputs}
         />
         <Drawer
           variant="permanent"
@@ -179,25 +169,27 @@ class Navigation extends Component {
           })}
         >
           <Grid container className={classes.grid} style={{ padding: 0 }}>
-            {this.state.open&&<Grid
-              item
-              xs={1}
-              className={classes.scroll}
-              className={clsx(classes.scroll, {
-                [classes.scrollOpen]: this.state.open,
-                [classes.scrollClose]: !this.state.open,
-              })}
-            >
-              <Fab
-                variant="extended"
-                component="button"
-                className={classes.scrollBtn}
-                value={this.state.icon}
-                onClick={(e) => this.scrollHandler(e)}
+            {this.state.open && (
+              <Grid
+                item
+                xs={1}
+                className={classes.scroll}
+                className={clsx(classes.scroll, {
+                  [classes.scrollOpen]: this.state.open,
+                  [classes.scrollClose]: !this.state.open,
+                })}
               >
-                {this.showScrollIcon()}
-              </Fab>
-            </Grid>}
+                <Fab
+                  variant="extended"
+                  component="button"
+                  className={classes.scrollBtn}
+                  value={this.state.icon}
+                  onClick={(e) => this.scrollHandler(e)}
+                >
+                  {this.showScrollIcon()}
+                </Fab>
+              </Grid>
+            )}
             {this.state.localLoading ? (
               <Loading />
             ) : (
@@ -214,56 +206,14 @@ class Navigation extends Component {
                 ) : (
                   this.showNotification()
                 )}
-                <Switch>
-                  <Route path="/" exact>
-                    <Movie />
-                  </Route>
-                  <Route path="/home" exact>
-                    <Movie />
-                  </Route>
-                  <Route path="/home/movie" exact>
-                    <Movie />
-                  </Route>
-                  <Route path="/home/tv" exact>
-                    <TV />
-                  </Route>
-                  <Route path="/home/library" exact>
-                    <Library />
-                  </Route>
-                  <Route path="/home/search" exact>
-                    <SearchPage />
-                  </Route>
-                  <Route
-                    path="/home/details/movies/:id"
-                    exact
-                    render={(props) => (
-                      <Details
-                        type="movies"
-                        getDetails={this.props.getDetailsMovie}
-                        getSimilar={this.props.getSimilarMovies}
-                        {...props}
-                      />
-                    )}
-                  />
-                  <Route
-                    path="/home/details/tv/:id"
-                    exact
-                    render={(props) => (
-                      <Details
-                        type="tv"
-                        getDetails={this.props.getDetailsTv}
-                        getSimilar={this.props.getSimilarTv}
-                        {...props}
-                      />
-                    )}
-                  />
-                  <Route path="/home/blog" exact>
-                    <Blog />
-                  </Route>
-                  <Route path="/home/profile" exact>
-                    <Profile />
-                  </Route>
-                </Switch>
+                <RouteContent
+                 searchMovies={this.props.searchMovies}
+                 searchTV={this.props.searchTV}
+                  getDetailsTv={this.props.getDetailsTv}
+                  getSimilarTv={this.props.getSimilarTv}
+                  getDetailsMovie={this.props.getDetailsMovie}
+                  getSimilarMovies={this.props.getSimilarMovies}
+                />
               </Grid>
             )}
           </Grid>
@@ -288,7 +238,7 @@ const mapStateToProps = (state) => {
     notification: state.MoviesReducer.notification,
     error: state.MoviesReducer.error,
     isNotificationLoading: state.LoadingReducer.isNotificationLoading,
-    rememberInput: state.MoviesReducer.rememberInput,
+    searchInputs: state.SearchReducer.searchInputs
   };
 };
 
@@ -302,6 +252,7 @@ const mapDispatchToProps = (dispatch) => ({
   getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
   getDetailsTv: (id) => dispatch(getDetailsTv(id)),
   getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
+  setInputs: (payload) => dispatch(setInputs(payload))
 });
 
 export default compose(

@@ -10,6 +10,7 @@ import {
   SET_PHOTO,
 } from "./../constants";
 import { setLoading, setAvatarLoading } from "./loadingAction";
+import { getMessages, getTopicInfo } from "./blogAction";
 
 export const registerSuccess = () => ({ type: REGISTER_SUCCESS });
 export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
@@ -131,6 +132,7 @@ export const updatePhoto = (ID, photoUrl) => async (dispatch) => {
         });
       }
     });
+    dispatch(getMessages(ID.topic));
   });
   topic.get().then((res) => {
     res.docs.forEach((item) => {
@@ -140,5 +142,6 @@ export const updatePhoto = (ID, photoUrl) => async (dispatch) => {
         });
       }
     });
+    dispatch(getTopicInfo(ID.topic));
   });
 };

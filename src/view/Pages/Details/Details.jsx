@@ -18,10 +18,6 @@ import { formatMoney, timeConvert, FormatDate } from "./../../utils/functions";
 import { withRouter } from "react-router-dom";
 
 class Details extends Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
   componentDidMount() {
     this.props.getDetails(this.props.match.params.id);
     this.props.getSimilar(this.props.match.params.id, 1);
