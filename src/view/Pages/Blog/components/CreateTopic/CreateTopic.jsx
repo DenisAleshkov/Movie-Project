@@ -1,11 +1,14 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
+import {
+  TextField,
+  Box,
+  withStyles,
+  Typography,
+  Button,
+  Snackbar,
+  CircularProgress,
+} from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { Box, withStyles } from "@material-ui/core";
 import { CreateTopicStyle } from "./CreateTopicStyle";
 
 class CreateTopic extends Component {
@@ -23,7 +26,7 @@ class CreateTopic extends Component {
     if (reason === "clickaway") {
       return;
     }
-    this.props.setNotification(null)
+    this.props.setNotification(null);
     this.setState({ open: false });
   };
   changeHandler = (e) => {

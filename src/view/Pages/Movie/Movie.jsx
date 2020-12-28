@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import PosterCard from "./../components/PosterCard/PosterCard";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
-import {
-  getGenres,
-  getMovies,
-} from "./../../../store/actions/movieAction";
+import { getGenres, getMovies, setMovieRate } from "./../../../store/actions/movieAction";
 class Movie extends Component {
   constructor() {
     super();
@@ -14,7 +11,6 @@ class Movie extends Component {
     };
     this.loader = React.createRef();
   }
-
   componentDidMount() {
     this.props.getGenres("movie");
     const options = {
@@ -27,11 +23,9 @@ class Movie extends Component {
       this.observer.observe(this.loader.current);
     }
   }
-
   componentWillUnmount() {
     this.observer.unobserve(this.loader.current);
   }
-
   loadMore = (entries) => {
     this.setState({
       isLoading: true,
@@ -44,24 +38,23 @@ class Movie extends Component {
       });
     }
   };
-  
+
   showMovies = () => {
     if (this.props.movies.length) {
-      return this.props.movies.map((item) => {
-        return (
-          <PosterCard
-            type="movie"
-            to="/home/details/movies"
-            key={item.id}
-            id={item.id}
-            poster={item.poster_path}
-            title={item.title}
-            vote={item.vote_average}
-            getDetalis={this.props.getDetailsMovie}
-            getSimilar={this.props.getSimilarMovies}
-          />
-        );
-      });
+      return this.props.movies.map((item) => (
+        <PosterCard
+          type="movie"
+          to="/home/details/movies"
+          key={item.id}
+          id={item.id}
+          poster={item.poster_path}
+          title={item.title}
+          vote={item.vote_average}
+          getDetalis={this.props.getDetailsMovie}
+          getSimilar={this.props.getSimilarMovies}
+          setRate={this.props.setMovieRate}
+        />
+      ));
     }
   };
   render() {
@@ -85,14 +78,13 @@ class Movie extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    movies: state.MoviesReducer.movies,
-    moviesCurrentPage: state.MoviesReducer.moviesCurrentPage,
-  };
-};
+const mapStateToProps = (state) => ({
+  movies: state.MoviesReducer.movies,
+  moviesCurrentPage: state.MoviesReducer.moviesCurrentPage,
+});
 const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),
   getGenres: (type) => dispatch(getGenres(type)),
+  setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Movie);

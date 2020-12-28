@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import LibraryCard from "./components/LibraryCard";
 import NotFound from "./../../utils/NotFound/NotFound";
 import { connect } from "react-redux";
-import { getLibraryList } from "../../../store/actions/movieAction";
+import {
+  getLibraryList,
+  removeItemFromLibrary,
+} from "../../../store/actions/movieAction";
 
 class Library extends Component {
   componentDidMount() {
@@ -15,21 +18,28 @@ class Library extends Component {
         id={item.id}
         title={item.title}
         poster={item.poster}
+        library={this.props.library}
+        removeItemFromLibrary={this.props.removeItemFromLibrary}
       />
     ));
   render() {
     return (
-      <>{this.props.library.length ? this.showLibrary() : <NotFound title="Empty library" />}</>
+      <>
+        {this.props.library.length ? (
+          this.showLibrary()
+        ) : (
+          <NotFound title="Empty library" />
+        )}
+      </>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    library: state.MoviesReducer.library,
-  };
-};
+const mapStateToProps = (state) => ({
+  library: state.MoviesReducer.library,
+});
 const mapDispatchToProps = (dispatch) => ({
   getLibraryList: () => dispatch(getLibraryList()),
+  removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Library);

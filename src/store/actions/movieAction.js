@@ -27,10 +27,6 @@ export const setNotification = (payload) => ({
 export const setTV = (payload) => ({ type: SET_TV, payload });
 export const setGenres = (payload) => ({ type: SET_GENRES, payload });
 export const setError = (payload) => ({ type: SET_ERROR, payload });
-export const setRememberInputs = (payload) => ({
-  type: SET_REMEMBER_INPUTS,
-  payload,
-});
 export const setSearchMovies = (payload) => ({
   type: SET_SEARCH_MOVIES,
   payload,
@@ -64,21 +60,20 @@ export const getTV = (page) => (dispatch) => {
 };
 
 export const setMovieToLibrary = (id, title, poster) => (dispatch) => {
-  if (!!id) {
-    if (localStorage.getItem("library") === null) {
-      const setlibrary = [];
-      setlibrary.push({ id, title, poster });
-      localStorage.setItem("library", JSON.stringify(setlibrary));
-      dispatch(setMovieToLibraryAction(setlibrary));
-    } else {
-      const libraryLS = JSON.parse(localStorage.getItem("library"));
-      const library = libraryLS.filter((element) => {
+  if (localStorage.getItem("library") === null) {
+    const library = [];
+    library.push({ id, title, poster });
+    localStorage.setItem("library", JSON.stringify(library));
+    dispatch(setMovieToLibraryAction(library));
+  } else {
+    const library = JSON.parse(localStorage.getItem("library")).filter(
+      (element) => {
         return +element.id !== +id;
-      });
-      library.push({ id, title: title, poster });
-      localStorage.setItem("library", JSON.stringify(library));
-      dispatch(setMovieToLibraryAction(library));
-    }
+      }
+    );
+    library.push({ id, title: title, poster });
+    localStorage.setItem("library", JSON.stringify(library));
+    dispatch(setMovieToLibraryAction(library));
   }
 };
 
@@ -90,12 +85,11 @@ export const getLibraryList = () => (dispatch) => {
 };
 
 export const removeItemFromLibrary = (id) => (dispatch) => {
-  if (!!id) {
-    const library = JSON.parse(localStorage.getItem("library"));
-    const items = library.filter((item) => +item.id !== +id);
-    localStorage.setItem("library", JSON.stringify(items));
-    dispatch(setMovieToLibraryAction(items));
-  }
+  const library = JSON.parse(localStorage.getItem("library")).filter(
+    (item) => +item.id !== +id
+  );
+  localStorage.setItem("library", JSON.stringify(library));
+  dispatch(setMovieToLibraryAction(library));
 };
 
 export const getGenres = (type) => (dispatch) => {
@@ -141,7 +135,6 @@ export const searchMovies = (data, history) => (dispatch) => {
         params: { include_adult: adultCheckbox, page: 1, query: title },
       })
       .then((result) => {
-        if (data.searchCheckbox) dispatch(setRememberInputs(data));
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));
@@ -176,8 +169,15 @@ export const searchMovies = (data, history) => (dispatch) => {
 
 export const searchTV = (data, history) => (dispatch) => {
   dispatch(setLoading(true));
-
-  const { title, average, idList, adultCheckbox, popularity, searchCheckbox, overview } = data;
+  const {
+    title,
+    average,
+    idList,
+    adultCheckbox,
+    popularity,
+    searchCheckbox,
+    overview,
+  } = data;
   if (searchCheckbox) {
     dispatch(
       setInputs({
@@ -196,7 +196,6 @@ export const searchTV = (data, history) => (dispatch) => {
         params: { include_adult: adultCheckbox, page: 1, query: title },
       })
       .then((result) => {
-        if (data.searchCheckbox) dispatch(setRememberInputs(data));
         dispatch(setSearchMovies(result.data));
         history.push("search");
         dispatch(setLoading(false));

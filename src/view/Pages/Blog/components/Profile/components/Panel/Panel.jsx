@@ -1,9 +1,6 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
-import RatedCard from "./../RatedCard/RatedCard"
+import RatedCard from "./../RatedCard/RatedCard";
+import { AppBar, Tabs, Tab, Box } from "@material-ui/core";
 import { PanelStyle } from "./PanelStyle";
 import { withStyles } from "@material-ui/core";
 

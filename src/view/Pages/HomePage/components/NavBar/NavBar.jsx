@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import SearchForm from "./components/SearchForm/SearchForm";
-import { AppBar, Badge, Box, Button, Toolbar } from "@material-ui/core";
+import { AppBar, Box, Button, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class NavBar extends React.Component {

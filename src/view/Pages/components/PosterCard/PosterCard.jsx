@@ -16,8 +16,6 @@ import {
   getLibraryList,
   removeItemFromLibrary,
   setMovieToLibrary,
-  setMovieRate,
-  setTvRate,
 } from "../../../../store/actions/movieAction";
 import { Link } from "react-router-dom";
 
@@ -26,20 +24,18 @@ class PosterCard extends React.Component {
     this.props.getLibraryList();
   }
   addHandler = (e) => {
-    this.props.setMovieToLibrary(
-      e.target.id,
-      this.props.title,
-      this.props.poster
-    );
+    e.target.id &&
+      this.props.setMovieToLibrary(
+        e.target.id,
+        this.props.title,
+        this.props.poster
+      );
   };
   deleteHandler = (e) => {
-    this.props.removeItemFromLibrary(e.target.id);
+    e.target.id && this.props.removeItemFromLibrary(e.target.id);
   };
-  isFavorite = () => {
-    const inLibrary = this.props.library.filter(
-      (item) => +item.id === +this.props.id
-    );
-    return inLibrary.length ? (
+  isFavorite = () =>
+    this.props.library.filter((item) => +item.id === +this.props.id).length ? (
       <Favorite
         key={this.props.id}
         id={this.props.id}
@@ -56,7 +52,6 @@ class PosterCard extends React.Component {
         onClick={this.addHandler}
       />
     );
-  };
 
   render() {
     const { poster, title, classes, id, vote, to } = this.props;
@@ -74,8 +69,7 @@ class PosterCard extends React.Component {
           </Typography>
           <Rating
             id={id}
-            setTvRate={this.props.setTvRate}
-            setMovieRate={this.props.setMovieRate}
+            setRate={this.props.setRate}
             vote={vote}
             type={this.props.type}
           />
@@ -86,28 +80,24 @@ class PosterCard extends React.Component {
           component={Link}
           to={`${to}/${this.props.id}`}
         >
-         Details
+          Details
         </Button>
       </Card>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    movies: state.MoviesReducer.movies,
-    library: state.MoviesReducer.library,
-    isNotificationLoading: state.MoviesReducer.isNotificationLoading,
-  };
-};
+const mapStateToProps = (state) => ({
+  movies: state.MoviesReducer.movies,
+  library: state.MoviesReducer.library,
+  isNotificationLoading: state.MoviesReducer.isNotificationLoading,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   getLibraryList: () => dispatch(getLibraryList()),
   setMovieToLibrary: (id, title, poster) =>
     dispatch(setMovieToLibrary(id, title, poster)),
   removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
-  setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
-  setTvRate: (id, value) => dispatch(setTvRate(id, value)),
 });
 
 export default compose(

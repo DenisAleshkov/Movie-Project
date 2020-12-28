@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import BlogCard from "./../BlogCard/BlogCard";
-import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Link from "@material-ui/core/Link";
 import { Box, withStyles } from "@material-ui/core";
 import { TopicsStyle } from "./TopicsStyle";
 

@@ -7,7 +7,13 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 class HomePage extends React.Component {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    this.listenerUser();
+  }
+  componentWillUnmount() {
+    this.unsubscribe && this.unsubscribe();
+  }
+  listenerUser = () => {
+    this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         firebase
           .firestore()
@@ -19,7 +25,7 @@ class HomePage extends React.Component {
           });
       }
     });
-  }
+  };
   render() {
     return (
       <Navigation
@@ -30,9 +36,7 @@ class HomePage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {};
-};
+const mapStateToProps = (state) => ({})
 
 const mapDispatchToProps = (dispatch) => ({
   setUser: (data) => dispatch(setUser(data)),

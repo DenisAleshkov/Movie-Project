@@ -1,18 +1,16 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core";
-import { LibraryCardStyles } from "./LibraryCardStyles";
-import { compose } from "redux";
-import { connect } from "react-redux";
 import Delete from "@material-ui/icons/DeleteOutline";
-import { removeItemFromLibrary } from "../../../../store/actions/movieAction";
-
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
+import { LibraryCardStyles } from "./LibraryCardStyles";
 class PosterCard extends React.Component {
   clickHandler = (e) => {
-    this.props.removeItemFromLibrary(e.target.id)
+    e.target.id && this.props.removeItemFromLibrary(e.target.id);
   };
   render() {
     const { poster, title, classes, id } = this.props;
@@ -38,18 +36,4 @@ class PosterCard extends React.Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    library: state.MoviesReducer.library,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  removeItemFromLibrary: (id) => dispatch(removeItemFromLibrary(id)),
-});
-
-export default compose(
-  withStyles(LibraryCardStyles, { withTheme: true }),
-  connect(mapStateToProps, mapDispatchToProps)
-)(PosterCard);
+export default withStyles(LibraryCardStyles, { withTheme: true })(PosterCard);

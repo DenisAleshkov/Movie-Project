@@ -1,9 +1,11 @@
-import { withStyles } from "@material-ui/core";
 import React, { Component } from "react";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import Avatar from "@material-ui/core/Avatar";
+import {
+  withStyles,
+  Card,
+  CardHeader,
+  Avatar,
+  CardMedia,
+} from "@material-ui/core";
 import { RatedCardStyle } from "./RatedCardStyle";
 
 class RatedCard extends Component {

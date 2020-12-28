@@ -1,15 +1,14 @@
 export const ProfileStyle = (theme) => ({
   profile: {
     width: "100%",
-    height: "100%",
+    minHeight: "100vh",
   },
-
- 
   content: {
     display: "flex",
     justifyContent: "center",
     padding: 40,
     color: "#fff",
+    textAlign: "center",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       height: "100%",
@@ -35,7 +34,7 @@ export const ProfileStyle = (theme) => ({
   },
   profileNav: {
     width: "70%",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   totalRatings: {
     display: "flex",
@@ -55,16 +54,16 @@ export const ProfileStyle = (theme) => ({
     textAlign: "center",
   },
   uploadAvatarInput: {
-    display: "none"
+    display: "none",
   },
   profilePhoto: {
     height: "100%",
-    width: "100%"
+    width: "100%",
   },
-  avatarLoading:{
+  avatarLoading: {
     marginTop: "-140px",
   },
   homePanel: {
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });

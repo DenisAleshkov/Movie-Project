@@ -52,47 +52,34 @@ class TopicPage extends Component {
       lName: this.props.lastName,
     });
   };
-  likesHandler = (e) => {
-    if (e.target.id) {
+  likeHandler = (data) => {
+    const {
+      e,
+      type,
+      changedType,
+      likes,
+      disLikes,
+      changedValue,
+      notChangedValue,
+    } = data;
+    e.target.id &&
       this.props.updateLikesInHeader(
         {
           topic: this.props.match.params.id,
           user: this.props.userId,
         },
         {
-          type: "likes",
-          likes: this.props.topicInfo.likes + 1,
-          disLikes: this.props.topicInfo.disLikes,
+          type: type,
+          likes: likes,
+          disLikes: disLikes,
           changed: {
-            changedType: "likes",
-            changedValue: this.props.topicInfo.likes,
-            notChangedType: "disLikes",
-            notChangedValue: this.props.topicInfo.disLikes,
+            changedType: type,
+            changedValue: changedValue,
+            notChangedType: changedType,
+            notChangedValue: notChangedValue,
           },
         }
       );
-    }
-  };
-  disLikesHandler = (e) => {
-    if (e.target.id) {
-      this.props.updateLikesInHeader(
-        {
-          topic: this.props.match.params.id,
-          user: this.props.userId,
-        },
-        {
-          type: "disLikes",
-          likes: this.props.topicInfo.likes,
-          disLikes: this.props.topicInfo.disLikes + 1,
-          changed: {
-            changedType: "disLikes",
-            changedValue: this.props.topicInfo.disLikes,
-            notChangedType: "likes",
-            notChangedValue: this.props.topicInfo.likes,
-          },
-        }
-      );
-    }
   };
   showMessages = () => {
     return this.props.messages.map((item) => {
@@ -167,7 +154,17 @@ class TopicPage extends Component {
               className={classes.footerAction}
               aria-label="add to favorites"
               id={topicInfo.topicId}
-              onClick={(e) => this.likesHandler(e)}
+              onClick={(e) =>
+                this.likeHandler({
+                  e: e,
+                  type: "likes",
+                  changedType: "disLikes",
+                  likes: topicInfo.likes + 1,
+                  disLikes: topicInfo.disLikes,
+                  changedValue: topicInfo.likes,
+                  notChangedValue: topicInfo.disLikes,
+                })
+              }
               disabled={isMessageLoading}
             >
               <Badge
@@ -188,7 +185,17 @@ class TopicPage extends Component {
               className={classes.footerAction}
               aria-label="add to favorites"
               id={topicInfo.topicId}
-              onClick={(e) => this.disLikesHandler(e)}
+              onClick={(e) =>
+                this.likeHandler({
+                  e: e,
+                  type: "disLikes",
+                  changedType: "likes",
+                  likes: topicInfo.likes,
+                  disLikes: topicInfo.disLikes + 1,
+                  changedValue: topicInfo.disLikes,
+                  notChangedValue: topicInfo.likes,
+                })
+              }
               disabled={isMessageLoading}
             >
               <Badge

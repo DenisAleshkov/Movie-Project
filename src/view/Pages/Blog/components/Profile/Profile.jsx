@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { Chip, withStyles } from "@material-ui/core";
-import { ProfileStyle } from "./ProfileStyle";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Divider from "@material-ui/core/Divider";
-import Avatar from "@material-ui/core/Avatar";
 import Panel from "./components/Panel/Panel";
 import CircularProgressWithLabel from "./components/CircularLabel/CircularLabel";
+import {
+  Typography,
+  Chip,
+  withStyles,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Divider,
+  Avatar,
+} from "@material-ui/core";
+import { ProfileStyle } from "./ProfileStyle";
 import { setDefaultAvatar } from "./../../../../utils/functions";
 const headerUrl = "https://reactapp.ir/wp-content/uploads/reactjs.jpg";
 class Profile extends Component {
@@ -37,7 +40,11 @@ class Profile extends Component {
         ></Box>
         <Box className={classes.content}>
           <Box className={classes.profileInfo}>
-          {this.props.showAvatar({width: "200px", height:"200px", margin: "-140px"})}
+            {this.props.showAvatar({
+              width: "200px",
+              height: "200px",
+              margin: "-140px",
+            })}
             <Box className={classes.fullName}>
               <Typography className={classes.avatarText} variant="h4">
                 {firstName} {lastName}

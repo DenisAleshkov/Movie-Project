@@ -14,43 +14,38 @@ import NotFound from "../../utils/NotFound/NotFound";
 class SearchPage extends Component {
   showMovies = () => {
     if (this.props.searchMovies.length) {
-      return this.props.searchMovies.map((item) => {
-        return (
-          <SearchCard
-            setTvRate={this.props.setTvRate}
-            key={item.id}
-            id={item.id}
-            popularity={item.vote_count}
-            poster={item.poster_path}
-            titleMovie={item.title}
-            titleTv={item.original_name}
-            type={item.title ? "movie" : "tv"}
-            vote={item.vote_average}
-            popularity={item.popularity}
-            library={this.props.library}
-            getLibraryList={this.props.getLibraryList}
-            setMovieToLibrary={this.props.setMovieToLibrary}
-            removeItemFromLibrary={this.props.removeItemFromLibrary}
-            setMovieRate={this.props.setMovieRate}
-          />
-        );
-      });
-    } else {
-      return <NotFound title="Not Found" />;
+      return this.props.searchMovies.map((item) => (
+        <SearchCard
+          setTvRate={this.props.setTvRate}
+          key={item.id}
+          id={item.id}
+          popularity={item.vote_count}
+          poster={item.poster_path}
+          titleMovie={item.title}
+          titleTv={item.original_name}
+          type={item.title ? "movie" : "tv"}
+          vote={item.vote_average}
+          popularity={item.popularity}
+          library={this.props.library}
+          getLibraryList={this.props.getLibraryList}
+          setMovieToLibrary={this.props.setMovieToLibrary}
+          removeItemFromLibrary={this.props.removeItemFromLibrary}
+          setMovieRate={this.props.setMovieRate}
+        />
+      ));
     }
+    return <NotFound title="Not Found" />;
   };
   render() {
     return <>{this.props.isLoading ? <Loading /> : this.showMovies()}</>;
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    searchMovies: state.MoviesReducer.searchMovies,
-    library: state.MoviesReducer.library,
-    isLoading: state.LoadingReducer.isLoading,
-  };
-};
+const mapStateToProps = (state) => ({
+  searchMovies: state.MoviesReducer.searchMovies,
+  library: state.MoviesReducer.library,
+  isLoading: state.LoadingReducer.isLoading,
+})
 
 const mapDispatchToProps = (dispatch) => ({
   getLibraryList: () => dispatch(getLibraryList()),

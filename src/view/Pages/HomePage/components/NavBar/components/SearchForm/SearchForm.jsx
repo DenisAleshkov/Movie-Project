@@ -48,10 +48,9 @@ class SearchForm extends Component {
       });
     }
   }
-  showCheckboxList = () => {
-    return this.props.genres.map((item) => {
-      return (
-        <FormControlLabel
+  showCheckboxList = () =>
+    this.props.genres.map((item) => (
+      <FormControlLabel
         key={item.id}
         control={
           <Checkbox
@@ -67,9 +66,7 @@ class SearchForm extends Component {
         onChange={this.handleGenresChange}
         className={this.props.classes.genreItem}
       />
-      );
-    });
-  };
+    ));
   changeHandler = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
@@ -81,9 +78,9 @@ class SearchForm extends Component {
     });
   };
   handleGenresChange = (e) => {
-    const item = e.target.id;
-    const isChecked = e.target.checked;
-    this.setState(prevState => ({ idList: prevState.idList.set(item, isChecked) }));
+    this.setState((prevState) => ({
+      idList: prevState.idList.set(e.target.id, e.target.checked),
+    }));
   };
   handleClickOpen = () => {
     this.setState({ open: true });

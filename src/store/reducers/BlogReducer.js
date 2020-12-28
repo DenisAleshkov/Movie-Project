@@ -4,7 +4,6 @@ import {
   SET_TOPIC_INFO,
   SET_MESSAGES,
   UPDATE_MESSAGES,
-  SET_LIKES,
   SET_NOTIFICATION_BLOG,
   UPDATE_TOPIC_LIKES,
 } from "./../constants";

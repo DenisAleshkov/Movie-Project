@@ -12,6 +12,7 @@ import {
 import { setMessageLoading } from "./../actions/loadingAction";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 import { getUserInfo } from "./authAction";
+import { isLiked, getLikedUser, addLikedUser } from "./../services/blogService";
 
 export const setNotification = (payload) => ({
   type: SET_NOTIFICATION_BLOG,
@@ -31,7 +32,7 @@ export const updateMessages = (payload) => ({ type: UPDATE_MESSAGES, payload });
 export const createTopic = (data, credentials) => async (dispatch) => {
   dispatch(setNotificationLoading(true));
   dispatch(setLoading(true));
-  const user = await getUserInfo(credentials.userId)
+  const user = await getUserInfo(credentials.userId);
   firebase
     .firestore()
     .collection("blog")
@@ -48,7 +49,7 @@ export const createTopic = (data, credentials) => async (dispatch) => {
       likes: 0,
       disLikes: 0,
       dateTime: firebase.firestore.FieldValue.serverTimestamp(),
-      photoUrl: user.photoUrl
+      photoUrl: user.photoUrl,
     })
     .then((res) => {
       dispatch(
@@ -71,7 +72,7 @@ export const createTopic = (data, credentials) => async (dispatch) => {
     });
 };
 
-export const getTopics = (id) => (dispatch) => {
+export const getTopics = () => (dispatch) => {
   dispatch(setLoading(true));
   const topics = [];
   firebase
@@ -275,19 +276,10 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
     .collection("messages")
     .doc(ID.message)
     .collection("isLiked");
-  const LikesResponse = await dbLikes.get();
-  const isLiked = LikesResponse.docs.filter(
-    (item) => item.data().userId === ID.user
-  );
-  if (!isLiked.length) {
-    dbLikes.add({
-      userId: ID.user,
-      type: data.type,
-    });
-    db.update({
-      likes: data.likes,
-      disLikes: data.disLikes,
-    })
+  const islike = await isLiked(ID);
+  if (islike) {
+    const update = addLikedUser(ID, data);
+    update
       .then((result) => {
         dispatch(getMessages(ID.topic));
         dispatch(setMessageLoading(false));
@@ -297,13 +289,13 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
         dispatch(setMessageLoading(false));
       });
   } else {
-    const likesUserID = LikesResponse.docs.filter(
-      (item) => item.data().userId === ID.user
-    )[0];
-    const user = likesUserID.data();
-    if (data.changed.changedType === user.type && user.userId === ID.user) {
+    const userData = await getLikedUser(ID);
+    if (
+      data.changed.changedType === userData.user.type &&
+      userData.user.userId === ID.user
+    ) {
       dbLikes
-        .doc(likesUserID.id)
+        .doc(userData.docID)
         .delete()
         .then(() => {
           db.update({
@@ -322,7 +314,7 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
         });
       return false;
     }
-    dbLikes.doc(likesUserID.id).update({
+    dbLikes.doc(userData.docID).update({
       type: data.type,
     });
     db.update({

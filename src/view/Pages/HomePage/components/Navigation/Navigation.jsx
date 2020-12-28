@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 import clsx from "clsx";
-import Snackbar from "@material-ui/core/Snackbar";
-import { withStyles } from "@material-ui/core/styles";
-import { NavigationStyle } from "./NavigationStyle";
-import { Drawer, CssBaseline, IconButton, Fab, Grid } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "./../NavBar/NavBar";
 import SideBar from "./../Sidebar/SideBar";
-import Loading from "./../../../../utils/Loading/Loading";
+import RouteContent from "../RouteContent/RouteContent";
+import MenuIcon from "@material-ui/icons/Menu";
 import ForwardTwoToneIcon from "@material-ui/icons/ForwardTwoTone";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { signOut } from "../../../../../store/actions/authAction";
+import { NavigationStyle } from "./NavigationStyle";
+import {
+  withStyles,
+  CircularProgress,
+  Drawer,
+  Snackbar,
+  CssBaseline,
+  IconButton,
+  Fab,
+  Grid,
+} from "@material-ui/core";
 import {
   getGenres,
   searchMovies,
@@ -24,11 +28,10 @@ import {
   getSimilarMovies,
   getSimilarTv,
 } from "./../../../../../store/actions/detailsAction";
-
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { Alert } from "@material-ui/lab";
-
-import RouteContent from "../RouteContent/RouteContent";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { signOut } from "../../../../../store/actions/authAction";
 import { setInputs } from "../../../../../store/actions/searchAction";
 class Navigation extends Component {
   constructor(props) {
@@ -45,20 +48,20 @@ class Navigation extends Component {
     this.scrollRef = React.createRef();
   }
 
-  componentDidMount(){
-    window.addEventListener('scroll', this.handleScroll);
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  };
-  
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
   handleScroll = (event) => {
-    if(window.pageYOffset>2500){
+    if (window.pageYOffset > 2500) {
       this.setState({
         icon: true,
       });
-    }else{
+    } else {
       this.setState({
         icon: false,
       });
@@ -71,10 +74,6 @@ class Navigation extends Component {
     });
   };
 
-  showContent = () => {
-    return this.props.isLoading && <Loading />;
-  };
-
   handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -84,6 +83,7 @@ class Navigation extends Component {
     });
     this.props.setNotification(null);
   };
+
   showNotification = () => {
     if (this.props.notification) {
       return (
@@ -103,6 +103,7 @@ class Navigation extends Component {
       );
     }
   };
+
   scrollHandler = (event) => {
     if (event.target.value !== undefined && this.state.icon === false) {
       this.scrollTo("end", this.pageToEndRef);
@@ -117,16 +118,14 @@ class Navigation extends Component {
         behavior: "smooth",
       });
   };
-  showScrollIcon = () => {
-    return (
-      <ForwardTwoToneIcon
-        className={clsx(this.props.classes.extendedIcon, {
-          [this.props.classes.extendedIconStart]: this.state.icon,
-          [this.props.classes.extendedIconEnd]: !this.state.icon,
-        })}
-      />
-    );
-  };
+  showScrollIcon = () => (
+    <ForwardTwoToneIcon
+      className={clsx(this.props.classes.extendedIcon, {
+        [this.props.classes.extendedIconStart]: this.state.icon,
+        [this.props.classes.extendedIconEnd]: !this.state.icon,
+      })}
+    />
+  );
   render() {
     const { classes, location } = this.props;
     return (
@@ -205,32 +204,23 @@ class Navigation extends Component {
                 </Fab>
               </Grid>
             )}
-            {this.state.localLoading ? (
-              <Loading />
-            ) : (
-              <Grid
-                item
-                xs={this.state.open ? 11 : 12}
-                className={classes.items}
-              >
-                {this.props.isNotificationLoading ? (
-                  <CircularProgress
-                    color="secondary"
-                    className={this.props.classes.notifLoader}
-                  />
-                ) : (
-                  this.showNotification()
-                )}
-                <RouteContent
-                 searchMovies={this.props.searchMovies}
-                 searchTV={this.props.searchTV}
-                  getDetailsTv={this.props.getDetailsTv}
-                  getSimilarTv={this.props.getSimilarTv}
-                  getDetailsMovie={this.props.getDetailsMovie}
-                  getSimilarMovies={this.props.getSimilarMovies}
+
+            <Grid item xs={this.state.open ? 11 : 12} className={classes.items}>
+              {this.props.isNotificationLoading ? (
+                <CircularProgress
+                  color="secondary"
+                  className={this.props.classes.notifLoader}
                 />
-              </Grid>
-            )}
+              ) : (
+                this.showNotification()
+              )}
+              <RouteContent
+                getDetailsTv={this.props.getDetailsTv}
+                getSimilarTv={this.props.getSimilarTv}
+                getDetailsMovie={this.props.getDetailsMovie}
+                getSimilarMovies={this.props.getSimilarMovies}
+              />
+            </Grid>
           </Grid>
         </main>
         <div
@@ -244,18 +234,16 @@ class Navigation extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    genres: state.MoviesReducer.genres,
-    movies: state.MoviesReducer.movies,
-    library: state.MoviesReducer.library,
-    isLoading: state.LoadingReducer.isLoading,
-    notification: state.MoviesReducer.notification,
-    error: state.MoviesReducer.error,
-    isNotificationLoading: state.LoadingReducer.isNotificationLoading,
-    searchInputs: state.SearchReducer.searchInputs
-  };
-};
+const mapStateToProps = (state) => ({
+  genres: state.MoviesReducer.genres,
+  movies: state.MoviesReducer.movies,
+  library: state.MoviesReducer.library,
+  isLoading: state.LoadingReducer.isLoading,
+  notification: state.MoviesReducer.notification,
+  error: state.MoviesReducer.error,
+  isNotificationLoading: state.LoadingReducer.isNotificationLoading,
+  searchInputs: state.SearchReducer.searchInputs,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
@@ -267,7 +255,7 @@ const mapDispatchToProps = (dispatch) => ({
   getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
   getDetailsTv: (id) => dispatch(getDetailsTv(id)),
   getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
-  setInputs: (payload) => dispatch(setInputs(payload))
+  setInputs: (payload) => dispatch(setInputs(payload)),
 });
 
 export default compose(

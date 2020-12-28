@@ -5,11 +5,7 @@ import { withStyles } from "@material-ui/core";
 
 class Rating extends Component {
   handleRateChange = (event, value) => {
-    if (this.props.type === "movie") {
-      this.props.setMovieRate(+event.target.name, value);
-    } else {
-      this.props.setTvRate(+event.target.name, value);
-    }
+    this.props.setRate(+event.target.name, value);
   };
 
   render() {

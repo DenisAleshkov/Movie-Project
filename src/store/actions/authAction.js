@@ -38,7 +38,6 @@ export const login = (credentials) => (dispatch) => {
     .signInWithEmailAndPassword(credentials.email, credentials.password)
     .then(async (res) => {
       const user = await getUserInfo(res.user.uid);
-      console.log("user", user);
       if (credentials.checked) {
         localStorage.setItem("token", res.user.uid);
       }

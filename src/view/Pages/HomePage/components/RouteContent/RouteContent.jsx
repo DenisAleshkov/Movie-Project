@@ -12,8 +12,6 @@ const RouteContent = ({
   getSimilarMovies,
   getDetailsTv,
   getSimilarTv,
-  searchMovies,
-  searchTV,
 }) => {
   return (
     <Switch>
@@ -26,12 +24,12 @@ const RouteContent = ({
       <Route
         path="/home/movie"
         exact
-        render={(props) => <Movie search={searchMovies} {...props} />}
+        render={(props) => <Movie {...props} />}
       />
       <Route
         path="/home/tv"
         exact
-        render={(props) => <TV search={searchTV} {...props} />}
+        render={(props) => <TV {...props} />}
       />
       <Route path="/home/library" exact>
         <Library />

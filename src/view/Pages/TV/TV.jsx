@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { getTV, getGenres } from "../../../store/actions/movieAction";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import PosterCard from "./../components/PosterCard/PosterCard";
+import { connect } from "react-redux";
+import { getTV, getGenres, setTvRate } from "../../../store/actions/movieAction";
 
 class TV extends Component {
   constructor() {
@@ -41,19 +41,18 @@ class TV extends Component {
   };
   showTV = () => {
     if (this.props.tv.length) {
-      return this.props.tv.map((item) => {
-        return (
-          <PosterCard
-            type="tv"
-            to="/home/details/tv"
-            key={item.id}
-            id={item.id}
-            poster={item.poster_path}
-            title={item.original_name}
-            vote={item.vote_average}
-          />
-        );
-      });
+      return this.props.tv.map((item) => (
+        <PosterCard
+          type="tv"
+          to="/home/details/tv"
+          key={item.id}
+          id={item.id}
+          poster={item.poster_path}
+          title={item.original_name}
+          vote={item.vote_average}
+          setRate={this.props.setTvRate}
+        />
+      ));
     }
   };
 
@@ -86,5 +85,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getTV: (page) => dispatch(getTV(page)),
   getGenres: (type) => dispatch(getGenres(type)),
+  setTvRate: (id, value) => dispatch(setTvRate(id, value)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TV);

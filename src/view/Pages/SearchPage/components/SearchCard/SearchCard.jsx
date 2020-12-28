@@ -15,7 +15,6 @@ import { SearchCardStyle } from "./SearchCardStyle";
 import Rating from "./../../../components/Rating/Rating";
 
 class SearchCard extends React.Component {
-
   componentDidMount() {
     this.props.getLibraryList();
   }
