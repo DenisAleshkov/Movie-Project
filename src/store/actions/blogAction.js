@@ -12,7 +12,22 @@ import {
 import { setMessageLoading } from "./../actions/loadingAction";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 import { getUserInfo } from "./authAction";
-import { isLiked, getLikedUser, addLikedUser } from "./../services/blogService";
+import {
+  isLiked,
+  getLikedUser,
+  addLikedUser,
+  updateLikeMessage,
+  deleteLikedUser,
+  getMessageDoc
+} from "./../services/BlogMessageService";
+
+import {
+  isLikedTopic,
+  addLikedTopicUser,
+  getLikedTopicUser,
+  updateLikesTopic,
+  deleteLikedTopicUser,
+} from "./../services/BlogTopicService";
 
 export const setNotification = (payload) => ({
   type: SET_NOTIFICATION_BLOG,
@@ -180,26 +195,11 @@ export const sendMessage = (userId, id, data) => async (dispatch) => {
 
 export const updateLikesInHeader = (ID, data) => async (dispatch) => {
   dispatch(setMessageLoading(true));
-  const db = firebase.firestore().collection("blog").doc(ID.topic);
-  const dbLikes = firebase
-    .firestore()
-    .collection("blog")
-    .doc(ID.topic)
-    .collection("isLiked");
-  const LikesResponse = await dbLikes.get();
-  const isLiked = LikesResponse.docs.filter(
-    (item) => item.data().userId === ID.user
-  );
-  if (!isLiked.length) {
-    dbLikes.add({
-      userId: ID.user,
-      type: data.type,
-    });
-    db.update({
-      likes: data.likes,
-      disLikes: data.disLikes,
-    })
-      .then((result) => {
+  const isLiked = await isLikedTopic(ID);
+  if (isLiked) {
+    const add = addLikedTopicUser(ID, data);
+    add
+      .then(() => {
         dispatch(setTopicLikes({ likes: data.likes, disLikes: data.disLikes }));
         dispatch(setMessageLoading(false));
       })
@@ -208,43 +208,28 @@ export const updateLikesInHeader = (ID, data) => async (dispatch) => {
         dispatch(setMessageLoading(false));
       });
   } else {
-    const likesUserID = LikesResponse.docs.filter(
-      (item) => item.data().userId === ID.user
-    )[0];
-    const user = likesUserID.data();
-    if (data.changed.changedType === user.type && user.userId === ID.user) {
-      dbLikes
-        .doc(likesUserID.id)
-        .delete()
+    const userData = await getLikedTopicUser(ID);
+    const { userId, type } = userData.user;
+    if (data.changed.changedType === type && userId === ID.user) {
+      const deleted = deleteLikedTopicUser(ID, data);
+      deleted
         .then(() => {
-          db.update({
-            [data.changed.changedType]: data.changed.changedValue - 1,
-          })
-            .then(() => {
-              dispatch(
-                setTopicLikes({
-                  [data.changed.changedType]: data.changed.changedValue - 1,
-                  [data.changed.notChangedType]: data.changed.notChangedValue,
-                })
-              );
-              dispatch(setMessageLoading(false));
+          dispatch(
+            setTopicLikes({
+              [data.changed.changedType]: data.changed.changedValue - 1,
+              [data.changed.notChangedType]: data.changed.notChangedValue,
             })
-            .catch((error) => {
-              console.log("ERROR", error);
-            });
+          );
+          dispatch(setMessageLoading(false));
         })
         .catch((error) => {
           console.log("ERROR", error);
+          dispatch(setMessageLoading(false));
         });
       return false;
     }
-    dbLikes.doc(likesUserID.id).update({
-      type: data.type,
-    });
-    db.update({
-      [data.changed.changedType]: data.changed.changedValue + 1,
-      [data.changed.notChangedType]: data.changed.notChangedValue - 1,
-    })
+    const update = updateLikesTopic(ID, data);
+    update
       .then(() => {
         dispatch(
           setTopicLikes({
@@ -263,24 +248,11 @@ export const updateLikesInHeader = (ID, data) => async (dispatch) => {
 
 export const updateMessagesLikes = (ID, data) => async (dispatch) => {
   dispatch(setMessageLoading(true));
-  const db = firebase
-    .firestore()
-    .collection("blog")
-    .doc(ID.topic)
-    .collection("messages")
-    .doc(ID.message);
-  const dbLikes = firebase
-    .firestore()
-    .collection("blog")
-    .doc(ID.topic)
-    .collection("messages")
-    .doc(ID.message)
-    .collection("isLiked");
   const islike = await isLiked(ID);
   if (islike) {
-    const update = addLikedUser(ID, data);
-    update
-      .then((result) => {
+    const add = addLikedUser(ID, data);
+    add
+      .then(() => {
         dispatch(getMessages(ID.topic));
         dispatch(setMessageLoading(false));
       })
@@ -290,37 +262,22 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
       });
   } else {
     const userData = await getLikedUser(ID);
-    if (
-      data.changed.changedType === userData.user.type &&
-      userData.user.userId === ID.user
-    ) {
-      dbLikes
-        .doc(userData.docID)
-        .delete()
+    const { userId, type } = userData.user;
+    if (data.changed.changedType === type && userId === ID.user) {
+      const deleteUser = deleteLikedUser(ID, data);
+      deleteUser
         .then(() => {
-          db.update({
-            [data.changed.changedType]: data.changed.changedValue - 1,
-          })
-            .then(() => {
-              dispatch(getMessages(ID.topic));
-              dispatch(setMessageLoading(false));
-            })
-            .catch((error) => {
-              console.log("ERROR", error);
-            });
+          dispatch(getMessages(ID.topic));
+          dispatch(setMessageLoading(false));
         })
         .catch((error) => {
           console.log("ERROR", error);
+          dispatch(setMessageLoading(false));
         });
       return false;
     }
-    dbLikes.doc(userData.docID).update({
-      type: data.type,
-    });
-    db.update({
-      [data.changed.changedType]: data.changed.changedValue + 1,
-      [data.changed.notChangedType]: data.changed.notChangedValue - 1,
-    })
+    const update = updateLikeMessage(ID, data);
+    update
       .then(() => {
         dispatch(getMessages(ID.topic));
         dispatch(setMessageLoading(false));
@@ -334,12 +291,7 @@ export const updateMessagesLikes = (ID, data) => async (dispatch) => {
 
 export const deleteMessage = (ID) => (dispatch) => {
   dispatch(setMessageLoading(true));
-  const db = firebase
-    .firestore()
-    .collection("blog")
-    .doc(ID.topic)
-    .collection("messages")
-    .doc(ID.message);
+  const db = getMessageDoc(ID)
   db.delete()
     .then(() => {
       dispatch(getMessages(ID.topic));

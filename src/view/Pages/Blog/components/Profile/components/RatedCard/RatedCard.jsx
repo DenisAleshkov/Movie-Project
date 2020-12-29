@@ -10,13 +10,13 @@ import { RatedCardStyle } from "./RatedCardStyle";
 
 class RatedCard extends Component {
   render() {
-    const { classes, vote, title, poster, name } = this.props;
+    const { classes, rating, title, poster, name } = this.props;
     return (
       <Card className={classes.root}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar}>
-              {vote}
+              {rating}
             </Avatar>
           }
           title={title || name}

@@ -16,30 +16,25 @@ class Panel extends React.Component {
       value: newValue,
     });
   };
-  showRatedMovie = () => {
-    return this.props.rateMovies.map((item) => {
-      return (
-        <RatedCard
-          key={item.id}
-          poster={item.poster_path}
-          title={item.title}
-          vote={item.vote_average}
-        />
-      );
-    });
-  };
-  showRatedTv = () => {
-    return this.props.rateTv.map((item) => {
-      return (
-        <RatedCard
-          key={item.id}
-          poster={item.poster_path}
-          name={item.name}
-          vote={item.vote_average}
-        />
-      );
-    });
-  };
+  showRatedMovie = () =>
+    this.props.rateMovies.map((item) => (
+      <RatedCard
+        key={item.id}
+        poster={item.poster_path}
+        title={item.title}
+        rating={item.rating}
+      />
+    ));
+  showRatedTv = () =>
+    this.props.rateTv.map((item) => (
+      <RatedCard
+        key={item.id}
+        poster={item.poster_path}
+        name={item.name}
+        rating={item.rating}
+      />
+    ));
+
   render() {
     const { classes } = this.props;
     return (
@@ -68,13 +63,11 @@ class Panel extends React.Component {
     );
   }
 }
+const a11yProps = (index) => ({
+  id: `scrollable-auto-tab-${index}`,
+  "aria-controls": `scrollable-auto-tabpanel-${index}`,
+});
 
-const a11yProps = (index) => {
-  return {
-    id: `scrollable-auto-tab-${index}`,
-    "aria-controls": `scrollable-auto-tabpanel-${index}`,
-  };
-};
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
   return (
