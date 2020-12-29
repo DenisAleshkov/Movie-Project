@@ -1,6 +1,7 @@
 import React from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Alert from '@material-ui/lab/Alert';
 import { Link } from "react-router-dom";
 import {
   withStyles,
@@ -11,11 +12,13 @@ import {
   Grid,
   Container,
   Typography,
+  Snackbar 
 } from "@material-ui/core";
 import { RegisterStyles } from "./RegisterStyles";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { register } from "./../../../store/actions/authAction";
+import { setNotification } from "../../../store/actions/authAction";
 class Register extends React.Component {
   constructor() {
     super();
@@ -24,13 +27,14 @@ class Register extends React.Component {
       lastName: "",
       email: "",
       password: "",
+      open: false
     };
   }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.register(this.state);
   };
-  handleChande = (e) => {
+  handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
     });
@@ -40,6 +44,34 @@ class Register extends React.Component {
       return <LinearProgress className={this.props.classes.authLoading} />;
     }
   };
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({
+      open: false
+    })
+    this.props.setNotification(null)
+  };
+  showNotification = () => {
+    if (this.props.notification) {
+      return (
+        <Snackbar
+          open={!!this.props.notification}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          {this.props.error ? (
+            <Alert severity="error">{this.props.error}</Alert>
+          ) : (
+            <Alert onClose={this.handleClose} severity="success">
+              {this.props.notification}
+            </Alert>
+          )}
+        </Snackbar>
+      );
+    }
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -69,7 +101,7 @@ class Register extends React.Component {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  onChange={this.handleChande}
+                  onChange={this.handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -81,7 +113,7 @@ class Register extends React.Component {
                   label="Last Name"
                   name="lastName"
                   autoComplete="lname"
-                  onChange={this.handleChande}
+                  onChange={this.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -93,7 +125,7 @@ class Register extends React.Component {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={this.handleChande}
+                  onChange={this.handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -106,7 +138,7 @@ class Register extends React.Component {
                   type="password"
                   id="password"
                   autoComplete="current-password"
-                  onChange={this.handleChande}
+                  onChange={this.handleChange}
                 />
               </Grid>
             </Grid>
@@ -125,6 +157,7 @@ class Register extends React.Component {
               </Grid>
             </Grid>
           </form>
+          {this.showNotification()}
         </div>
       </Container>
     );
@@ -133,11 +166,13 @@ class Register extends React.Component {
 
 const mapStateToProps = (state) => ({
   error: state.AuthReducer.error,
+  notification: state.AuthReducer.notification,
   isLoading: state.LoadingReducer.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   register: (credentials) => dispatch(register(credentials)),
+  setNotification: (payload) => dispatch(setNotification(payload))
 });
 
 export default compose(

@@ -90,7 +90,6 @@ class PosterCard extends React.Component {
 const mapStateToProps = (state) => ({
   movies: state.MoviesReducer.movies,
   library: state.MoviesReducer.library,
-  isNotificationLoading: state.MoviesReducer.isNotificationLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({

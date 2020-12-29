@@ -1,6 +1,7 @@
 import React from "react";
+import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from "@material-ui/core/LinearProgress";
 import {
   Avatar,
   Button,
@@ -12,13 +13,13 @@ import {
   withStyles,
   Typography,
   Container,
+  Snackbar,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { LoginStyles } from "./LoginStyles";
-import { login } from "./../../../store/actions/authAction";
+import { login, loginError } from "./../../../store/actions/authAction";
 import { compose } from "redux";
 import { connect } from "react-redux";
-
 
 class Login extends React.Component {
   constructor() {
@@ -27,6 +28,7 @@ class Login extends React.Component {
       email: "",
       password: "",
       checked: false,
+      open: false,
     };
   }
   handleSubmit = (e) => {
@@ -44,10 +46,33 @@ class Login extends React.Component {
     });
   };
   showLoading = () => {
-    if(this.props.isLoading){
-      return <LinearProgress className={this.props.classes.authLoading} />
+    if (this.props.isLoading) {
+      return <LinearProgress className={this.props.classes.authLoading} />;
     }
-  }
+  };
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      open: false,
+    });
+    this.props.loginError(null);
+  };
+  showNotification = () => {
+    if (this.props.error) {
+      return (
+        <Snackbar
+          open={!!this.props.error}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error">{this.props.error}</Alert>
+        </Snackbar>
+      );
+    }
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -113,6 +138,7 @@ class Login extends React.Component {
             </Grid>
           </form>
         </div>
+        {this.showNotification()}
       </Container>
     );
   }
@@ -120,10 +146,11 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   error: state.AuthReducer.error,
-  isLoading: state.LoadingReducer.isLoading
+  isLoading: state.LoadingReducer.isLoading,
 });
 const mapDispatchToProps = (dispatch) => ({
   login: (credentials) => dispatch(login(credentials)),
+  loginError: (payload) => dispatch(loginError(payload)),
 });
 
 export default compose(

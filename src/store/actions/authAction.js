@@ -8,12 +8,21 @@ import {
   SIGNOUT_ERROR,
   SET_USER,
   SET_PHOTO,
+  SET_REGISTER_NOTIF
 } from "./../constants";
 import { setLoading, setAvatarLoading } from "./loadingAction";
 import { getMessages, getTopicInfo } from "./blogAction";
 
-export const registerSuccess = () => ({ type: REGISTER_SUCCESS });
+export const registerSuccess = (payload) => ({
+  type: REGISTER_SUCCESS,
+  payload,
+});
 export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
+
+export const setNotification = (payload) => ({
+  type: SET_REGISTER_NOTIF,
+  payload,
+});
 
 export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
 export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
@@ -72,7 +81,7 @@ export const register = (credentials) => (dispatch) => {
         email: credentials.email,
         photoUrl: "",
       });
-      dispatch(registerSuccess());
+      dispatch(registerSuccess({ message: "You are register" }));
       dispatch(setLoading(false));
     })
     .catch((error) => {

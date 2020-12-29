@@ -7,6 +7,7 @@ import {
   SIGNOUT_ERROR,
   SET_USER,
   SET_PHOTO,
+  SET_REGISTER_NOTIF
 } from "./../constants";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   email: "",
   error: null,
   photoUrl: null,
+  notification: null
 };
 
 const AuthReducer = (state = initialState, action) => {
@@ -48,6 +50,7 @@ const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         error: null,
+        notification: action.payload.message
       };
     }
     case REGISTER_ERROR: {
@@ -56,6 +59,7 @@ const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+        notification: action.payload
       };
     }
     case SIGNOUT_SUCCESS: {
@@ -94,6 +98,12 @@ const AuthReducer = (state = initialState, action) => {
         ...state,
         photoUrl: action.payload,
       };
+    }
+    case SET_REGISTER_NOTIF: {
+      return {
+        ...state,
+        notification: action.payload
+      }
     }
     default: {
       return state;
