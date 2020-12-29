@@ -6,6 +6,7 @@ import {
   CardContent,
   Typography,
   withStyles,
+  IconButton,
 } from "@material-ui/core";
 import { LibraryCardStyles } from "./LibraryCardStyles";
 class PosterCard extends React.Component {
@@ -16,11 +17,13 @@ class PosterCard extends React.Component {
     const { poster, title, classes, id } = this.props;
     return (
       <Card className={classes.root}>
-        <Delete
+        <IconButton
           id={id}
           onClick={this.clickHandler}
           className={classes.deleteIcon}
-        />
+        >
+          <Delete id={id} />
+        </IconButton>
         <CardMedia
           className={classes.media}
           image={`https://image.tmdb.org/t/p/w500/${poster}`}

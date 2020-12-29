@@ -8,7 +8,7 @@ export const PosterCardStyle = (theme) => ({
     "&:hover $media": {
       opacity: "0.05",
     },
-    "&:hover $favoriteWithBorder": {
+    "&:hover $favoriteBtn": {
       opacity: 1,
       transform: "scale(1)",
       transition: "transform .2s ease, opacity 1s ease",
@@ -46,14 +46,14 @@ export const PosterCardStyle = (theme) => ({
     transform: "scale(0)",
     transition: "transform .5s ease, opacity .7s ease",
   },
-  favoriteWithBorder: {
+  favoriteBtn: {
     cursor: "pointer",
     position: "absolute",
     top: 15,
     right: 15,
+    zIndex: "10",
     transform: "scale(0)",
     transition: "transform .5s ease, opacity .7s ease",
-    zIndex: "10"
   },
   detailsBtn: {
     cursor: "pointer",

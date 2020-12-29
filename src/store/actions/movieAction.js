@@ -8,7 +8,6 @@ import {
   SET_SEARCH_MOVIES,
   SET_MOVIE_RATE,
   SET_NOTIFICATION,
-  SET_REMEMBER_INPUTS,
   SET_RATE_MOVIES,
   SET_RATE_TV,
 } from "./../constants";

@@ -13,26 +13,21 @@ import {
 import { setLoading, setAvatarLoading } from "./loadingAction";
 import { getMessages, getTopicInfo } from "./blogAction";
 
+export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
+export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
+export const signOutSucces = () => ({ type: SIGNOUT_SUCCESS });
+export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
+export const setUser = (payload) => ({ type: SET_USER, payload });
+export const setPhoto = (payload) => ({ type: SET_PHOTO, payload });
 export const registerSuccess = (payload) => ({
   type: REGISTER_SUCCESS,
   payload,
 });
 export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
-
 export const setNotification = (payload) => ({
   type: SET_REGISTER_NOTIF,
   payload,
 });
-
-export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
-export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
-
-export const signOutSucces = () => ({ type: SIGNOUT_SUCCESS });
-export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
-
-export const setUser = (payload) => ({ type: SET_USER, payload });
-
-export const setPhoto = (payload) => ({ type: SET_PHOTO, payload });
 
 export const getUserInfo = async (id) => {
   const userData = await firebase.firestore().collection("users").doc(id).get();

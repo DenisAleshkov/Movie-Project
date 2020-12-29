@@ -8,6 +8,7 @@ import {
   CardContent,
   Typography,
   Button,
+  IconButton,
 } from "@material-ui/core";
 import { PosterCardStyle } from "./PosterCardStyle";
 import { compose } from "redux";
@@ -36,21 +37,23 @@ class PosterCard extends React.Component {
   };
   isFavorite = () =>
     this.props.library.filter((item) => +item.id === +this.props.id).length ? (
-      <Favorite
-        key={this.props.id}
+      <IconButton
+        className={this.props.classes.favoriteBtn}
         id={this.props.id}
-        className={this.props.classes.favoriteWithBorder}
-        color="secondary"
         onClick={this.deleteHandler}
-      />
-    ) : (
-      <FavoriteBorder
         key={this.props.id}
+      >
+        <Favorite id={this.props.id} color="secondary" />
+      </IconButton>
+    ) : (
+      <IconButton
+        className={this.props.classes.favoriteBtn}
         id={this.props.id}
-        className={this.props.classes.favoriteWithBorder}
-        color="secondary"
         onClick={this.addHandler}
-      />
+        key={this.props.id}
+      >
+        <FavoriteBorder id={this.props.id} color="secondary" />
+      </IconButton>
     );
 
   render() {

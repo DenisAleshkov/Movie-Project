@@ -9,9 +9,6 @@ import {
   UPDATE_TOPIC_LIKES,
   SET_NOTIFICATION_BLOG,
 } from "./../constants";
-import { setMessageLoading } from "./../actions/loadingAction";
-import { setLoading, setNotificationLoading } from "./loadingAction";
-import { getUserInfo } from "./authAction";
 import {
   isLiked,
   getLikedUser,
@@ -20,6 +17,9 @@ import {
   deleteLikedUser,
   getMessageDoc
 } from "./../services/BlogMessageService";
+import { setMessageLoading } from "./../actions/loadingAction";
+import { setLoading, setNotificationLoading } from "./loadingAction";
+import { getUserInfo } from "./authAction";
 
 import {
   isLikedTopic,
@@ -134,7 +134,6 @@ export const getMessages = (id) => async (dispatch) => {
     .collection("blog")
     .doc(id)
     .collection("messages");
-
   db.get().then((result) => {
     result.docs.forEach((item) => {
       messages.push({

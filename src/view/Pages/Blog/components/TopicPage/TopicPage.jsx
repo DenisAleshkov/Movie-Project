@@ -20,7 +20,7 @@ import {
 import { TopicPageStyle } from "./TopicPageStyle";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import ThumbDownAltOutlinedIcon from "@material-ui/icons/ThumbDownAltOutlined";
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { compose } from "redux";
 import { setDefaultAvatar, FormatDate } from "./../../../../utils/functions";
