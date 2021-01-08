@@ -1,15 +1,21 @@
 export const PosterCardStyle = (theme) => ({
   root: {
     position: "relative",
-    backgroundColor: "#1c045a",
+    backgroundColor: "#545454",
     width: 300,
     height: 450,
     margin: "20px",
     "&:hover $media": {
-      opacity: "0.5",
+      opacity: "0.05",
     },
-    "&:hover $favoriteWithBorder": {
+    "&:hover $favoriteBtn": {
       opacity: 1,
+      transform: "scale(1)",
+      transition: "transform .2s ease, opacity 1s ease",
+    },
+    "&:hover $detailsBtn": {
+      opacity: 1,
+      cursor: "pointer",
       transform: "scale(1)",
       transition: "transform .2s ease, opacity 1s ease",
     },
@@ -40,13 +46,23 @@ export const PosterCardStyle = (theme) => ({
     transform: "scale(0)",
     transition: "transform .5s ease, opacity .7s ease",
   },
-  favoriteWithBorder: {
+  favoriteBtn: {
     cursor: "pointer",
     position: "absolute",
     top: 15,
     right: 15,
+    zIndex: "10",
+    transform: "scale(0)",
+    transition: "transform .5s ease, opacity .7s ease",
+  },
+  detailsBtn: {
+    cursor: "pointer",
+    position: "absolute",
+    left: 30,
+    right: 30,
+    bottom: 60,
     transform: "scale(0)",
     transition: "transform .5s ease, opacity .7s ease",
     zIndex: "10"
-  },
+  }
 });

@@ -16,5 +16,12 @@ export const LoginStyles = (theme) => ({
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    authLoading: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      width: "100%",
+    }
   });
   

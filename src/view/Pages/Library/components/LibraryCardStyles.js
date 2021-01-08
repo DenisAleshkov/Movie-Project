@@ -1,12 +1,12 @@
 export const LibraryCardStyles = (theme) => ({
   root: {
     position: "relative",
-    backgroundColor: "#1c045a",
+    backgroundColor: "#545454",
     width: 300,
     height: 450,
     margin: "20px",
     "&:hover $media": {
-      opacity: "0.5",
+      opacity: "0.05",
     },
     "&:hover $deleteIcon": {
       opacity: 1,

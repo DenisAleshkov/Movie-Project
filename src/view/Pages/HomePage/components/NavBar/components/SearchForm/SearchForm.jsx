@@ -1,16 +1,19 @@
-import { Box, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import SearchIcon from "@material-ui/icons/Search";
-import Typography from "@material-ui/core/Typography";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { SearchFormStyles } from "./SearchFormStyle";
-import Checkbox from "@material-ui/core/Checkbox";
 import CustomizedSlider from "./SliderStyle";
+import SearchIcon from "@material-ui/icons/Search";
+import {
+  Box,
+  withStyles,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+} from "@material-ui/core";
+import { SearchFormStyles } from "./SearchFormStyle";
 
 class SearchForm extends Component {
   constructor(props) {
@@ -18,35 +21,52 @@ class SearchForm extends Component {
     this.state = {
       open: false,
       adultCheckbox: false,
-      idList: [],
+      idList: new Map(),
       popularity: 50,
       average: 1,
       title: "",
+      overview: "",
     };
   }
-
-  showCheckboxList = () => {
-    return this.props.genres.map((item) => {
-      return (
-        <FormControlLabel
-          key={item.id}
-          control={
-            <Checkbox
-              className={this.props.classes.genreItemCheckbox}
-              value="remember"
-              color="primary"
-              style={{ color: "#565050" }}
-              id={`${item.id}`}
-              className={this.props.classes.genreItem}
-            />
-          }
-          label={item.name}
-          onChange={this.handleGenresChange}
-          className={this.props.classes.genreItem}
-        />
-      );
-    });
-  };
+  componentDidMount() {
+    if (this.props.searchInputs) {
+      const {
+        title,
+        average,
+        idList,
+        adultCheckbox,
+        popularity,
+        overview,
+      } = this.props.searchInputs;
+      this.setState({
+        title,
+        average,
+        idList,
+        adultCheckbox,
+        popularity,
+        overview,
+      });
+    }
+  }
+  showCheckboxList = () =>
+    this.props.genres.map((item) => (
+      <FormControlLabel
+        key={item.id}
+        control={
+          <Checkbox
+            name={item.name}
+            color="primary"
+            style={{ color: "#565050" }}
+            id={`${item.id}`}
+            className={this.props.classes.genreItemCheckbox}
+            checked={!!this.state.idList.get(`${item.id}`)}
+          />
+        }
+        label={item.name}
+        onChange={this.handleGenresChange}
+        className={this.props.classes.genreItem}
+      />
+    ));
   changeHandler = (e) => {
     this.setState({
       [e.target.id]: e.target.value,
@@ -58,9 +78,9 @@ class SearchForm extends Component {
     });
   };
   handleGenresChange = (e) => {
-    this.setState({
-      idList: [...this.state.idList, e.target.id],
-    });
+    this.setState((prevState) => ({
+      idList: prevState.idList.set(e.target.id, e.target.checked),
+    }));
   };
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -77,9 +97,23 @@ class SearchForm extends Component {
   };
 
   searchMovie = () => {
-    const location = this.props.location;
-    const type = location.replace("/home/", "");
-    this.props.searchMovies(this.state, this.props.history, type);
+    if (this.props.location === "/home/movie") {
+      this.props.searchMovies(this.state, this.props.history);
+    } else if (this.props.location === "/home/tv") {
+      this.props.searchTV(this.state, this.props.history);
+    }
+  };
+  clearInputs = () => {
+    this.setState({
+      open: false,
+      adultCheckbox: false,
+      idList: new Map(),
+      popularity: 50,
+      average: 1,
+      title: "",
+      overview: "",
+    });
+    this.props.setInputs(null);
   };
   render() {
     const { classes } = this.props;
@@ -118,10 +152,12 @@ class SearchForm extends Component {
                       Title
                     </Typography>
                     <TextField
-                      id="title"
                       className={classes.dialogInput}
+                      value={this.state.title}
                       variant="outlined"
                       label="Title"
+                      variant="outlined"
+                      id="title"
                       onChange={this.changeHandler}
                     />
                   </Box>
@@ -131,6 +167,7 @@ class SearchForm extends Component {
                     </Typography>
                     <TextField
                       className={classes.dialogInput}
+                      value={this.state.overview}
                       variant="outlined"
                       label="Overview"
                       multiline
@@ -148,6 +185,7 @@ class SearchForm extends Component {
                         <Checkbox
                           value="adult"
                           color="primary"
+                          checked={this.state.adultCheckbox}
                           style={{ color: "#565050" }}
                           className={classes.adultCheckbox}
                           id="adultCheckbox"
@@ -161,12 +199,12 @@ class SearchForm extends Component {
                       Popularity
                     </Typography>
                     <CustomizedSlider
-                      defaultValue={50}
+                      key={`popularity-${this.state.popularity}`}
+                      defaultValue={this.state.popularity}
                       min={50}
                       max={5000}
                       color="#9a7b07"
                       id="popularity"
-                      value={this.state.value}
                       onChange={this.handlePopularityChange}
                     />
                   </Box>
@@ -179,12 +217,12 @@ class SearchForm extends Component {
                       Vote average
                     </Typography>
                     <CustomizedSlider
-                      defaultValue={1}
+                      defaultValue={this.state.average}
+                      key={`average-${this.state.average}`}
                       min={1}
                       max={10}
                       color="#0a8a26de"
                       id="average"
-                      value={this.state.value}
                       onChange={this.handleAverageChange}
                     />
                   </Box>
@@ -210,12 +248,18 @@ class SearchForm extends Component {
                     className={classes.searchCheckbox}
                   />
                   <Button
-                    onClick={this.handleClose}
                     color="primary"
                     className={classes.searchBtn}
                     onClick={this.searchMovie}
                   >
                     Search
+                  </Button>
+                  <Button
+                    color="primary"
+                    className={classes.clearBtn}
+                    onClick={this.clearInputs}
+                  >
+                    Clear
                   </Button>
                 </Box>
               </DialogActions>

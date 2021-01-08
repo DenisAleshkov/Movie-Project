@@ -125,5 +125,15 @@ export const SearchFormStyles = (theme) => ({
         alignItems: "center",
     },
   },
+  clearBtn: {
+    marginTop: 20,
+    backgroundColor: "#fff",
+    color: "#565050",
+    padding: "5px 30px",
+    "&:hover": {
+      backgroundColor: "#565050",
+      color: "#fff",
+    },
+  }
 });
 

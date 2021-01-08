@@ -5,18 +5,24 @@ import {
   LOGIN_ERROR,
   SIGNOUT_SUCCESS,
   SIGNOUT_ERROR,
+  SET_USER,
+  SET_PHOTO,
+  SET_REGISTER_NOTIF
 } from "./../constants";
 
 const initialState = {
+  profileInfo: null,
   isAuth: false,
   userId: null,
   firstName: "",
   lastName: "",
   email: "",
   error: null,
+  photoUrl: null,
+  notification: null
 };
 
-const LoadingReducer = (state = initialState, action) => {
+const AuthReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS: {
       console.log("LOGIN_SUCCESS");
@@ -28,6 +34,7 @@ const LoadingReducer = (state = initialState, action) => {
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
         email: action.payload.email,
+        photoUrl: action.payload.photoUrl
       };
     }
     case LOGIN_ERROR: {
@@ -43,6 +50,7 @@ const LoadingReducer = (state = initialState, action) => {
       return {
         ...state,
         error: null,
+        notification: action.payload.message
       };
     }
     case REGISTER_ERROR: {
@@ -51,6 +59,7 @@ const LoadingReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+        notification: action.payload
       };
     }
     case SIGNOUT_SUCCESS: {
@@ -70,8 +79,31 @@ const LoadingReducer = (state = initialState, action) => {
       console.log(action.payload);
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       };
+    }
+    case SET_USER: {
+      return {
+        ...state,
+        isAuth: true,
+        userId: action.payload.id,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        email: action.payload.email,
+        photoUrl: action.payload.photoUrl
+      };
+    }
+    case SET_PHOTO: {
+      return {
+        ...state,
+        photoUrl: action.payload,
+      };
+    }
+    case SET_REGISTER_NOTIF: {
+      return {
+        ...state,
+        notification: action.payload
+      }
     }
     default: {
       return state;
@@ -79,4 +111,4 @@ const LoadingReducer = (state = initialState, action) => {
   }
 };
 
-export default LoadingReducer;
+export default AuthReducer;

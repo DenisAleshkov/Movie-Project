@@ -1,5 +1,6 @@
 export const SearchCardStyle = (theme) => ({
   root: {
+    position: "relative",
     width: 350,
     height: 620,
     margin: 20,
@@ -13,7 +14,7 @@ export const SearchCardStyle = (theme) => ({
     }
   },
   media: {
-    height: "85%",
+    height: "82%",
   },
   header:{
       alignItems: "center",
@@ -24,5 +25,11 @@ export const SearchCardStyle = (theme) => ({
   },
   actionChip: {
     margin: "10px"
-  }
+  },
+  cardAction:{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 7 
+  },
 });

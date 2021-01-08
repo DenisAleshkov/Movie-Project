@@ -1,18 +1,23 @@
 import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  withStyles,
+  Typography,
+  Container,
+  Snackbar,
+} from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { LoginStyles } from "./LoginStyles";
-import { login } from "./../../../store/actions/authAction";
+import { login, loginError } from "./../../../store/actions/authAction";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
@@ -23,6 +28,7 @@ class Login extends React.Component {
       email: "",
       password: "",
       checked: false,
+      open: false,
     };
   }
   handleSubmit = (e) => {
@@ -38,11 +44,40 @@ class Login extends React.Component {
     this.setState({
       checked: e.target.checked,
     });
-  }
+  };
+  showLoading = () => {
+    if (this.props.isLoading) {
+      return <LinearProgress className={this.props.classes.authLoading} />;
+    }
+  };
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      open: false,
+    });
+    this.props.loginError(null);
+  };
+  showNotification = () => {
+    if (this.props.error) {
+      return (
+        <Snackbar
+          open={!!this.props.error}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error">{this.props.error}</Alert>
+        </Snackbar>
+      );
+    }
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <Container component="main" maxWidth="xs">
+        {this.showLoading()}
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -84,7 +119,7 @@ class Login extends React.Component {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
               onChange={this.handleCheckboxChange}
-            /> 
+            />
             <Button
               type="submit"
               fullWidth
@@ -103,6 +138,7 @@ class Login extends React.Component {
             </Grid>
           </form>
         </div>
+        {this.showNotification()}
       </Container>
     );
   }
@@ -110,9 +146,11 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   error: state.AuthReducer.error,
+  isLoading: state.LoadingReducer.isLoading,
 });
 const mapDispatchToProps = (dispatch) => ({
   login: (credentials) => dispatch(login(credentials)),
+  loginError: (payload) => dispatch(loginError(payload)),
 });
 
 export default compose(

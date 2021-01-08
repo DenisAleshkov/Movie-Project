@@ -58,7 +58,7 @@ body{margin: 0px;
   border-radius: 0px 0px 50px 50px;
   position: relative;
   z-index: -1;  
-  left: 0%; top: 20%;
+  left: 0%;
   overflow: hidden;
   z-index: 10000;
 }

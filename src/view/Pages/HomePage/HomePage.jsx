@@ -1,7 +1,31 @@
 import React from "react";
+import firebase from "firebase";
 import Navigation from "./components/Navigation/Navigation";
+import { setUser } from "./../../../store/actions/authAction";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { compose } from "redux";
 class HomePage extends React.Component {
+  componentDidMount() {
+    this.listenerUser();
+  }
+  componentWillUnmount() {
+    this.unsubscribe && this.unsubscribe();
+  }
+  listenerUser = () => {
+    this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            this.props.setUser({ ...doc.data(), id: doc.id });
+          });
+      }
+    });
+  };
   render() {
     return (
       <Navigation
@@ -12,4 +36,13 @@ class HomePage extends React.Component {
   }
 }
 
-export default withRouter(HomePage);
+const mapStateToProps = (state) => ({})
+
+const mapDispatchToProps = (dispatch) => ({
+  setUser: (data) => dispatch(setUser(data)),
+});
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter
+)(HomePage);

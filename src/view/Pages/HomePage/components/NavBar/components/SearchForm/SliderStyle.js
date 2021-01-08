@@ -1,6 +1,6 @@
 import React from "react";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,16 +45,12 @@ function CustomizedSlider({
   max,
   defaultValue,
   onChange,
-  id,
-  value,
-  color
 }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <PrettoSlider
         aria-label="pretto slider"
-        getAriaValueText={value}
         defaultValue={defaultValue}
         min={min}
         max={max}
