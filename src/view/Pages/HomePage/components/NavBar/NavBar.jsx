@@ -1,34 +1,34 @@
 import React from "react";
 import clsx from "clsx";
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  AppBar,
-  Box,
-  Button,
-  Icon,
-  InputBase,
-  Toolbar,
-} from "@material-ui/core";
+import SearchForm from "./components/SearchForm/SearchForm";
+import { AppBar, Badge, Box, Button, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: "",
-    };
-  }
-  changeHandler = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
   isActive = (url) =>
     this.props.location === url ? this.props.classes.activeNavLink : "";
-
+  signOut = () => {
+    this.props.signOut(this.props.history);
+  };
+  showSearchForm() {
+    if (
+      this.props.location === "/home/movie" ||
+      this.props.location === "/home/tv"
+    ) {
+      return (
+        <SearchForm
+          getGenres={this.props.getGenres}
+          genres={this.props.genres}
+          location={this.props.location}
+          movies={this.props.movies}
+          searchMovies={this.props.searchMovies}
+          history={this.props.history}
+        />
+      );
+    }
+  }
   render() {
-    const { classes, open } = this.props;
-
+    const { classes, open, count } = this.props;
     return (
       <AppBar
         position="fixed"
@@ -37,27 +37,15 @@ class NavBar extends React.Component {
         })}
       >
         <Toolbar className={classes.navBar}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              className={classes.searchInput}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              onChange={this.changeHandler}
-              inputProps={{ "aria-label": "search", id: "searchText" }}
-            />
-          </div>
+          {this.showSearchForm()}
           <Box className={clsx(classes.navMenu)}>
             <Button
               component={Link}
-              to="/home/movies"
+              to="/home/movie"
               color="inherit"
-              className={this.isActive("/home/movies")||this.isActive("/home")}
+              className={
+                this.isActive("/home/movie") || this.isActive("/home")
+              }
             >
               Movies
             </Button>
@@ -68,16 +56,23 @@ class NavBar extends React.Component {
               className={this.isActive("/home/tv")}
               onClick={this.isActive}
             >
-              Tv
+              TV Shows
             </Button>
+              <Button
+                component={Link}
+                to="/home/library"
+                color="inherit"
+                className={this.isActive("/home/library")}
+                onClick={this.isActive}
+              >
+                my Library
+              </Button>
             <Button
-              component={Link}
-              to="/home/library"
-              color="inherit"
-              className={this.isActive("/home/library")}
-              onClick={this.isActive}
+              className={classes.signOutBtn}
+              onClick={this.signOut}
+              variant="outlined"
             >
-              my Library
+              Sign Out
             </Button>
           </Box>
         </Toolbar>

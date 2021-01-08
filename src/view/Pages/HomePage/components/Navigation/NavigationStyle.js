@@ -1,4 +1,5 @@
 import { fade } from "@material-ui/core/styles";
+import { red } from "@material-ui/core/colors";
 
 const drawerWidth = 166;
 
@@ -58,6 +59,9 @@ export const NavigationStyle = (theme) => ({
     backgroundColor: "#57527b",
   },
   content: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     flexGrow: 1,
     paddingTop: theme.spacing(10),
     minHeight: "100vh",
@@ -65,8 +69,14 @@ export const NavigationStyle = (theme) => ({
   },
   items: {
     display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   navMenu: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "flex-end"
   },
   activeNavLink: {
     backgroundColor: "#565050",
@@ -75,8 +85,6 @@ export const NavigationStyle = (theme) => ({
     }
   },
   navBar: {
-    display: "flex",
-    justifyContent: "space-between",
   },
   navIcon: {
     color: "#fff",
@@ -104,16 +112,8 @@ export const NavigationStyle = (theme) => ({
       width: "auto",
     },
   },
-  searchInput: {
-    padding: "0px 17px 0px 30px",
-  },
-  searchIcon: {
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  
+  signOutBtn: {
+    color: "#fff",
+    borderColor:"#fff!important"
+  }
 });

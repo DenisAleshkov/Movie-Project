@@ -3,7 +3,8 @@ import {
   SET_ERROR,
   SET_TV,
   SET_MOVIE_TO_LIBRARY,
-  GET_MOVIE_FROM_LIBRARY,
+  SET_GENRES,
+  SET_SEARCH_MOVIES
 } from "./../constants";
 
 const initialState = {
@@ -15,9 +16,10 @@ const initialState = {
     page: null,
     tvList: [],
   },
+  genres: [],
   library: [],
-  allMovies: [],
   error: null,
+  searchMovies: []
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -40,10 +42,18 @@ const MoviesReducer = (state = initialState, action) => {
         },
       };
     }
+    case SET_GENRES: {
+      return {
+        ...state,
+        genres: action.payload,
+      };
+    }
     case SET_ERROR: {
       return {
         ...state,
         movies: null,
+        tv: null,
+        genres: null,
         error: action.payload,
       };
     }
@@ -52,6 +62,12 @@ const MoviesReducer = (state = initialState, action) => {
         ...state,
         library: action.payload,
       };
+    }
+    case SET_SEARCH_MOVIES: {
+      return {
+        ...state,
+        searchMovies: action.payload.results
+      }
     }
     default: {
       return state;

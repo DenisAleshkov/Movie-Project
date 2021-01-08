@@ -3,6 +3,8 @@ import {
   REGISTER_ERROR,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+  SIGNOUT_SUCCESS,
+  SIGNOUT_ERROR,
 } from "./../constants";
 
 const initialState = {
@@ -18,7 +20,7 @@ const LoadingReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS: {
       console.log("LOGIN_SUCCESS");
-      console.log('action', action.payload)
+      console.log("action", action.payload);
       return {
         ...state,
         isAuth: action.payload.isAuth,
@@ -49,6 +51,26 @@ const LoadingReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    }
+    case SIGNOUT_SUCCESS: {
+      console.log("SIGNOUT_SUCCESS");
+      return {
+        ...state,
+        isAuth: false,
+        userId: null,
+        firstName: "",
+        lastName: "",
+        email: "",
+        error: null,
+      };
+    }
+    case SIGNOUT_ERROR: {
+      console.log("SIGNOUT_ERROR");
+      console.log(action.payload);
+      return {
+        ...state,
+        error: action.payload
       };
     }
     default: {

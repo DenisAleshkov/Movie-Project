@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import firebase from "firebase";
 import Register from "./view/Auth/Register/Register";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { FIREBASE_CONFIG } from "./store/constants";

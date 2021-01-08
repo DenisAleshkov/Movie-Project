@@ -1,9 +1,9 @@
-export const PosterCardStyles = (theme) => ({
+export const PosterCardStyle = (theme) => ({
   root: {
     position: "relative",
-    backgroundColor: "#0cde87",
-    width: 250,
-    height: 300,
+    backgroundColor: "#1c045a",
+    width: 300,
+    height: 450,
     margin: "20px",
     "&:hover $media": {
       opacity: "0.5",

@@ -4,6 +4,8 @@ import {
   REGISTER_ERROR,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+  SIGNOUT_SUCCESS,
+  SIGNOUT_ERROR,
 } from "./../constants";
 
 export const registerSuccess = () => ({ type: REGISTER_SUCCESS });
@@ -11,6 +13,9 @@ export const registerError = (payload) => ({ type: REGISTER_ERROR, payload });
 
 export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
 export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
+
+export const signOutSucces = () => ({ type: SIGNOUT_SUCCESS });
+export const signOutError = (payload) => ({ type: SIGNOUT_ERROR, payload });
 
 const getUserInfo = async (id, email) => {
   const userData = await firebase.firestore().collection("users").get(id);
@@ -59,5 +64,19 @@ export const register = (credentials) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(registerError(error.message));
+    });
+};
+
+export const signOut = (history) => (dispatch) => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      localStorage.removeItem("token");
+      dispatch(signOutSucces());
+      history.push("/auth/login");
+    })
+    .catch((error) => {
+      dispatch(signOutError(error.response));
     });
 };
