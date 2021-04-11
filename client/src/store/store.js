@@ -5,6 +5,7 @@ import SearchReducer from "./reducers/SearchReducer";
 import DetailsReducer from "./reducers/DetailsReducer";
 import BlogReducer from "./reducers/BlogReducer" 
 import { combineReducers, createStore, applyMiddleware } from "redux";
+import {reducer as formReducer} from 'redux-form';
 import thunk from "redux-thunk";
 
 const reducers = combineReducers({
@@ -13,7 +14,8 @@ const reducers = combineReducers({
   AuthReducer,
   SearchReducer,
   DetailsReducer,
-  BlogReducer
+  BlogReducer,
+  form: formReducer  
 });
 
 const store = createStore(reducers, applyMiddleware(thunk));

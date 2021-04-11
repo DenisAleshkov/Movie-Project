@@ -1,6 +1,12 @@
-import { GLOBALS } from "./constants";
+import { GLOBALS, API_ROOT } from "./constants";
 
 const { BASE_URL, API_KEY, LANG, BY_POPULARITY, SESSION_ID } = GLOBALS;
+
+export const USER = {
+  LOGIN: () => `${API_ROOT}api/user/login`,
+  REGISTER: () => `${API_ROOT}api/user/registration`,
+  AUTH: () => `${API_ROOT}api/user/auth`,
+};
 
 export const MOVIE = {
   GET_POPULAR_MOVIES: (page) =>

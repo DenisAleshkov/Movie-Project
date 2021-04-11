@@ -1,4 +1,6 @@
 import firebase from "firebase";
+import axios from "axios";
+import { SubmissionError } from "redux-form";
 import {
   REGISTER_SUCCESS,
   REGISTER_ERROR,
@@ -8,10 +10,12 @@ import {
   SIGNOUT_ERROR,
   SET_USER,
   SET_PHOTO,
-  SET_REGISTER_NOTIF
+  SET_REGISTER_NOTIF,
 } from "./../constants";
+import { USER } from "./../api";
 import { setLoading, setAvatarLoading } from "./loadingAction";
 import { getMessages, getTopicInfo } from "./blogAction";
+import jwt_decode from "jwt-decode";
 
 export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload });
 export const loginError = (payload) => ({ type: LOGIN_ERROR, payload });
@@ -37,51 +41,51 @@ export const getUserInfo = async (id) => {
 
 export const login = (credentials) => (dispatch) => {
   dispatch(setLoading(true));
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(credentials.email, credentials.password)
-    .then(async (res) => {
-      const user = await getUserInfo(res.user.uid);
-      if (credentials.checked) {
-        localStorage.setItem("token", res.user.uid);
-      }
+  const { email, password, checked } = credentials;
+  return axios
+    .post(USER.LOGIN(), {
+      email,
+      password,
+    })
+    .then((data) => {
+      const { token } = data.data;
+      if (checked) localStorage.setItem("token", token);
       dispatch(
         loginSuccess({
           isAuth: true,
-          userId: res.user.uid,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          userId: token,
+          email: email,
           photoUrl: "",
         })
       );
       dispatch(setLoading(false));
     })
     .catch((error) => {
-      dispatch(loginError(error.message));
       dispatch(setLoading(false));
+      throw new SubmissionError({ _error: error.response.data.message });
     });
 };
 
 export const register = (credentials) => (dispatch) => {
   dispatch(setLoading(true));
-  const db = firebase.firestore().collection("users");
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(credentials.email, credentials.password)
-    .then((res) => {
-      db.doc(res.user.uid).set({
-        firstName: credentials.firstName,
-        lastName: credentials.lastName,
-        email: credentials.email,
-        photoUrl: "",
-      });
-      dispatch(registerSuccess({ message: "You are register" }));
+  const { email, password } = credentials;
+  return axios
+    .post(USER.REGISTER(), {
+      email,
+      password,
+    })
+    .then((data) => {
+      dispatch(
+        registerSuccess({
+          message: `your token ${data.data.token}`,
+          userId: data.data.token,
+        })
+      );
       dispatch(setLoading(false));
     })
     .catch((error) => {
-      dispatch(registerError(error.message));
       dispatch(setLoading(false));
+      throw new SubmissionError({ _error: error.response.data.message });
     });
 };
 

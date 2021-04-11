@@ -2,6 +2,7 @@ import React from "react";
 import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import MuiAlert from "@material-ui/lab/Alert";
 import {
   Avatar,
   Button,
@@ -20,6 +21,62 @@ import { LoginStyles } from "./LoginStyles";
 import { login, loginError } from "./../../../store/actions/authAction";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+import { required, email } from "./../../utils/validate";
+
+function AlertField(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const renderEmailField = ({ input, meta: { touched, error, warning } }) => {
+  return (
+    <>
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="email"
+        label="Email Address"
+        name="email"
+        autoComplete="email"
+        autoFocus
+        {...input}
+      />
+      {touched && error && <AlertField severity="error">{error}</AlertField>}
+    </>
+  );
+};
+
+const renderPasswordField = ({ input, meta: { touched, error, warning } }) => {
+  return (
+    <>
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+        {...input}
+      />
+      {touched && error && <AlertField severity="error">{error}</AlertField>}
+    </>
+  );
+};
+
+const renderCheckboxField = ({ input: { value, checked, onChange } }) => {
+  return (
+    <FormControlLabel
+      control={<Checkbox value={checked} color="primary" />}
+      label="Remember me"
+      onChange={() => onChange(!checked)}
+    />
+  );
+};
 
 class Login extends React.Component {
   constructor() {
@@ -31,20 +88,6 @@ class Login extends React.Component {
       open: false,
     };
   }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.login(this.state);
-  };
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
-  handleCheckboxChange = (e) => {
-    this.setState({
-      checked: e.target.checked,
-    });
-  };
   showLoading = () => {
     if (this.props.isLoading) {
       return <LinearProgress className={this.props.classes.authLoading} />;
@@ -73,8 +116,12 @@ class Login extends React.Component {
     }
   };
 
+  submit = (values) => {
+    return this.props.login(values);
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, handleSubmit, pristine, submitting } = this.props;
     return (
       <Container component="main" maxWidth="xs">
         {this.showLoading()}
@@ -88,37 +135,24 @@ class Login extends React.Component {
           </Typography>
           <form
             className={classes.form}
-            onSubmit={this.handleSubmit}
+            onSubmit={handleSubmit(this.submit)}
             noValidate
           >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
+            <Field
               name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={this.handleChange}
+              component={renderEmailField}
+              validate={[required, email]}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+            <Field
               name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={this.handleChange}
+              component={renderPasswordField}
+              validate={required}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-              onChange={this.handleCheckboxChange}
+            <Field
+              name="checked"
+              id="checked"
+              component={renderCheckboxField}
+              type="checkbox"
             />
             <Button
               type="submit"
@@ -126,6 +160,7 @@ class Login extends React.Component {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={pristine || submitting}
             >
               Sign In
             </Button>
@@ -155,5 +190,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default compose(
   withStyles(LoginStyles, { withTheme: true }),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
+  reduxForm({
+    form: "login",
+  })
 )(Login);

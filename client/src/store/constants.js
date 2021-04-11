@@ -16,6 +16,12 @@ export const FIREBASE_CONFIG = {
   appId: "1:896885905753:web:9678d9d814ae0fad2f5448",
 };
 
+export const API_ROOT='http://localhost:5000/'
+
+
+
+///////old applic
+
 export const SET_MOVIES = "SET_MOVIES";
 export const SET_MOVIE_RATE = "SET_MOVIE_RATE";
 export const SET_TV = "SET_TV";

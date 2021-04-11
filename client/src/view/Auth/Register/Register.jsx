@@ -1,7 +1,8 @@
 import React from "react";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
+import MuiAlert from "@material-ui/lab/Alert";
 import { Link } from "react-router-dom";
 import {
   withStyles,
@@ -12,46 +13,86 @@ import {
   Grid,
   Container,
   Typography,
-  Snackbar 
+  Snackbar,
 } from "@material-ui/core";
 import { RegisterStyles } from "./RegisterStyles";
 import { compose } from "redux";
+import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { register } from "./../../../store/actions/authAction";
 import { setNotification } from "../../../store/actions/authAction";
+import { required, minValue6, email } from "./../../utils/validate";
+
+function AlertField(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const renderEmailField = ({ input, meta: { touched, error, warning } }) => {
+  return (
+    <Grid item xs={12}>
+      <TextField
+        variant="outlined"
+        required
+        fullWidth
+        id="email"
+        label="Email Address"
+        name="email"
+        autoComplete="email"
+        {...input}
+      />
+      {touched && error && <AlertField severity="error">{error}</AlertField>}
+    </Grid>
+  );
+};
+
+const renderPasswordField = ({ input, meta: { touched, error, warning } }) => {
+  return (
+    <Grid item xs={12}>
+      <TextField
+        variant="outlined"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+        {...input}
+      />
+      {touched && error && <span>{error}</span>}
+    </Grid>
+  );
+};
+
 class Register extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      open: false
+      open: false,
     };
   }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.register(this.state);
+
+  submit = (values) => {
+    return this.props.register(values);
   };
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
+
   showLoading = () => {
     if (this.props.isLoading) {
       return <LinearProgress className={this.props.classes.authLoading} />;
     }
   };
   handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     this.setState({
-      open: false
-    })
-    this.props.setNotification(null)
+      open: false,
+    });
+    this.props.setNotification(null);
   };
   showNotification = () => {
     if (this.props.notification) {
@@ -71,9 +112,30 @@ class Register extends React.Component {
         </Snackbar>
       );
     }
-  }
+  };
+
+  showError = () => {
+    if (this.props.error) {
+      return (
+        <Snackbar
+          open={!!this.props.error}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          {this.props.error ? (
+            <Alert severity="error">{this.props.error}</Alert>
+          ) : (
+            <Alert onClose={this.handleClose} severity="success">
+              {this.props.error}
+            </Alert>
+          )}
+        </Snackbar>
+      );
+    }
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, handleSubmit, pristine, submitting } = this.props;
     return (
       <Container component="div" maxWidth="xs">
         {this.showLoading()}
@@ -87,60 +149,20 @@ class Register extends React.Component {
           </Typography>
           <form
             className={classes.form}
-            onSubmit={this.handleSubmit}
+            onSubmit={handleSubmit(this.submit)}
             noValidate
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={this.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="lname"
-                  onChange={this.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={this.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  onChange={this.handleChange}
-                />
-              </Grid>
+              <Field
+                name="email"
+                component={renderEmailField}
+                validate={[required, email]}
+              />
+              <Field
+                name="password"
+                component={renderPasswordField}
+                validate={[required, minValue6]}
+              />
             </Grid>
             <Button
               type="submit"
@@ -148,6 +170,7 @@ class Register extends React.Component {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={pristine || submitting}
             >
               Sign Up
             </Button>
@@ -158,6 +181,7 @@ class Register extends React.Component {
             </Grid>
           </form>
           {this.showNotification()}
+          {this.showError()}
         </div>
       </Container>
     );
@@ -172,10 +196,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   register: (credentials) => dispatch(register(credentials)),
-  setNotification: (payload) => dispatch(setNotification(payload))
+  setNotification: (payload) => dispatch(setNotification(payload)),
 });
 
 export default compose(
   withStyles(RegisterStyles, { withTheme: true }),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
+  reduxForm({
+    form: "register",
+  })
 )(Register);
