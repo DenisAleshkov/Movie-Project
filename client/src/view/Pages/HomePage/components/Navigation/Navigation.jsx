@@ -21,6 +21,8 @@ import {
   searchMovies,
   searchTV,
   setNotification,
+  getCities,
+  searchEventsByCity,
 } from "../../../../../store/actions/movieAction";
 import {
   getDetailsMovie,
@@ -143,6 +145,9 @@ class Navigation extends Component {
           signOut={this.props.signOut}
           history={this.props.history}
           getGenres={this.props.getGenres}
+          getCities={this.props.getCities}
+          searchEventsByCity={this.props.searchEventsByCity}
+          cities={this.props.cities}
           genres={this.props.genres}
           movies={this.props.movies}
           searchMovies={this.props.searchMovies}
@@ -243,11 +248,13 @@ const mapStateToProps = (state) => ({
   error: state.MoviesReducer.error,
   isNotificationLoading: state.LoadingReducer.isNotificationLoading,
   searchInputs: state.SearchReducer.searchInputs,
+  cities: state.EventReducer.cities,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
   getGenres: (type) => dispatch(getGenres(type)),
+  getCities: () => dispatch(getCities()),
   searchMovies: (data, history) => dispatch(searchMovies(data, history)),
   searchTV: (data, history) => dispatch(searchTV(data, history)),
   setNotification: (payload) => dispatch(setNotification(payload)),
@@ -256,6 +263,8 @@ const mapDispatchToProps = (dispatch) => ({
   getDetailsTv: (id) => dispatch(getDetailsTv(id)),
   getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
   setInputs: (payload) => dispatch(setInputs(payload)),
+  searchEventsByCity: (cityId, history) =>
+    dispatch(searchEventsByCity(cityId, history)),
 });
 
 export default compose(

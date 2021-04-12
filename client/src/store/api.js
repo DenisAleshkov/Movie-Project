@@ -8,6 +8,13 @@ export const USER = {
   AUTH: () => `${API_ROOT}api/user/auth`,
 };
 
+export const EVENT = {
+  GET_CITY: () => `${API_ROOT}api/city`,
+  GET_LOCATION: () => `${API_ROOT}api/location`,
+  GET_EVENTS: () => `${API_ROOT}api/event`,
+  SEARCH_BY_CITY: (cityId) => `${API_ROOT}api/event?cityId=${cityId}`,
+}
+
 export const MOVIE = {
   GET_POPULAR_MOVIES: (page) =>
     `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=${LANG}&page=${page}`,

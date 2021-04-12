@@ -10,8 +10,10 @@ import {
   SET_NOTIFICATION,
   SET_RATE_MOVIES,
   SET_RATE_TV,
+  SET_CITIES,
+  SET_EVENTS,
 } from "./../constants";
-import { MOVIE } from "./../api";
+import { MOVIE, EVENT } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 import { setInputs } from "./searchAction";
 
@@ -312,3 +314,38 @@ export const getRateTv = (page) => (dispatch) => {
       dispatch(setLoading(false));
     });
 };
+
+export const setCities = (payload) => ({ type: SET_CITIES, payload });
+export const setEvents = (payload) => ({ type: SET_EVENTS, payload });
+
+export const getCities = () => (dispatch) => {
+  axios
+    .get(EVENT.GET_CITY())
+    .then((data) => {
+      dispatch(setCities(data.data));
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
+export const searchEventsByCity = (cityId, history) => (dispatch) => {
+  console.log('history', history)
+  axios
+    .get(EVENT.SEARCH_BY_CITY(cityId))
+    .then((data) => {
+      dispatch(setEvents(data.data.rows));
+      history.push("/home/search")
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
+export const getEvents = () => dispatch => {
+  axios.get(EVENT.GET_EVENTS()).then(data=>{
+    dispatch(setEvents(data.data.rows));
+  }).catch(error=>{
+    console.log('error', error)
+  })
+}

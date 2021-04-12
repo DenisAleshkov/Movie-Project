@@ -63,7 +63,7 @@ class PosterCard extends React.Component {
         {this.isFavorite()}
         <CardMedia
           className={classes.media}
-          image={`https://image.tmdb.org/t/p/w500/${poster}`}
+          image={`${poster}`}
           title="Paella dish"
         />
         <CardContent className={classes.title}>

@@ -17,12 +17,10 @@ class NavBar extends React.Component {
     ) {
       return (
         <SearchForm
-          getGenres={this.props.getGenres}
-          genres={this.props.genres}
+          getCities={this.props.getCities}
+          searchEventsByCity={this.props.searchEventsByCity}
+          cities={this.props.cities}
           location={this.props.location}
-          movies={this.props.movies}
-          searchMovies={this.props.searchMovies}
-          searchTV={this.props.searchTV}
           history={this.props.history}
           searchInputs={this.props.searchInputs}
           setInputs={this.props.setInputs}

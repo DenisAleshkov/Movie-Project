@@ -16,11 +16,26 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { formatMoney, timeConvert, FormatDate } from "./../../utils/functions";
 import { withRouter } from "react-router-dom";
+import axios from "axios"
 
 class Details extends Component {
+  state={
+    event: null
+  }
   componentDidMount() {
     this.props.getDetails(this.props.match.params.id);
     this.props.getSimilar(this.props.match.params.id, 1);
+    axios.get("http://localhost:5000/api/event", {
+      params: {
+        id: this.props.match.params.id
+      }
+    }).then(data=>{
+      this.setState({
+        event: data.data.rows[0]
+      })
+    }).catch(error=>{
+      console.log('error', error)
+    })
   }
   showGenres = () => {
     if (Object.entries(this.props.details).length !== 0) {
@@ -75,7 +90,7 @@ class Details extends Component {
   };
   render() {
     const { classes, details, isLoading } = this.props;
-    if (isLoading) return <Loading />;
+    if (this.state.event) return <Loading />;
     return (
       <Container maxWidth="md" className={classes.root}>
         <Box className={classes.header}>
