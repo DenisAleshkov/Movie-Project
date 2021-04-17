@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import PosterCard from "./../components/PosterCard/PosterCard";
+import Types from "../HomePage/components/Types/Types";
 import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getEvents, getMovies, setMovieRate } from "./../../../store/actions/movieAction";
+import {
+  getEvents,
+  getMovies,
+  setMovieRate,
+} from "./../../../store/actions/movieAction";
 class Movie extends Component {
   constructor() {
     super();
   }
   componentDidMount() {
-    this.props.getEvents()
+    this.props.getEvents();
   }
 
   showMovies = () => {
     if (this.props.events.length) {
-      console.log('this.props.events', this.props.events)
+      console.log("this.props.events", this.props.events);
       return this.props.events.map((item) => (
         <PosterCard
           type="movie"
@@ -31,18 +36,24 @@ class Movie extends Component {
     }
   };
   render() {
-    return <>{this.showMovies()}</>
+    return (
+      <>
+        <Types types={this.props.types} />
+        {this.showMovies()}
+      </>
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
   movies: state.MoviesReducer.movies,
+  types: state.MoviesReducer.types,
   moviesCurrentPage: state.MoviesReducer.moviesCurrentPage,
-  events: state.EventReducer.events
+  events: state.EventReducer.events,
 });
 const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),
   setMovieRate: (id, value) => dispatch(setMovieRate(id, value)),
-  getEvents: () => dispatch(getEvents())
+  getEvents: () => dispatch(getEvents()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Movie);

@@ -28,6 +28,7 @@ const initialState = {
   myAverageTv: 0,
   rateMovies: [],
   myAverageMovies: 0,
+  types: [],
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -100,6 +101,12 @@ const MoviesReducer = (state = initialState, action) => {
         ...state,
         rateTv: action.payload.tv,
         myAverageTv: action.payload.myAverageTv,
+      };
+    }
+    case "SET_TYPES": {
+      return {
+        ...state,
+        types: action.payload,
       };
     }
     default: {

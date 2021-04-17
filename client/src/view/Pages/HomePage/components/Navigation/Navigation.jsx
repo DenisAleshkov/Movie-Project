@@ -5,6 +5,7 @@ import SideBar from "./../Sidebar/SideBar";
 import RouteContent from "../RouteContent/RouteContent";
 import MenuIcon from "@material-ui/icons/Menu";
 import ForwardTwoToneIcon from "@material-ui/icons/ForwardTwoTone";
+import Types from "./../Types/Types";
 import { NavigationStyle } from "./NavigationStyle";
 import {
   withStyles,
@@ -23,6 +24,7 @@ import {
   setNotification,
   getCities,
   searchEventsByCity,
+  getTypes,
 } from "../../../../../store/actions/movieAction";
 import {
   getDetailsMovie,
@@ -52,6 +54,7 @@ class Navigation extends Component {
 
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
+    this.props.getTypes();
   }
 
   componentWillUnmount() {
@@ -105,29 +108,6 @@ class Navigation extends Component {
       );
     }
   };
-
-  scrollHandler = (event) => {
-    if (event.target.value !== undefined && this.state.icon === false) {
-      this.scrollTo("end", this.pageToEndRef);
-    } else {
-      this.scrollTo("start", this.pageToStartRef);
-    }
-  };
-  scrollTo = (to, position) => {
-    position.scrollIntoView &&
-      position.scrollIntoView({
-        block: to,
-        behavior: "smooth",
-      });
-  };
-  showScrollIcon = () => (
-    <ForwardTwoToneIcon
-      className={clsx(this.props.classes.extendedIcon, {
-        [this.props.classes.extendedIconStart]: this.state.icon,
-        [this.props.classes.extendedIconEnd]: !this.state.icon,
-      })}
-    />
-  );
   render() {
     const { classes, location } = this.props;
     return (
@@ -189,27 +169,6 @@ class Navigation extends Component {
           })}
         >
           <Grid container className={classes.grid} style={{ padding: 0 }}>
-            {this.state.open && (
-              <Grid
-                item
-                xs={1}
-                className={clsx(classes.scroll, {
-                  [classes.scrollOpen]: this.state.open,
-                  [classes.scrollClose]: !this.state.open,
-                })}
-              >
-                <Fab
-                  variant="extended"
-                  component="button"
-                  className={classes.scrollBtn}
-                  value={this.state.icon}
-                  onClick={(e) => this.scrollHandler(e)}
-                >
-                  {this.showScrollIcon()}
-                </Fab>
-              </Grid>
-            )}
-
             <Grid item xs={this.state.open ? 11 : 12} className={classes.items}>
               {this.props.isNotificationLoading ? (
                 <CircularProgress
@@ -249,6 +208,7 @@ const mapStateToProps = (state) => ({
   isNotificationLoading: state.LoadingReducer.isNotificationLoading,
   searchInputs: state.SearchReducer.searchInputs,
   cities: state.EventReducer.cities,
+  types: state.MoviesReducer.types,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -262,6 +222,7 @@ const mapDispatchToProps = (dispatch) => ({
   getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
   getDetailsTv: (id) => dispatch(getDetailsTv(id)),
   getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
+  getTypes: () => dispatch(getTypes()),
   setInputs: (payload) => dispatch(setInputs(payload)),
   searchEventsByCity: (cityId, history) =>
     dispatch(searchEventsByCity(cityId, history)),

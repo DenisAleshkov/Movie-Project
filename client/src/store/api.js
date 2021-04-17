@@ -13,7 +13,9 @@ export const EVENT = {
   GET_LOCATION: () => `${API_ROOT}api/location`,
   GET_EVENTS: () => `${API_ROOT}api/event`,
   SEARCH_BY_CITY: (cityId) => `${API_ROOT}api/event?cityId=${cityId}`,
-}
+  GET_TYPES: () => `${API_ROOT}api/type`,
+  GET_EVENT_BY_TYPE: () => `${API_ROOT}api/type/getEvent`,
+};
 
 export const MOVIE = {
   GET_POPULAR_MOVIES: (page) =>

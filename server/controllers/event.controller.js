@@ -1,12 +1,12 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Event, EventInfo } = require("../models/models");
+const { Event, EventInfo, Type } = require("../models/models");
 const ApiError = require("./../error/api.error");
 
 class EventController {
   async create(req, res, next) {
     try {
-      const { name, price, cityId, locationId, status, type, info } = req.body;
+      const { name, price, cityId, locationId, status, typeId, info } = req.body;
       const { img } = req.files;
       let filename = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", filename));
@@ -16,7 +16,7 @@ class EventController {
         cityId,
         locationId,
         status,
-        type,
+        typeId,
         img: filename,
       });
       if (info) {
@@ -30,14 +30,15 @@ class EventController {
         });
       }
 
-      return res.json(event);
+      return res.json({event,info});
     } catch (e) {
-      next(ApiError(e.message));
+      next(ApiError.badRequest(e.message))
     }
   }
 
   async getAll(req, res) {
     let { cityId, locationId, limit, page } = req.query;
+
     page = page || 1;
     limit = limit || 9;
     let offset = page * limit - limit;

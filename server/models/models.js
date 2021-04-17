@@ -22,11 +22,13 @@ const Event = sequelize.define("event", {
   price: { type: DataTypes.INTEGER, allowNull: false },
   rating: { type: DataTypes.INTEGER, defaultValue: 0 },
   img: { type: DataTypes.STRING, allowNull: false },
-  status: { type: DataTypes.STRING, allowNull: false },
-  type: { type: DataTypes.STRING, allowNull: false },
+  status: { type: DataTypes.BOOLEAN, allowNull: false },
 });
 
-
+const Type = sequelize.define("type", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, unique: true, allowNull: false },
+});
 
 const Location = sequelize.define("location", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -55,6 +57,9 @@ const CityLocation = sequelize.define("city_location", {
 
 User.hasOne(Ticket);
 Ticket.belongsTo(User);
+
+Type.hasMany(Event);
+Event.belongsTo(Type);
 
 User.hasMany(Rating);
 Rating.belongsTo(User);
@@ -85,6 +90,7 @@ module.exports = {
   Ticket,
   TicketEvent,
   Event,
+  Type,
   Location,
   City,
   Rating,

@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import SearchForm from "./components/SearchForm/SearchForm";
+import CreateForm from "./components/CreateForm/CreateForm";
 import { AppBar, Box, Button, Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
@@ -16,15 +17,26 @@ class NavBar extends React.Component {
       this.props.location === "/home/tv"
     ) {
       return (
-        <SearchForm
-          getCities={this.props.getCities}
-          searchEventsByCity={this.props.searchEventsByCity}
-          cities={this.props.cities}
-          location={this.props.location}
-          history={this.props.history}
-          searchInputs={this.props.searchInputs}
-          setInputs={this.props.setInputs}
-        />
+        <>
+          <SearchForm
+            getCities={this.props.getCities}
+            searchEventsByCity={this.props.searchEventsByCity}
+            cities={this.props.cities}
+            location={this.props.location}
+            history={this.props.history}
+            searchInputs={this.props.searchInputs}
+            setInputs={this.props.setInputs}
+          />
+          <CreateForm
+            getCities={this.props.getCities}
+            searchEventsByCity={this.props.searchEventsByCity}
+            cities={this.props.cities}
+            location={this.props.location}
+            history={this.props.history}
+            searchInputs={this.props.searchInputs}
+            setInputs={this.props.setInputs}
+          />
+        </>
       );
     }
   }

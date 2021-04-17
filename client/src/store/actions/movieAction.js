@@ -16,6 +16,7 @@ import {
 import { MOVIE, EVENT } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 import { setInputs } from "./searchAction";
+import { getFormValues } from "redux-form";
 
 export const setRateMovies = (payload) => ({ type: SET_RATE_MOVIES, payload });
 export const setRateTv = (payload) => ({ type: SET_RATE_TV, payload });
@@ -107,127 +108,9 @@ export const getGenres = (type) => (dispatch) => {
     });
 };
 
-export const searchMovies = (data, history) => (dispatch) => {
-  dispatch(setLoading(true));
-  const {
-    title,
-    average,
-    idList,
-    adultCheckbox,
-    popularity,
-    overview,
-    searchCheckbox,
-  } = data;
-  if (searchCheckbox) {
-    dispatch(
-      setInputs({
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      })
-    );
-  }
-  if (title) {
-    axios
-      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(), {
-        params: { include_adult: adultCheckbox, page: 1, query: title },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  } else {
-    axios
-      .get(MOVIE.SEARCH_MOVIE(), {
-        params: {
-          include_adult: adultCheckbox,
-          page: 1,
-          ["vote_count.gte"]: popularity,
-          ["vote_average.gte"]: average,
-          with_genres: Array.from(idList.keys()).join(),
-        },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  }
-  dispatch(setLoading(false));
-};
+export const searchMovies = (data, history) => (dispatch) => {};
 
-export const searchTV = (data, history) => (dispatch) => {
-  dispatch(setLoading(true));
-  const {
-    title,
-    average,
-    idList,
-    adultCheckbox,
-    popularity,
-    searchCheckbox,
-    overview,
-  } = data;
-  if (searchCheckbox) {
-    dispatch(
-      setInputs({
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      })
-    );
-  }
-  if (title) {
-    axios
-      .get(MOVIE.SEARCH_TV_BY_TITLE(), {
-        params: { include_adult: adultCheckbox, page: 1, query: title },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  } else {
-    axios
-      .get(MOVIE.SEARCH_TV(), {
-        params: {
-          include_adult: adultCheckbox,
-          page: 1,
-          ["vote_count.gte"]: popularity,
-          ["vote_average.gte"]: average,
-          with_genres: Array.from(idList.keys()).join(),
-        },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  }
-  dispatch(setLoading(false));
-};
+export const searchTV = (data, history) => (dispatch) => {};
 
 export const setMovieRate = (id, value) => (dispatch) => {
   dispatch(setNotificationLoading(true));
@@ -330,22 +213,58 @@ export const getCities = () => (dispatch) => {
 };
 
 export const searchEventsByCity = (cityId, history) => (dispatch) => {
-  console.log('history', history)
+  dispatch(setLoading(true))
   axios
     .get(EVENT.SEARCH_BY_CITY(cityId))
     .then((data) => {
       dispatch(setEvents(data.data.rows));
-      history.push("/home/search")
+      dispatch(setLoading(false))
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false))
+    });
+};
+
+export const getEvents = () => (dispatch) => {
+  dispatch(setLoading(true))
+  axios
+    .get(EVENT.GET_EVENTS())
+    .then((data) => {
+      dispatch(setEvents(data.data.rows));
+      dispatch(setLoading(false))
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false))
+    });
+};
+
+export const setTypes = (payload) => ({ type: "SET_TYPES", payload });
+
+export const getTypes = () => (dispatch) => {
+  axios
+    .get(EVENT.GET_TYPES())
+    .then((data) => {
+      dispatch(setTypes(data.data));
     })
     .catch((error) => {
       console.log("error", error);
     });
 };
 
-export const getEvents = () => dispatch => {
-  axios.get(EVENT.GET_EVENTS()).then(data=>{
-    dispatch(setEvents(data.data.rows));
-  }).catch(error=>{
-    console.log('error', error)
-  })
-}
+export const getEventByType = (typeId) => (dispatch) => {
+  dispatch(setLoading(true))
+  axios
+    .post(EVENT.GET_EVENT_BY_TYPE(), {
+      typeId,
+    })
+    .then((data) => {
+      dispatch(setEvents(data.data))
+      dispatch(setLoading(false))
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      dispatch(setLoading(false))
+    });
+};
