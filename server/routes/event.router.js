@@ -6,5 +6,6 @@ const eventController = require('../controllers/event.controller')
 router.post('/', eventController.create)
 router.get('/', eventController.getAll)
 router.get('/:id', eventController.getOne)
+router.post('/getEventByLocation', eventController.getEventByLocation)
 
 module.exports = router

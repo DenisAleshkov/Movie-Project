@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PosterCard from "./../components/PosterCard/PosterCard";
 import Types from "../HomePage/components/Types/Types";
+import Locations from "../HomePage/components/Locations/Locations";
 import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import {
@@ -18,7 +19,6 @@ class Movie extends Component {
 
   showMovies = () => {
     if (this.props.events.length) {
-      console.log("this.props.events", this.props.events);
       return this.props.events.map((item) => (
         <PosterCard
           type="movie"
@@ -35,9 +35,14 @@ class Movie extends Component {
       ));
     }
   };
+
   render() {
+    if (this.props.loading) {
+      return <CircularProgress />;
+    }
     return (
       <>
+        {this.props.city && <Locations />}
         <Types types={this.props.types} />
         {this.showMovies()}
       </>
@@ -50,6 +55,8 @@ const mapStateToProps = (state) => ({
   types: state.MoviesReducer.types,
   moviesCurrentPage: state.MoviesReducer.moviesCurrentPage,
   events: state.EventReducer.events,
+  city: state.MoviesReducer.city,
+  loading: state.LoadingReducer.loading,
 });
 const mapDispatchToProps = (dispatch) => ({
   getMovies: (page) => dispatch(getMovies(page)),

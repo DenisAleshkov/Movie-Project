@@ -7,7 +7,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 const SideBar = ({ classes, location, count }) => {
   return (
     <List>
-      {["Profile","Movies", "TV Shows", "My Library", "Blog"].map((text, index) => (
+      {["Profile", "Events", "My Library", "Blog"].map((text, index) => (
         <ListItem
           button
           component={Link}

@@ -212,31 +212,50 @@ export const getCities = () => (dispatch) => {
     });
 };
 
+export const setCity = (payload) => ({ type: "SET_CITY", payload });
+
 export const searchEventsByCity = (cityId, history) => (dispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setLoading(true));
   axios
     .get(EVENT.SEARCH_BY_CITY(cityId))
     .then((data) => {
       dispatch(setEvents(data.data.rows));
-      dispatch(setLoading(false))
+      dispatch(setCity(cityId));
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       console.log("error", error);
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     });
 };
 
 export const getEvents = () => (dispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setLoading(true));
   axios
     .get(EVENT.GET_EVENTS())
     .then((data) => {
       dispatch(setEvents(data.data.rows));
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       console.log("error", error);
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
+    });
+};
+
+export const getEventsByLocation = (locationId) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .post(EVENT.GET_EVENT_BY_LOCATION(), {
+      locationId,
+    })
+    .then((data) => {
+      dispatch(setEvents(data.data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false));
     });
 };
 
@@ -254,17 +273,33 @@ export const getTypes = () => (dispatch) => {
 };
 
 export const getEventByType = (typeId) => (dispatch) => {
-  dispatch(setLoading(true))
+  dispatch(setLoading(true));
   axios
     .post(EVENT.GET_EVENT_BY_TYPE(), {
       typeId,
     })
     .then((data) => {
-      dispatch(setEvents(data.data))
-      dispatch(setLoading(false))
+      dispatch(setEvents(data.data));
+      dispatch(setLoading(false));
     })
     .catch((error) => {
       console.log("error", error.response);
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
+    });
+};
+
+export const setLocations = (payload) => ({ type: "SET_LOCATIONS", payload });
+
+export const getLocationInCity = (cityId) => (dispatch) => {
+  console.log('cityId', cityId)
+  axios
+    .post(EVENT.GET_LOCATION_BY_CITY(), {
+      cityId,
+    })
+    .then((data) => {
+      dispatch(setLocations(data.data));
+    })
+    .catch((error) => {
+      console.log("error", error);
     });
 };

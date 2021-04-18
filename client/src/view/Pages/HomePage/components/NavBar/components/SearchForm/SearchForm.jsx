@@ -1,14 +1,10 @@
 import React, { Component } from "react";
-import axios from "axios";
-import CustomizedSlider from "./SliderStyle";
 import SearchIcon from "@material-ui/icons/Search";
 import {
   Box,
   withStyles,
   Checkbox,
   FormControlLabel,
-  Typography,
-  TextField,
   Button,
   Dialog,
   DialogActions,
@@ -41,34 +37,10 @@ class SearchForm extends Component {
     super(props);
     this.state = {
       open: false,
-      adultCheckbox: false,
-      idList: new Map(),
-      popularity: 50,
-      average: 1,
-      title: "",
-      overview: "",
     };
   }
   componentDidMount() {
     this.props.getCities();
-    if (this.props.searchInputs) {
-      const {
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      } = this.props.searchInputs;
-      this.setState({
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      });
-    }
   }
   showСities = () =>
     this.props.cities.map((item) => (
@@ -81,41 +53,11 @@ class SearchForm extends Component {
       />
     ));
 
-  changeHandler = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value,
-    });
-  };
-  handleCheckboxChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.checked,
-    });
-  };
   handleClickOpen = () => {
     this.setState({ open: true });
   };
   handleClose = () => {
     this.setState({ open: false });
-  };
-
-  searchMovie = () => {
-    if (this.props.location === "/home/movie") {
-      this.props.searchMovies(this.state, this.props.history);
-    } else if (this.props.location === "/home/tv") {
-      this.props.searchTV(this.state, this.props.history);
-    }
-  };
-  clearInputs = () => {
-    this.setState({
-      open: false,
-      adultCheckbox: false,
-      idList: new Map(),
-      popularity: 50,
-      average: 1,
-      title: "",
-      overview: "",
-    });
-    this.props.setInputs(null);
   };
 
   submit = (values) => {
@@ -152,33 +94,12 @@ class SearchForm extends Component {
               </DialogContent>
               <DialogActions className={classes.dialogActions}>
                 <Box>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value="remember"
-                        color="primary"
-                        style={{ color: "#565050" }}
-                        className={classes.searchCheckbox}
-                        id="searchCheckbox"
-                      />
-                    }
-                    label="Remember inputs"
-                    onChange={this.handleCheckboxChange}
-                    className={classes.searchCheckbox}
-                  />
                   <Button
                     color="primary"
                     className={classes.searchBtn}
                     onClick={handleSubmit(this.submit)}
                   >
                     Search
-                  </Button>
-                  <Button
-                    color="primary"
-                    className={classes.clearBtn}
-                    onClick={this.clearInputs}
-                  >
-                    Clear
                   </Button>
                 </Box>
               </DialogActions>

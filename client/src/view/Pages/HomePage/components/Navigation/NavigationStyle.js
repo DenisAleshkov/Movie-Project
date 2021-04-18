@@ -62,11 +62,11 @@ export const NavigationStyle = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
     flexGrow: 1,
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(10),
     minHeight: "100vh",
     backgroundColor: "#292121ed",
     [theme.breakpoints.down("xs")]: {
-      paddingTop: theme.spacing(3),
+      paddingTop: theme.spacing(5),
     },
   },
   items: {
@@ -74,6 +74,7 @@ export const NavigationStyle = (theme) => ({
     justifyContent: "center",
     alignItems: "center",
     flexWrap: "wrap",
+    position: "relative"
   },
   navMenu: {
     display: "flex",

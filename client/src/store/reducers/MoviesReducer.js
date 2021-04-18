@@ -29,6 +29,8 @@ const initialState = {
   rateMovies: [],
   myAverageMovies: 0,
   types: [],
+  locations: [],
+  cityId: null,
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -107,6 +109,18 @@ const MoviesReducer = (state = initialState, action) => {
       return {
         ...state,
         types: action.payload,
+      };
+    }
+    case "SET_CITY": {
+      return {
+        ...state,
+        city: action.payload,
+      };
+    }
+    case "SET_LOCATIONS": {
+      return {
+        ...state,
+        locations: action.payload,
       };
     }
     default: {

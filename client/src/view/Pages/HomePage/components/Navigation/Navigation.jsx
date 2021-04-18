@@ -5,7 +5,6 @@ import SideBar from "./../Sidebar/SideBar";
 import RouteContent from "../RouteContent/RouteContent";
 import MenuIcon from "@material-ui/icons/Menu";
 import ForwardTwoToneIcon from "@material-ui/icons/ForwardTwoTone";
-import Types from "./../Types/Types";
 import { NavigationStyle } from "./NavigationStyle";
 import {
   withStyles,
@@ -198,18 +197,23 @@ class Navigation extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  genres: state.MoviesReducer.genres,
-  movies: state.MoviesReducer.movies,
-  library: state.MoviesReducer.library,
-  isLoading: state.LoadingReducer.isLoading,
-  notification: state.MoviesReducer.notification,
-  error: state.MoviesReducer.error,
-  isNotificationLoading: state.LoadingReducer.isNotificationLoading,
-  searchInputs: state.SearchReducer.searchInputs,
-  cities: state.EventReducer.cities,
-  types: state.MoviesReducer.types,
-});
+const mapStateToProps = (state) => {
+  console.log("state", state);
+
+  return {
+    genres: state.MoviesReducer.genres,
+    movies: state.MoviesReducer.movies,
+    library: state.MoviesReducer.library,
+    isLoading: state.LoadingReducer.isLoading,
+    notification: state.MoviesReducer.notification,
+    error: state.MoviesReducer.error,
+    isNotificationLoading: state.LoadingReducer.isNotificationLoading,
+    searchInputs: state.SearchReducer.searchInputs,
+    cities: state.EventReducer.cities,
+    types: state.MoviesReducer.types,
+    city: state.MoviesReducer.city,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),

@@ -25,6 +25,11 @@ const Event = sequelize.define("event", {
   status: { type: DataTypes.BOOLEAN, allowNull: false },
 });
 
+const EventUser = sequelize.define("event_user",{ 
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+
+})
+
 const Type = sequelize.define("type", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
@@ -84,6 +89,9 @@ EventInfo.belongsTo(Event);
 
 Location.belongsToMany(City, { through: CityLocation });
 City.belongsToMany(Location, { through: CityLocation });
+
+Event.belongsToMany(User, {through: EventUser})
+User.belongsToMany(Event, {through: EventUser})
 
 module.exports = {
   User,
