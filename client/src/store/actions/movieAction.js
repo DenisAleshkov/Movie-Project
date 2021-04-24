@@ -291,7 +291,6 @@ export const getEventByType = (typeId) => (dispatch) => {
 export const setLocations = (payload) => ({ type: "SET_LOCATIONS", payload });
 
 export const getLocationInCity = (cityId) => (dispatch) => {
-  console.log('cityId', cityId)
   axios
     .post(EVENT.GET_LOCATION_BY_CITY(), {
       cityId,
@@ -301,5 +300,39 @@ export const getLocationInCity = (cityId) => (dispatch) => {
     })
     .catch((error) => {
       console.log("error", error);
+    });
+};
+
+export const createEvent = (values) => (dispatch) => {
+  const {
+    city,
+    description,
+    location,
+    name,
+    price,
+    status,
+    title,
+    type,
+    img,
+  } = values;
+  let formData = new FormData()
+  formData.append('name', name)
+  formData.append('price', price)
+  formData.append('img', img)
+  formData.append('status', status)
+  formData.append('userId', 1)
+  formData.append('locationName', location)
+  formData.append('cityId', city.id)
+  formData.append('typeId', type.id)
+  formData.append('info', JSON.stringify({
+    title, description
+  }))
+  axios
+    .post(EVENT.CREATE_EVENT(), formData)
+    .then((data) => {
+      console.log("data", data);
+    })
+    .catch((error) => {
+      console.log("error", error.response);
     });
 };

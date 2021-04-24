@@ -27,10 +27,7 @@ class Movie extends Component {
           id={item.id}
           poster={item.img}
           title={item.name}
-          vote={5}
-          // getDetalis={this.props.getDetailsMovie}
-          // getSimilar={this.props.getSimilarMovies}
-          // setRate={this.props.setMovieRate}
+          rating={item.rating}
         />
       ));
     }

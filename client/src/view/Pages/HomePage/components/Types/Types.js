@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ChipsArray({ types }, ...props) {
-  console.log("props", props);
   const dispatch = useDispatch();
   const onClickHandler = (typeId) => {
     dispatch(getEventByType(typeId));

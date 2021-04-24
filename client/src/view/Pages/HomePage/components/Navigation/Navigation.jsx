@@ -127,6 +127,7 @@ class Navigation extends Component {
           getCities={this.props.getCities}
           searchEventsByCity={this.props.searchEventsByCity}
           cities={this.props.cities}
+          types={this.props.types}
           genres={this.props.genres}
           movies={this.props.movies}
           searchMovies={this.props.searchMovies}
@@ -198,8 +199,6 @@ class Navigation extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("state", state);
-
   return {
     genres: state.MoviesReducer.genres,
     movies: state.MoviesReducer.movies,

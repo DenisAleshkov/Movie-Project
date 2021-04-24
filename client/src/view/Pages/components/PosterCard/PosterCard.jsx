@@ -57,7 +57,8 @@ class PosterCard extends React.Component {
     );
 
   render() {
-    const { poster, title, classes, id, vote, to } = this.props;
+    const { poster, title, classes, id, rating, to } = this.props;
+    console.log('this.props', this.props)
     return (
       <Card className={classes.root}>
         {this.isFavorite()}
@@ -72,9 +73,7 @@ class PosterCard extends React.Component {
           </Typography>
           <Rating
             id={id}
-            setRate={this.props.setRate}
-            vote={vote}
-            type={this.props.type}
+            rating={rating}
           />
         </CardContent>
         <Button

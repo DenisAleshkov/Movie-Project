@@ -31,6 +31,7 @@ class NavBar extends React.Component {
             getCities={this.props.getCities}
             searchEventsByCity={this.props.searchEventsByCity}
             cities={this.props.cities}
+            types={this.props.types}
             location={this.props.location}
             history={this.props.history}
             searchInputs={this.props.searchInputs}

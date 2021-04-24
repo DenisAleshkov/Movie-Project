@@ -6,6 +6,7 @@ const {
   Type,
   CityLocation,
   Location,
+  Rating,
 } = require("../models/models");
 const ApiError = require("./../error/api.error");
 
@@ -108,6 +109,40 @@ class EventController {
       where: { locationId },
     });
     return res.json(events);
+  }
+
+  async setRateEvent(req, res) {
+    const { eventId, rating, userId } = req.body;
+    const event = await Event.findOne({
+      where: { id: eventId },
+    });
+
+    const rateEvent = await Rating.findOne({ where: { eventId, userId } });
+    if (rateEvent) {
+      rateEvent.rate = rating;
+      await rateEvent.save();
+    } else {
+      await Rating.create({
+        eventId,
+        rate: rating,
+        userId,
+      });
+    }
+    const newRateEvent = await Rating.findAll({ where: { eventId } });
+    const average =
+      newRateEvent.length &&
+      newRateEvent.reduce((accum, current) => accum + current.get("rate"), 0) /
+        newRateEvent.length;
+    await event.update(
+      {
+        rating: average,
+      },
+      {
+        where: { id: eventId },
+      }
+    );
+
+    res.send({ message: "Event was rated" });
   }
 }
 
