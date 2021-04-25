@@ -6,7 +6,7 @@ import Blog from "../../../Blog/Blog";
 import Profile from "../../../Profile/Profile";
 import Details from "./../../../Details/Details";
 import { Route, Switch } from "react-router-dom";
-const RouteContent = ({ getDetailsMovie, getSimilarMovies }) => {
+const RouteContent = () => {
   return (
     <Switch>
       <Route path="/" exact>
@@ -29,14 +29,7 @@ const RouteContent = ({ getDetailsMovie, getSimilarMovies }) => {
       <Route
         path="/home/details/movies/:id"
         exact
-        render={(props) => (
-          <Details
-            type="movies"
-            getDetails={getDetailsMovie}
-            getSimilar={getSimilarMovies}
-            {...props}
-          />
-        )}
+        render={(props) => <Details {...props}/>}
       />
       <Route path="/home/profile" exact>
         <Profile />

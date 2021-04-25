@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import CustomizedSlider from "./SliderStyle";
 import SearchIcon from "@material-ui/icons/Search";
-import { DropzoneArea } from "material-ui-dropzone";
+import  {DropzoneArea}  from "material-ui-dropzone";
 import {
   Box,
   withStyles,

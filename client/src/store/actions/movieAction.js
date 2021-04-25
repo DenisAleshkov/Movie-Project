@@ -336,3 +336,26 @@ export const createEvent = (values) => (dispatch) => {
       console.log("error", error.response);
     });
 };
+
+// export const setTvEvent = (id, value) => (dispatch) => {
+//   dispatch(setNotificationLoading(true));
+//   axios
+//     .post(MOVIE.SET_RATING_TV(id), {
+//       value: value,
+//     })
+//     .then((res) => {
+//       dispatch(
+//         setNotification({ error: false, message: res.data.status_message })
+//       );
+//       dispatch(setNotificationLoading(false));
+//     })
+//     .catch((error) => {
+//       dispatch(
+//         setNotification({
+//           error: true,
+//           message: error.response.data.status_message,
+//         })
+//       );
+//       dispatch(setNotificationLoading(false));
+//     });
+// };
