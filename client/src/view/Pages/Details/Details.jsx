@@ -13,37 +13,24 @@ import {
 } from "@material-ui/core";
 import { DetailsStyle } from "./DetailsStyle.js";
 import { compose } from "redux";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { getDetailsEvent } from "./../../../store/actions/movieAction";
 import { formatMoney, timeConvert, FormatDate } from "./../../utils/functions";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { SET_EVENTS } from "../../../store/constants";
 
 const Details = (props) => {
-  console.log('props', props)
   const { classes } = props;
-  const [loading, setLoading] = React.useState(true)
-  const [event, setEvent] = React.useState(null);
-  console.log('events', event)
+  const dispatch = useDispatch();
+  const event = useSelector((state) => state.MoviesReducer.details);
+  console.log("event", event);
+
   React.useEffect(() => {
-    setLoading(true)
-    axios
-      .get("http://localhost:5000/api/event", {
-        params: {
-          id: props.match.params.id,
-        },
-      })
-      .then((data) => {
-        setEvent(data.data.rows[0])
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.log("error", error);
-        setLoading(false)
-      });
+    dispatch(getDetailsEvent(props.match.params.id));
   }, []);
 
-  if(loading) return <Loading />
+  if (!event) return <Loading />;
 
   return (
     <Container maxWidth="md" className={classes.root}>
@@ -51,7 +38,7 @@ const Details = (props) => {
         <Box
           className={classes.headerWrapper}
           style={{
-            backgroundImage: `url(http://localhost:5000/${event.img})`,
+            backgroundImage: `url(http://localhost:5000/${event.event.img})`,
           }}
         >
           <Box className={classes.body}>
@@ -62,28 +49,33 @@ const Details = (props) => {
                   variant="h2"
                   gutterBottom
                 >
-                  {event.name}
+                  {event.event.name}
                 </Typography>
               </Box>
               <Box className={classes.headerRate}>
-                <Avatar>{event.rating}</Avatar>
-                <Rating name="read-only" value={event.rating || 0} max={10} readOnly />
+                <Avatar>{event.event.rating}</Avatar>
+                <Rating
+                  name="read-only"
+                  value={event.event.rating || 0}
+                  max={10}
+                  readOnly
+                />
               </Box>
               <Box className={classes.headerNumber}>
                 <Typography variant="subtitle2" gutterBottom>
-                  {event.rating}
+                  {event.event.rating}
                 </Typography>
                 <Typography
                   variant="subtitle2"
                   gutterBottom
                   style={{ marginLeft: 10 }}
                 >
-                {new Date(event.createdAt).getFullYear()}
+                  {new Date(event.event.createdAt).getFullYear()}
                 </Typography>
               </Box>
               <Box className={classes.description}>
                 <Typography variant="subtitle2" gutterBottom>
-                 {event.description}
+                  {event.event.description}
                 </Typography>
               </Box>
             </Box>
@@ -94,7 +86,7 @@ const Details = (props) => {
       <Box className={classes.boxOverview}>
         <Box className={classes.poster} style={{ height: 400 }}>
           <CardMedia
-            image={`https://image.tmdb.org/t/p/w500/`}
+            image={`http://localhost:5000/${event.event.img}`}
             title="Paella dish"
             style={{ width: 265, height: "100%" }}
           />
@@ -102,14 +94,14 @@ const Details = (props) => {
         <Box className={classes.overview}>
           <Box className={classes.overviewheader}>
             <Typography variant="h5" gutterBottom>
-              details.title
+              {event.event.title || event.event.name}
             </Typography>
             <Typography
               variant="subtitle1"
               gutterBottom
               className={classes.overviewText}
             >
-              details.overview
+              {event.event.description}
             </Typography>
           </Box>
           <Box className={classes.overviewContent}>
@@ -125,7 +117,7 @@ const Details = (props) => {
               variant="subtitle1"
               gutterBottom
             >
-              Status:
+              Status: {event.event.status ? "active" : "unactive"}
             </Typography>
 
             <Typography
@@ -133,64 +125,23 @@ const Details = (props) => {
               variant="subtitle1"
               gutterBottom
             >
-              Budget:5435
-            </Typography>
-
-            <Typography
-              className={classes.overviewItem}
-              variant="subtitle1"
-              gutterBottom
-            >
-              Laguage: details.original_language
-            </Typography>
-
-            <Typography
-              className={classes.overviewItem}
-              variant="subtitle1"
-              gutterBottom
-            >
-              Next episode:next
-            </Typography>
-
-            <Typography
-              className={classes.overviewItem}
-              variant="subtitle1"
-              gutterBottom
-            >
-              Runtime: 41234
+              Budget: {event.event.price + "$"}
             </Typography>
 
             <Box className={classes.genres}>
               <Typography variant="subtitle1" gutterBottom>
-                Genres:
+                Type: {event.typeName}
               </Typography>
             </Box>
-
-            <Typography
-              className={classes.overviewItem}
-              variant="subtitle1"
-              gutterBottom
-            >
-              Number of episodes: 3
-            </Typography>
-
-            <Typography
-              className={classes.overviewItem}
-              variant="subtitle1"
-              gutterBottom
-            >
-              Number of Seasons:2
-            </Typography>
-
-            <Box className={classes.production}>
-              <Typography
-                variant="subtitle1"
-                gutterBottom
-                style={{ margin: 0 }}
-              >
-                Production:
+            <Box className={classes.genres}>
+              <Typography variant="subtitle1" gutterBottom>
+                City: {event.cityName}
               </Typography>
-              <Typography>this.showCompanies</Typography>
+            </Box>
+            <Box className={classes.genres}>
+              <Typography variant="subtitle1" gutterBottom>
+                Location: {event.locationName}
+              </Typography>
             </Box>
           </Box>
         </Box>

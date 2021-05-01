@@ -7,6 +7,10 @@ const {
   CityLocation,
   Location,
   Rating,
+  City,
+  TicketEvent,
+  Ticket,
+  EventUser,
 } = require("../models/models");
 const ApiError = require("./../error/api.error");
 
@@ -100,7 +104,23 @@ class EventController {
       where: { id },
       include: [{ model: EventInfo, as: "info" }],
     });
-    return res.json(event);
+    const cityId = event.get("cityId");
+    const locationId = event.get("locationId");
+    const typeId = event.get("typeId");
+    const location = await Location.findOne({
+      where: { id: locationId },
+    });
+    const city = await City.findOne({
+      where: { id: cityId },
+    });
+    const type = await Type.findOne({
+      where: { id: typeId },
+    });
+    const cityName = await city.get("name");
+    const locationName = await location.get("name");
+    const typeName = await type.get("name");
+    const eventData = { event, cityName, locationName, typeName };
+    return res.json(eventData);
   }
 
   async getEventByLocation(req, res) {
@@ -143,6 +163,22 @@ class EventController {
     );
 
     res.send({ message: "Event was rated" });
+  }
+
+  async setTicket(req, res, next) {
+    try {
+      const { eventId, userId } = req.body;
+      const ticket = await Ticket.create({ userId });
+      const ticketId = await ticket.get("id");
+      await TicketEvent.create({
+        ticketId,
+        eventId,
+      });
+      await EventUser.create({ eventId, userId });
+      return res.send({ message: "ticket is bought" });
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   }
 }
 

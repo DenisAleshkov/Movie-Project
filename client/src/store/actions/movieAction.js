@@ -158,46 +158,6 @@ export const setTvRate = (id, value) => (dispatch) => {
     });
 };
 
-export const getRateMovies = (page) => (dispatch) => {
-  dispatch(setLoading(true));
-  axios
-    .get(MOVIE.GET_RATED_MOVIES(page))
-    .then((result) => {
-      const average =
-        result.data.results.length &&
-        result.data.results.reduce((accum, current) => {
-          return accum + current.rating;
-        }, 0) / result.data.results.length;
-      dispatch(
-        setRateMovies({ movies: result.data.results, myAverageMovies: average })
-      );
-      dispatch(setLoading(false));
-    })
-    .catch((error) => {
-      dispatch(setError(error.response.data.status_message));
-      dispatch(setLoading(false));
-    });
-};
-
-export const getRateTv = (page) => (dispatch) => {
-  dispatch(setLoading(true));
-  axios
-    .get(MOVIE.GET_RATED_TV(page))
-    .then((result) => {
-      const average =
-        result.data.results.length &&
-        result.data.results.reduce((accum, current) => {
-          return accum + current.rating;
-        }, 0) / result.data.results.length;
-      dispatch(setRateTv({ tv: result.data.results, myAverageTv: average }));
-      dispatch(setLoading(false));
-    })
-    .catch((error) => {
-      dispatch(setError(error.response.data.status_message));
-      dispatch(setLoading(false));
-    });
-};
-
 export const setCities = (payload) => ({ type: SET_CITIES, payload });
 export const setEvents = (payload) => ({ type: SET_EVENTS, payload });
 
@@ -315,18 +275,22 @@ export const createEvent = (values) => (dispatch) => {
     type,
     img,
   } = values;
-  let formData = new FormData()
-  formData.append('name', name)
-  formData.append('price', price)
-  formData.append('img', img)
-  formData.append('status', status)
-  formData.append('userId', 1)
-  formData.append('locationName', location)
-  formData.append('cityId', city.id)
-  formData.append('typeId', type.id)
-  formData.append('info', JSON.stringify({
-    title, description
-  }))
+  let formData = new FormData();
+  formData.append("name", name);
+  formData.append("price", price);
+  formData.append("img", img);
+  formData.append("status", status);
+  formData.append("userId", 1);
+  formData.append("locationName", location);
+  formData.append("cityId", city.id);
+  formData.append("typeId", type.id);
+  formData.append(
+    "info",
+    JSON.stringify({
+      title,
+      description,
+    })
+  );
   axios
     .post(EVENT.CREATE_EVENT(), formData)
     .then((data) => {
@@ -334,6 +298,45 @@ export const createEvent = (values) => (dispatch) => {
     })
     .catch((error) => {
       console.log("error", error.response);
+    });
+};
+
+export const setDetailsEvent = (payload) => ({ type: "SET_DETAILS", payload });
+
+export const getDetailsEvent = (id) => (dispatch) => {
+  console.log("id", id);
+  dispatch(setLoading(true));
+  axios
+    .get(`http://localhost:5000/api/event/${id}`)
+    .then((data) => {
+      dispatch(setDetailsEvent(data.data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false));
+    });
+};
+
+export const setEventRate = (value, eventId, userId) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post("http://localhost:5000/api/event/rateEvent", {
+      rating: value,
+      eventId,
+      userId,
+    })
+    .then((data) => {
+      dispatch(
+        setNotification({ error: false, message: "rating was changed" })
+      );
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setNotification({ error: true, message: "some error" }));
+      dispatch(setNotificationLoading(false));
+      dispatch(setNotificationLoading(false));
     });
 };
 

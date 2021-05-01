@@ -104,4 +104,5 @@ module.exports = {
   Rating,
   CityLocation,
   EventInfo,
+  EventUser
 };

@@ -18,8 +18,6 @@ import { setDefaultAvatar } from "./../../../../utils/functions";
 const headerUrl = "https://reactapp.ir/wp-content/uploads/reactjs.jpg";
 class Profile extends Component {
   componentDidMount() {
-    this.props.getRatedMovies(1);
-    this.props.getRateTv(1);
   }
   render() {
     const {

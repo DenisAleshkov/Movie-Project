@@ -2,7 +2,6 @@ import React from "react";
 import Library from "../../../Library/Library";
 import Movie from "./../../../Movie/Movie";
 import SearchPage from "./../../../SearchPage/SearchPage";
-import Blog from "../../../Blog/Blog";
 import Profile from "../../../Profile/Profile";
 import Details from "./../../../Details/Details";
 import { Route, Switch } from "react-router-dom";

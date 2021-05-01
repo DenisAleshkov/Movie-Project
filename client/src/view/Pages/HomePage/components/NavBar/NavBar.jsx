@@ -12,34 +12,29 @@ class NavBar extends React.Component {
     this.props.signOut(this.props.history);
   };
   showSearchForm() {
-    if (
-      this.props.location === "/home/movie" ||
-      this.props.location === "/home/tv"
-    ) {
-      return (
-        <>
-          <SearchForm
-            getCities={this.props.getCities}
-            searchEventsByCity={this.props.searchEventsByCity}
-            cities={this.props.cities}
-            location={this.props.location}
-            history={this.props.history}
-            searchInputs={this.props.searchInputs}
-            setInputs={this.props.setInputs}
-          />
-          <CreateForm
-            getCities={this.props.getCities}
-            searchEventsByCity={this.props.searchEventsByCity}
-            cities={this.props.cities}
-            types={this.props.types}
-            location={this.props.location}
-            history={this.props.history}
-            searchInputs={this.props.searchInputs}
-            setInputs={this.props.setInputs}
-          />
-        </>
-      );
-    }
+    return (
+      <>
+        <SearchForm
+          getCities={this.props.getCities}
+          searchEventsByCity={this.props.searchEventsByCity}
+          cities={this.props.cities}
+          location={this.props.location}
+          history={this.props.history}
+          searchInputs={this.props.searchInputs}
+          setInputs={this.props.setInputs}
+        />
+        <CreateForm
+          getCities={this.props.getCities}
+          searchEventsByCity={this.props.searchEventsByCity}
+          cities={this.props.cities}
+          types={this.props.types}
+          location={this.props.location}
+          history={this.props.history}
+          searchInputs={this.props.searchInputs}
+          setInputs={this.props.setInputs}
+        />
+      </>
+    );
   }
   render() {
     const { classes, open } = this.props;

@@ -31,6 +31,7 @@ const initialState = {
   types: [],
   locations: [],
   cityId: null,
+  details: null
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -122,6 +123,13 @@ const MoviesReducer = (state = initialState, action) => {
         ...state,
         locations: action.payload,
       };
+    }
+    case "SET_DETAILS": {
+      return {
+        ...state,
+        details: action.payload
+        
+      }
     }
     default: {
       return state;

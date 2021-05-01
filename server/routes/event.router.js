@@ -8,5 +8,6 @@ router.get('/', eventController.getAll)
 router.get('/:id', eventController.getOne)
 router.post('/getEventByLocation', eventController.getEventByLocation)
 router.post('/rateEvent', eventController.setRateEvent)
+router.post('/setTicket', eventController.setTicket)
 
 module.exports = router

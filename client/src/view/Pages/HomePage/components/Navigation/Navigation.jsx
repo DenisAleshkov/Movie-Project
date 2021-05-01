@@ -46,31 +46,7 @@ class Navigation extends Component {
       icon: false,
       showMessage: false,
     };
-    this.pageToEndRef = React.createRef();
-    this.pageToStartRef = React.createRef();
-    this.scrollRef = React.createRef();
   }
-
-  componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
-    this.props.getTypes();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
-
-  handleScroll = (event) => {
-    if (window.pageYOffset > 2500) {
-      this.setState({
-        icon: true,
-      });
-    } else {
-      this.setState({
-        icon: false,
-      });
-    }
-  };
 
   toggleDrawerOpen = (value) => {
     this.setState({
@@ -111,11 +87,6 @@ class Navigation extends Component {
     const { classes, location } = this.props;
     return (
       <div className={classes.root}>
-        <div
-          ref={(el) => {
-            this.pageToStartRef = el;
-          }}
-        ></div>
         <CssBaseline />
         <NavBar
           classes={classes}
@@ -178,21 +149,10 @@ class Navigation extends Component {
               ) : (
                 this.showNotification()
               )}
-              <RouteContent
-                getDetailsTv={this.props.getDetailsTv}
-                getSimilarTv={this.props.getSimilarTv}
-                getDetailsMovie={this.props.getDetailsMovie}
-                getSimilarMovies={this.props.getSimilarMovies}
-              />
+              <RouteContent />
             </Grid>
           </Grid>
         </main>
-        <div
-          className={classes.end}
-          ref={(el) => {
-            this.pageToEndRef = el;
-          }}
-        ></div>
       </div>
     );
   }

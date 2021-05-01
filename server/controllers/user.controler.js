@@ -1,7 +1,7 @@
 const ApiError = require("../error/api.error");
 const bcrypto = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User } = require("./../models/models");
+const { User, TicketEvent, Ticket, EventUser } = require("./../models/models");
 
 const generateJwt = (id, email, role) => {
   return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {

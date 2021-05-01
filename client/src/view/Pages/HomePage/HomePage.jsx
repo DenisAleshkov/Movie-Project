@@ -1,5 +1,4 @@
 import React from "react";
-import firebase from "firebase";
 import Navigation from "./components/Navigation/Navigation";
 import { isAuth } from "./../../../store/actions/authAction";
 import { withRouter } from "react-router-dom";

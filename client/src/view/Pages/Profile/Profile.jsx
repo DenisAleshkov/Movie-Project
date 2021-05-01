@@ -17,7 +17,6 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { setDefaultAvatar } from "./../../utils/functions";
-import { getRateMovies, getRateTv } from "./../../../store/actions/movieAction";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { ProfileStyle } from "./ProfileStyle";
@@ -25,10 +24,7 @@ import { uploadPhoto } from "../../../store/actions/authAction";
 
 const headerUrl = "https://reactapp.ir/wp-content/uploads/reactjs.jpg";
 class Profile extends Component {
-  componentDidMount() {
-    this.props.getRateMovies(1);
-    this.props.getRateTv(1);
-  }
+  componentDidMount() {}
   fileChanged = (e) => {
     if (e.target.files.length) {
       this.props.uploadPhotos({
@@ -171,8 +167,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getRateMovies: (page) => dispatch(getRateMovies(page)),
-  getRateTv: (page) => dispatch(getRateTv(page)),
   uploadPhotos: (data) => dispatch(uploadPhoto(data)),
 });
 
