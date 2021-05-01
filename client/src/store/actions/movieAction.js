@@ -340,6 +340,29 @@ export const setEventRate = (value, eventId, userId) => (dispatch) => {
     });
 };
 
+export const buyTicket = (eventId, userId) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post("http://localhost:5000/api/event/setTicket", {
+      eventId,
+      userId,
+    })
+    .then((data) => {
+      console.log("data", data);
+      dispatch(setNotification({ error: false, message: "ticket was bought" }));
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      dispatch(
+        setNotification({
+          error: true,
+          message: "you have already ticket on the event",
+        })
+      );
+      dispatch(setNotificationLoading(false));
+    });
+};
+
 // export const setTvEvent = (id, value) => (dispatch) => {
 //   dispatch(setNotificationLoading(true));
 //   axios

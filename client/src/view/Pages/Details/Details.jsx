@@ -10,25 +10,23 @@ import {
   withStyles,
   Avatar,
   Chip,
+  Button
 } from "@material-ui/core";
 import { DetailsStyle } from "./DetailsStyle.js";
 import { compose } from "redux";
 import { connect, useSelector, useDispatch } from "react-redux";
-import { getDetailsEvent } from "./../../../store/actions/movieAction";
-import { formatMoney, timeConvert, FormatDate } from "./../../utils/functions";
-import { withRouter } from "react-router-dom";
-import axios from "axios";
-import { SET_EVENTS } from "../../../store/constants";
+import { getDetailsEvent, buyTicket } from "./../../../store/actions/movieAction";
 
 const Details = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
   const event = useSelector((state) => state.MoviesReducer.details);
-  console.log("event", event);
 
   React.useEffect(() => {
     dispatch(getDetailsEvent(props.match.params.id));
   }, []);
+
+  const buyTicketEvent = () => {dispatch(buyTicket(props.match.params.id, 1))}
 
   if (!event) return <Loading />;
 
@@ -146,6 +144,9 @@ const Details = (props) => {
           </Box>
         </Box>
       </Box>
+      <Button variant="contained" color="primary" onClick={buyTicketEvent}>
+        BUY TICKET
+      </Button>
     </Container>
   );
 };
