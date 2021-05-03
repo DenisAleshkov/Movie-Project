@@ -225,6 +225,7 @@ export const getTypes = () => (dispatch) => {
   axios
     .get(EVENT.GET_TYPES())
     .then((data) => {
+      console.log("data", data);
       dispatch(setTypes(data.data));
     })
     .catch((error) => {
@@ -264,6 +265,7 @@ export const getLocationInCity = (cityId) => (dispatch) => {
 };
 
 export const createEvent = (values) => (dispatch) => {
+  dispatch(setLoading(true));
   const {
     city,
     description,
@@ -275,6 +277,7 @@ export const createEvent = (values) => (dispatch) => {
     type,
     img,
   } = values;
+  console.log("values", values);
   let formData = new FormData();
   formData.append("name", name);
   formData.append("price", price);
@@ -295,19 +298,24 @@ export const createEvent = (values) => (dispatch) => {
     .post(EVENT.CREATE_EVENT(), formData)
     .then((data) => {
       console.log("data", data);
+      dispatch(setLoading(false));
+      dispatch(setNotification({ error: false, message: "event was created" }));
     })
     .catch((error) => {
       console.log("error", error.response);
+      dispatch(setLoading(false));
+      dispatch(
+        setNotification({ error: true, message: "something was wrong" })
+      );
     });
 };
 
 export const setDetailsEvent = (payload) => ({ type: "SET_DETAILS", payload });
 
 export const getDetailsEvent = (id) => (dispatch) => {
-  console.log("id", id);
   dispatch(setLoading(true));
   axios
-    .get(`http://localhost:5000/api/event/${id}`)
+    .get(EVENT.GET_DETAILS(id))
     .then((data) => {
       dispatch(setDetailsEvent(data.data));
       dispatch(setLoading(false));

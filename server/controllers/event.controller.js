@@ -30,14 +30,14 @@ class EventController {
       } = req.body;
       let newlocationId;
       if (!locationId) {
-        const location = await Location.create({ name: locationName, cityId });
+        let location = await Location.create({ name: locationName, cityId });
         newlocationId = location.get("id");
         await CityLocation.create({ cityId, locationId: newlocationId });
       }
       const { img } = req.files;
       let filename = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", filename));
-      const event = await Event.create({
+      let event = await Event.create({
         name,
         price,
         cityId,
@@ -48,13 +48,11 @@ class EventController {
         img: filename,
       });
       if (info) {
-        info = JSON.parse(info);
-        info.forEach((element) => {
-          EventInfo.create({
-            title: element.title,
-            description: element.description,
-            eventId: event.id,
-          });
+        const inf = JSON.parse(info)
+        await EventInfo.create({
+          title: inf.title,
+          description: inf.description,
+          eventId: event.id,
         });
       }
 

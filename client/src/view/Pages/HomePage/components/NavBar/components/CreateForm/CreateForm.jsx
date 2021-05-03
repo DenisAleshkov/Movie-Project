@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import CustomizedSlider from "./SliderStyle";
 import SearchIcon from "@material-ui/icons/Search";
-import  {DropzoneArea}  from "material-ui-dropzone";
+import { DropzoneArea } from "material-ui-dropzone";
 import {
   Box,
   withStyles,
@@ -15,6 +15,8 @@ import {
   DialogActions,
   DialogContent,
   Radio,
+  CircularProgress,
+  Backdrop,
 } from "@material-ui/core";
 import { SearchFormStyles } from "./CreateFormStyle";
 import { reduxForm, Field } from "redux-form";
@@ -52,7 +54,7 @@ const renderInput = ({ input: { onChange, value }, ...props }) => {
   return (
     <TextField
       required
-      style={{width: "100%"}}
+      style={{ width: "100%" }}
       id={props.label}
       label={props.label}
       onChange={onChange}
@@ -65,7 +67,6 @@ const SearchForm = (props) => {
   const { classes, handleSubmit, change } = props;
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-
   const renderСities = () =>
     props.cities.map((item) => (
       <Field
@@ -92,7 +93,10 @@ const SearchForm = (props) => {
 
   const handleClose = () => setOpen(false);
 
-  const submit = (values) => dispatch(createEvent(values));
+  const submit = (values) => {
+    dispatch(createEvent(values));
+    handleClose();
+  };
 
   return (
     <>

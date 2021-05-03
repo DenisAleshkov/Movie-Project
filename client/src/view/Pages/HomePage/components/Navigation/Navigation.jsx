@@ -15,6 +15,7 @@ import {
   IconButton,
   Fab,
   Grid,
+  Backdrop,
 } from "@material-ui/core";
 import {
   getGenres,
@@ -46,6 +47,10 @@ class Navigation extends Component {
       icon: false,
       showMessage: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.getTypes();
   }
 
   toggleDrawerOpen = (value) => {
@@ -87,6 +92,9 @@ class Navigation extends Component {
     const { classes, location } = this.props;
     return (
       <div className={classes.root}>
+        <Backdrop className={classes.backdrop} open={this.props.isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <CssBaseline />
         <NavBar
           classes={classes}
