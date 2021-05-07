@@ -63,5 +63,5 @@ function ChipsArray({ types }, ...props) {
 }
 
 export default reduxForm({
-  name: "type-form",
+  form: "type-form",
 })(ChipsArray);
