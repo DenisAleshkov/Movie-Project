@@ -17,10 +17,6 @@ export const NAV_ICONS = (cssClass = "", count) => {
         url: "/home/movie",
       },
       {
-        component: <Tv className={cssClass} />,
-        url: "/home/tv",
-      },
-      {
         component: (
           <IconButton aria-label="cart" style={{padding: "12px 0"}}>
             <Badge badgeContent={count} color="secondary" showZero>
@@ -29,10 +25,6 @@ export const NAV_ICONS = (cssClass = "", count) => {
           </IconButton>
         ),
         url: "/home/library",
-      },
-      {
-        component: <ChatIcon className={cssClass} />,
-        url: "/blog",
       },
     ];
   };

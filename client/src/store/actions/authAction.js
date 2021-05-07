@@ -89,6 +89,25 @@ export const register = (credentials) => (dispatch) => {
     });
 };
 
+export const isAuth = (token) => (dispatch) => {
+  axios
+    .get(USER.AUTH(), {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((data) => {
+      const { email, id } = jwt_decode(data.data.token);
+      loginSuccess({
+        isAuth: true,
+        userId: id,
+        email: email,
+        photoUrl: "",
+      });
+    })
+    .catch((e) => {
+      console.log("USER", e.response);
+    });
+};
+
 export const signOut = (history) => (dispatch) => {
   firebase
     .auth()

@@ -14,7 +14,7 @@ class PosterCard extends React.Component {
     e.target.id && this.props.removeItemFromLibrary(e.target.id);
   };
   render() {
-    const { poster, title, classes, id } = this.props;
+    const { poster, name, classes, id } = this.props;
     return (
       <Card className={classes.root}>
         <IconButton
@@ -26,13 +26,13 @@ class PosterCard extends React.Component {
         </IconButton>
         <CardMedia
           className={classes.media}
-          image={`https://image.tmdb.org/t/p/w500/${poster}`}
+          image={`http://localhost:5000/${poster}`}
           title="Paella dish"
         />
 
         <CardContent className={classes.title}>
           <Typography variant="h4" gutterBottom className={classes.title}>
-            {title}
+            {name}
           </Typography>
         </CardContent>
       </Card>

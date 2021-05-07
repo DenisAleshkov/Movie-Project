@@ -57,13 +57,14 @@ class PosterCard extends React.Component {
     );
 
   render() {
-    const { poster, title, classes, id, vote, to } = this.props;
+    const { poster, title, classes, id, rating, to } = this.props;
+    console.log('this.props', this.props)
     return (
       <Card className={classes.root}>
         {this.isFavorite()}
         <CardMedia
           className={classes.media}
-          image={`https://image.tmdb.org/t/p/w500/${poster}`}
+          image={`http://localhost:5000/${poster}`}
           title="Paella dish"
         />
         <CardContent className={classes.title}>
@@ -72,9 +73,7 @@ class PosterCard extends React.Component {
           </Typography>
           <Rating
             id={id}
-            setRate={this.props.setRate}
-            vote={vote}
-            type={this.props.type}
+            rating={rating}
           />
         </CardContent>
         <Button

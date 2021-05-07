@@ -15,12 +15,16 @@ import {
   IconButton,
   Fab,
   Grid,
+  Backdrop,
 } from "@material-ui/core";
 import {
   getGenres,
   searchMovies,
   searchTV,
   setNotification,
+  getCities,
+  searchEventsByCity,
+  getTypes,
 } from "../../../../../store/actions/movieAction";
 import {
   getDetailsMovie,
@@ -43,30 +47,11 @@ class Navigation extends Component {
       icon: false,
       showMessage: false,
     };
-    this.pageToEndRef = React.createRef();
-    this.pageToStartRef = React.createRef();
-    this.scrollRef = React.createRef();
   }
 
   componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
+    this.props.getTypes();
   }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
-
-  handleScroll = (event) => {
-    if (window.pageYOffset > 2500) {
-      this.setState({
-        icon: true,
-      });
-    } else {
-      this.setState({
-        icon: false,
-      });
-    }
-  };
 
   toggleDrawerOpen = (value) => {
     this.setState({
@@ -103,38 +88,13 @@ class Navigation extends Component {
       );
     }
   };
-
-  scrollHandler = (event) => {
-    if (event.target.value !== undefined && this.state.icon === false) {
-      this.scrollTo("end", this.pageToEndRef);
-    } else {
-      this.scrollTo("start", this.pageToStartRef);
-    }
-  };
-  scrollTo = (to, position) => {
-    position.scrollIntoView &&
-      position.scrollIntoView({
-        block: to,
-        behavior: "smooth",
-      });
-  };
-  showScrollIcon = () => (
-    <ForwardTwoToneIcon
-      className={clsx(this.props.classes.extendedIcon, {
-        [this.props.classes.extendedIconStart]: this.state.icon,
-        [this.props.classes.extendedIconEnd]: !this.state.icon,
-      })}
-    />
-  );
   render() {
     const { classes, location } = this.props;
     return (
       <div className={classes.root}>
-        <div
-          ref={(el) => {
-            this.pageToStartRef = el;
-          }}
-        ></div>
+        <Backdrop className={classes.backdrop} open={this.props.isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <CssBaseline />
         <NavBar
           classes={classes}
@@ -143,6 +103,10 @@ class Navigation extends Component {
           signOut={this.props.signOut}
           history={this.props.history}
           getGenres={this.props.getGenres}
+          getCities={this.props.getCities}
+          searchEventsByCity={this.props.searchEventsByCity}
+          cities={this.props.cities}
+          types={this.props.types}
           genres={this.props.genres}
           movies={this.props.movies}
           searchMovies={this.props.searchMovies}
@@ -184,27 +148,6 @@ class Navigation extends Component {
           })}
         >
           <Grid container className={classes.grid} style={{ padding: 0 }}>
-            {this.state.open && (
-              <Grid
-                item
-                xs={1}
-                className={clsx(classes.scroll, {
-                  [classes.scrollOpen]: this.state.open,
-                  [classes.scrollClose]: !this.state.open,
-                })}
-              >
-                <Fab
-                  variant="extended"
-                  component="button"
-                  className={classes.scrollBtn}
-                  value={this.state.icon}
-                  onClick={(e) => this.scrollHandler(e)}
-                >
-                  {this.showScrollIcon()}
-                </Fab>
-              </Grid>
-            )}
-
             <Grid item xs={this.state.open ? 11 : 12} className={classes.items}>
               {this.props.isNotificationLoading ? (
                 <CircularProgress
@@ -214,40 +157,35 @@ class Navigation extends Component {
               ) : (
                 this.showNotification()
               )}
-              <RouteContent
-                getDetailsTv={this.props.getDetailsTv}
-                getSimilarTv={this.props.getSimilarTv}
-                getDetailsMovie={this.props.getDetailsMovie}
-                getSimilarMovies={this.props.getSimilarMovies}
-              />
+              <RouteContent />
             </Grid>
           </Grid>
         </main>
-        <div
-          className={classes.end}
-          ref={(el) => {
-            this.pageToEndRef = el;
-          }}
-        ></div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  genres: state.MoviesReducer.genres,
-  movies: state.MoviesReducer.movies,
-  library: state.MoviesReducer.library,
-  isLoading: state.LoadingReducer.isLoading,
-  notification: state.MoviesReducer.notification,
-  error: state.MoviesReducer.error,
-  isNotificationLoading: state.LoadingReducer.isNotificationLoading,
-  searchInputs: state.SearchReducer.searchInputs,
-});
+const mapStateToProps = (state) => {
+  return {
+    genres: state.MoviesReducer.genres,
+    movies: state.MoviesReducer.movies,
+    library: state.MoviesReducer.library,
+    isLoading: state.LoadingReducer.isLoading,
+    notification: state.MoviesReducer.notification,
+    error: state.MoviesReducer.error,
+    isNotificationLoading: state.LoadingReducer.isNotificationLoading,
+    searchInputs: state.SearchReducer.searchInputs,
+    cities: state.EventReducer.cities,
+    types: state.MoviesReducer.types,
+    city: state.MoviesReducer.city,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   signOut: (history) => dispatch(signOut(history)),
   getGenres: (type) => dispatch(getGenres(type)),
+  getCities: () => dispatch(getCities()),
   searchMovies: (data, history) => dispatch(searchMovies(data, history)),
   searchTV: (data, history) => dispatch(searchTV(data, history)),
   setNotification: (payload) => dispatch(setNotification(payload)),
@@ -255,7 +193,10 @@ const mapDispatchToProps = (dispatch) => ({
   getSimilarMovies: (id, page) => dispatch(getSimilarMovies(id, page)),
   getDetailsTv: (id) => dispatch(getDetailsTv(id)),
   getSimilarTv: (id, page) => dispatch(getSimilarTv(id, page)),
+  getTypes: () => dispatch(getTypes()),
   setInputs: (payload) => dispatch(setInputs(payload)),
+  searchEventsByCity: (cityId, history) =>
+    dispatch(searchEventsByCity(cityId, history)),
 });
 
 export default compose(

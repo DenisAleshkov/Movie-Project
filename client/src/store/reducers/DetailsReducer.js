@@ -7,12 +7,6 @@ const initialState = {
 
 const DetailsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_DETAILS: {
-      return {
-        ...state,
-        details: action.payload,
-      };
-    }
     case SET_SIMILAT_MOVIES: {
       return {
         ...state,

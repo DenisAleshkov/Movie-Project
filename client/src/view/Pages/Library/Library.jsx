@@ -11,18 +11,21 @@ class Library extends Component {
   componentDidMount() {
     this.props.getLibraryList();
   }
+  
   showLibrary = () =>
     this.props.library.map((item) => (
+      
       <LibraryCard
         key={item.id}
         id={item.id}
-        title={item.title}
+        name={item.name}
         poster={item.poster}
         library={this.props.library}
         removeItemFromLibrary={this.props.removeItemFromLibrary}
       />
     ));
   render() {
+    console.log('this.props.library', this.props.library)
     return (
       <>
         {this.props.library.length ? (

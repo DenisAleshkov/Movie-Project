@@ -1,5 +1,4 @@
 import React from "react";
-import firebase from "firebase";
 import Register from "./view/Auth/Register/Register";
 import HomePage from "./view/Pages/HomePage/HomePage";
 import Blog from "./view/Pages/Blog/Blog"
@@ -9,12 +8,8 @@ import PublicRoute from "./routes/PublicRoute";
 import { Switch, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { FIREBASE_CONFIG } from "./store/constants";
 import "./App.css";
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(FIREBASE_CONFIG);
-}
 class App extends React.Component {
   render() {
     return (

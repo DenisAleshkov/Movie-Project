@@ -16,9 +16,11 @@ export const FIREBASE_CONFIG = {
   appId: "1:896885905753:web:9678d9d814ae0fad2f5448",
 };
 
-export const API_ROOT='http://localhost:5000/'
+export const API_ROOT = "http://localhost:5000/";
 
-
+export const SET_CITIES = "SET_CITIES";
+export const SET_EVENTS = "SET_EVENTS";
+export const SET_LOCATIONS = "SET_LOCATIONS";
 
 ///////old applic
 

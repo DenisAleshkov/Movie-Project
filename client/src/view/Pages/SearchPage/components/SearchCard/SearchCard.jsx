@@ -81,7 +81,7 @@ class SearchCard extends React.Component {
         <CardMedia
           className={classes.media}
           image={
-            poster ? `https://image.tmdb.org/t/p/w500/${poster}` : EmptyPoster
+            poster ? `http://localhost:5000/${poster}` : EmptyPoster
           }
           title={titleTv || titleMovie}
         />

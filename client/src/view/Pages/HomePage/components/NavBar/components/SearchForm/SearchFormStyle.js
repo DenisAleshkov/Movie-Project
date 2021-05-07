@@ -59,23 +59,11 @@ export const SearchFormStyles = (theme) => ({
     },
   },
   genreslist: {
-    border: "2px solid #565050",
     display: "flex",
     flexWrap: "wrap",
-    overflowY:"scroll",
-    height:"200px",
-    [theme.breakpoints.down("xs")]: {
-       justifyContent: "center",
-       width: "55%"
-    },
   },
   genreItem: {
-    width: "45%",
-    margin: 0,
     color: "#565050",
-    [theme.breakpoints.down("xs")]: {
-        width: "51%",
-     },
   },
   searchCheckbox: {
     color: "#565050",
@@ -126,7 +114,6 @@ export const SearchFormStyles = (theme) => ({
     },
   },
   clearBtn: {
-    marginTop: 20,
     backgroundColor: "#fff",
     color: "#565050",
     padding: "5px 30px",

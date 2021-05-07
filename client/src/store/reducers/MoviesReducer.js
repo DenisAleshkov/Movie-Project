@@ -28,6 +28,10 @@ const initialState = {
   myAverageTv: 0,
   rateMovies: [],
   myAverageMovies: 0,
+  types: [],
+  locations: [],
+  cityId: null,
+  details: null
 };
 
 const MoviesReducer = (state = initialState, action) => {
@@ -101,6 +105,31 @@ const MoviesReducer = (state = initialState, action) => {
         rateTv: action.payload.tv,
         myAverageTv: action.payload.myAverageTv,
       };
+    }
+    case "SET_TYPES": {
+      return {
+        ...state,
+        types: action.payload,
+      };
+    }
+    case "SET_CITY": {
+      return {
+        ...state,
+        city: action.payload,
+      };
+    }
+    case "SET_LOCATIONS": {
+      return {
+        ...state,
+        locations: action.payload,
+      };
+    }
+    case "SET_DETAILS": {
+      return {
+        ...state,
+        details: action.payload
+        
+      }
     }
     default: {
       return state;

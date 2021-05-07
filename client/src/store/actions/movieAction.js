@@ -10,10 +10,13 @@ import {
   SET_NOTIFICATION,
   SET_RATE_MOVIES,
   SET_RATE_TV,
+  SET_CITIES,
+  SET_EVENTS,
 } from "./../constants";
-import { MOVIE } from "./../api";
+import { MOVIE, EVENT } from "./../api";
 import { setLoading, setNotificationLoading } from "./loadingAction";
 import { setInputs } from "./searchAction";
+import { getFormValues } from "redux-form";
 
 export const setRateMovies = (payload) => ({ type: SET_RATE_MOVIES, payload });
 export const setRateTv = (payload) => ({ type: SET_RATE_TV, payload });
@@ -105,127 +108,9 @@ export const getGenres = (type) => (dispatch) => {
     });
 };
 
-export const searchMovies = (data, history) => (dispatch) => {
-  dispatch(setLoading(true));
-  const {
-    title,
-    average,
-    idList,
-    adultCheckbox,
-    popularity,
-    overview,
-    searchCheckbox,
-  } = data;
-  if (searchCheckbox) {
-    dispatch(
-      setInputs({
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      })
-    );
-  }
-  if (title) {
-    axios
-      .get(MOVIE.SEARCH_MOVIE_BY_TITLE(), {
-        params: { include_adult: adultCheckbox, page: 1, query: title },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  } else {
-    axios
-      .get(MOVIE.SEARCH_MOVIE(), {
-        params: {
-          include_adult: adultCheckbox,
-          page: 1,
-          ["vote_count.gte"]: popularity,
-          ["vote_average.gte"]: average,
-          with_genres: Array.from(idList.keys()).join(),
-        },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  }
-  dispatch(setLoading(false));
-};
+export const searchMovies = (data, history) => (dispatch) => {};
 
-export const searchTV = (data, history) => (dispatch) => {
-  dispatch(setLoading(true));
-  const {
-    title,
-    average,
-    idList,
-    adultCheckbox,
-    popularity,
-    searchCheckbox,
-    overview,
-  } = data;
-  if (searchCheckbox) {
-    dispatch(
-      setInputs({
-        title,
-        average,
-        idList,
-        adultCheckbox,
-        popularity,
-        overview,
-      })
-    );
-  }
-  if (title) {
-    axios
-      .get(MOVIE.SEARCH_TV_BY_TITLE(), {
-        params: { include_adult: adultCheckbox, page: 1, query: title },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  } else {
-    axios
-      .get(MOVIE.SEARCH_TV(), {
-        params: {
-          include_adult: adultCheckbox,
-          page: 1,
-          ["vote_count.gte"]: popularity,
-          ["vote_average.gte"]: average,
-          with_genres: Array.from(idList.keys()).join(),
-        },
-      })
-      .then((result) => {
-        dispatch(setSearchMovies(result.data));
-        history.push("search");
-        dispatch(setLoading(false));
-      })
-      .catch((error) => {
-        dispatch(setError(error.response));
-        dispatch(setLoading(false));
-      });
-  }
-  dispatch(setLoading(false));
-};
+export const searchTV = (data, history) => (dispatch) => {};
 
 export const setMovieRate = (id, value) => (dispatch) => {
   dispatch(setNotificationLoading(true));
@@ -273,42 +158,238 @@ export const setTvRate = (id, value) => (dispatch) => {
     });
 };
 
-export const getRateMovies = (page) => (dispatch) => {
+export const setCities = (payload) => ({ type: SET_CITIES, payload });
+export const setEvents = (payload) => ({ type: SET_EVENTS, payload });
+
+export const getCities = () => (dispatch) => {
+  axios
+    .get(EVENT.GET_CITY())
+    .then((data) => {
+      dispatch(setCities(data.data));
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
+export const setCity = (payload) => ({ type: "SET_CITY", payload });
+
+export const searchEventsByCity = (cityId, history) => (dispatch) => {
   dispatch(setLoading(true));
   axios
-    .get(MOVIE.GET_RATED_MOVIES(page))
-    .then((result) => {
-      const average =
-        result.data.results.length &&
-        result.data.results.reduce((accum, current) => {
-          return accum + current.rating;
-        }, 0) / result.data.results.length;
-      dispatch(
-        setRateMovies({ movies: result.data.results, myAverageMovies: average })
-      );
+    .get(EVENT.SEARCH_BY_CITY(cityId))
+    .then((data) => {
+      dispatch(setEvents(data.data.rows));
+      dispatch(setCity(cityId));
       dispatch(setLoading(false));
     })
     .catch((error) => {
-      dispatch(setError(error.response.data.status_message));
+      console.log("error", error);
       dispatch(setLoading(false));
     });
 };
 
-export const getRateTv = (page) => (dispatch) => {
+export const getEvents = () => (dispatch) => {
   dispatch(setLoading(true));
   axios
-    .get(MOVIE.GET_RATED_TV(page))
-    .then((result) => {
-      const average =
-        result.data.results.length &&
-        result.data.results.reduce((accum, current) => {
-          return accum + current.rating;
-        }, 0) / result.data.results.length;
-      dispatch(setRateTv({ tv: result.data.results, myAverageTv: average }));
+    .get(EVENT.GET_EVENTS())
+    .then((data) => {
+      dispatch(setEvents(data.data.rows));
       dispatch(setLoading(false));
     })
     .catch((error) => {
-      dispatch(setError(error.response.data.status_message));
+      console.log("error", error);
       dispatch(setLoading(false));
     });
 };
+
+export const getEventsByLocation = (locationId) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .post(EVENT.GET_EVENT_BY_LOCATION(), {
+      locationId,
+    })
+    .then((data) => {
+      dispatch(setEvents(data.data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false));
+    });
+};
+
+export const setTypes = (payload) => ({ type: "SET_TYPES", payload });
+
+export const getTypes = () => (dispatch) => {
+  axios
+    .get(EVENT.GET_TYPES())
+    .then((data) => {
+      console.log("data", data);
+      dispatch(setTypes(data.data));
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
+export const getEventByType = (typeId) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .post(EVENT.GET_EVENT_BY_TYPE(), {
+      typeId,
+    })
+    .then((data) => {
+      dispatch(setEvents(data.data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      dispatch(setLoading(false));
+    });
+};
+
+export const setLocations = (payload) => ({ type: "SET_LOCATIONS", payload });
+
+export const getLocationInCity = (cityId) => (dispatch) => {
+  axios
+    .post(EVENT.GET_LOCATION_BY_CITY(), {
+      cityId,
+    })
+    .then((data) => {
+      dispatch(setLocations(data.data));
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+};
+
+export const createEvent = (values) => (dispatch) => {
+  dispatch(setLoading(true));
+  const {
+    city,
+    description,
+    location,
+    name,
+    price,
+    status,
+    title,
+    type,
+    img,
+  } = values;
+  console.log("values", values);
+  let formData = new FormData();
+  formData.append("name", name);
+  formData.append("price", price);
+  formData.append("img", img);
+  formData.append("status", status);
+  formData.append("userId", 1);
+  formData.append("locationName", location);
+  formData.append("cityId", city.id);
+  formData.append("typeId", type.id);
+  formData.append(
+    "info",
+    JSON.stringify({
+      title,
+      description,
+    })
+  );
+  axios
+    .post(EVENT.CREATE_EVENT(), formData)
+    .then((data) => {
+      console.log("data", data);
+      dispatch(setLoading(false));
+      dispatch(setNotification({ error: false, message: "event was created" }));
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      dispatch(setLoading(false));
+      dispatch(
+        setNotification({ error: true, message: "something was wrong" })
+      );
+    });
+};
+
+export const setDetailsEvent = (payload) => ({ type: "SET_DETAILS", payload });
+
+export const getDetailsEvent = (id) => (dispatch) => {
+  dispatch(setLoading(true));
+  axios
+    .get(EVENT.GET_DETAILS(id))
+    .then((data) => {
+      dispatch(setDetailsEvent(data.data));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setLoading(false));
+    });
+};
+
+export const setEventRate = (value, eventId, userId) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post("http://localhost:5000/api/event/rateEvent", {
+      rating: value,
+      eventId,
+      userId,
+    })
+    .then((data) => {
+      dispatch(
+        setNotification({ error: false, message: "rating was changed" })
+      );
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      console.log("error", error);
+      dispatch(setNotification({ error: true, message: "some error" }));
+      dispatch(setNotificationLoading(false));
+      dispatch(setNotificationLoading(false));
+    });
+};
+
+export const buyTicket = (eventId, userId) => (dispatch) => {
+  dispatch(setNotificationLoading(true));
+  axios
+    .post("http://localhost:5000/api/event/setTicket", {
+      eventId,
+      userId,
+    })
+    .then((data) => {
+      console.log("data", data);
+      dispatch(setNotification({ error: false, message: "ticket was bought" }));
+      dispatch(setNotificationLoading(false));
+    })
+    .catch((error) => {
+      dispatch(
+        setNotification({
+          error: true,
+          message: "you have already ticket on the event",
+        })
+      );
+      dispatch(setNotificationLoading(false));
+    });
+};
+
+// export const setTvEvent = (id, value) => (dispatch) => {
+//   dispatch(setNotificationLoading(true));
+//   axios
+//     .post(MOVIE.SET_RATING_TV(id), {
+//       value: value,
+//     })
+//     .then((res) => {
+//       dispatch(
+//         setNotification({ error: false, message: res.data.status_message })
+//       );
+//       dispatch(setNotificationLoading(false));
+//     })
+//     .catch((error) => {
+//       dispatch(
+//         setNotification({
+//           error: true,
+//           message: error.response.data.status_message,
+//         })
+//       );
+//       dispatch(setNotificationLoading(false));
+//     });
+// };

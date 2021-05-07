@@ -21,8 +21,7 @@ import {
   updateMessagesLikes,
   deleteMessage,
   setNotification,
-} from "./../../../store/actions/blogAction";
-import { getRateMovies, getRateTv } from "../../../store/actions/movieAction";
+} from "./../../../store/actions/blogAction"
 import { setDefaultAvatar } from "./../../utils/functions";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { BlogStyle } from "./BlogStyle";
@@ -132,7 +131,6 @@ class Blog extends Component {
                 photoUrl={this.props.photoUrl}
                 email={this.props.email}
                 getRatedMovies={this.props.getRatedMovies}
-                getRateTv={this.props.getRateTv}
                 rateMovies={this.props.rateMovies}
                 rateTv={this.props.rateTv}
                 myAverageMovies={this.props.myAverageMovies}
@@ -177,8 +175,6 @@ const mapDispatchToProps = (dispatch) => ({
   updateMessagesLikes: (ID, data) => dispatch(updateMessagesLikes(ID, data)),
   deleteMessage: (ID) => dispatch(deleteMessage(ID)),
   setNotification: (payload) => dispatch(setNotification(payload)),
-  getRatedMovies: (page) => dispatch(getRateMovies(page)),
-  getRateTv: (page) => dispatch(getRateTv(page)),
   updatePhoto: (ID, photoUrl) => dispatch(updatePhoto(ID, photoUrl)),
 });
 

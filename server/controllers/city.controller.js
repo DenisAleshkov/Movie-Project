@@ -1,4 +1,4 @@
-const { City } = require("../models/models");
+const { City, CityLocation } = require("../models/models");
 const ApiError = require("../error/api.error");
 
 class CityController {
