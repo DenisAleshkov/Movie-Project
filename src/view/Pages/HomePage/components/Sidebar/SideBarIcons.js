@@ -14,7 +14,7 @@ export const NAV_ICONS = (cssClass = "", count) => {
       },
       {
         component: <Slideshow className={cssClass} />,
-        url: "/home/movie",
+        url: "/home/events",
       },
       {
         component: <Tv className={cssClass} />,

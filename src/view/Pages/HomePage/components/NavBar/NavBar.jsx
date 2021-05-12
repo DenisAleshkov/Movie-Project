@@ -12,8 +12,7 @@ class NavBar extends React.Component {
   };
   showSearchForm() {
     if (
-      this.props.location === "/home/movie" ||
-      this.props.location === "/home/tv"
+      this.props.location === "/home/events"
     ) {
       return (
         <SearchForm
@@ -44,20 +43,11 @@ class NavBar extends React.Component {
           <Box className={clsx(classes.navMenu)}>
             <Button
               component={Link}
-              to="/home/movie"
+              to="/home/events"
               color="inherit"
-              className={this.isActive("/home/movie") || this.isActive("/home")}
+              className={this.isActive("/home/events") || this.isActive("/home")}
             >
-              Movies
-            </Button>
-            <Button
-              component={Link}
-              to="/home/tv"
-              color="inherit"
-              className={this.isActive("/home/tv")}
-              onClick={this.isActive}
-            >
-              TV Shows
+              Events
             </Button>
             <Button
               component={Link}
@@ -67,15 +57,6 @@ class NavBar extends React.Component {
               onClick={this.isActive}
             >
               my Library
-            </Button>
-            <Button
-              component={Link}
-              to="/blog"
-              color="inherit"
-              className={this.isActive("/blog")}
-              onClick={this.isActive}
-            >
-              Blog
             </Button>
             <Button
               className={classes.signOutBtn}

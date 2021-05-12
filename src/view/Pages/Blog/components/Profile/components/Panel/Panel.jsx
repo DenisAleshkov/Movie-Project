@@ -49,15 +49,11 @@ class Panel extends React.Component {
             aria-label="scrollable auto tabs example"
             variant="fullWidth"
           >
-            <Tab label="Rated Movies" {...a11yProps(0)} />
-            <Tab label="Rated Tv" {...a11yProps(1)} />
+            <Tab label="Rated Events" {...a11yProps(0)} />
           </Tabs>
         </AppBar>
         <TabPanel value={this.state.value} index={0}>
           {this.showRatedMovie()}
-        </TabPanel>
-        <TabPanel value={this.state.value} index={1}>
-          {this.showRatedTv()}
         </TabPanel>
       </>
     );

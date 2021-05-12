@@ -97,7 +97,7 @@ class SearchForm extends Component {
   };
 
   searchMovie = () => {
-    if (this.props.location === "/home/movie") {
+    if (this.props.location === "/home/events") {
       this.props.searchMovies(this.state, this.props.history);
     } else if (this.props.location === "/home/tv") {
       this.props.searchTV(this.state, this.props.history);

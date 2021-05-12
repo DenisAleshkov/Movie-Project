@@ -44,7 +44,7 @@ class Movie extends Component {
       return this.props.movies.map((item) => (
         <PosterCard
           type="movie"
-          to="/home/details/movies"
+          to="/home/details/events"
           key={item.id}
           id={item.id}
           poster={item.poster_path}

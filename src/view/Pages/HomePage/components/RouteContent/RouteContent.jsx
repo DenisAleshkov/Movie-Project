@@ -22,7 +22,7 @@ const RouteContent = ({
         <Movie />
       </Route>
       <Route
-        path="/home/movie"
+        path="/home/events"
         exact
         render={(props) => <Movie {...props} />}
       />
@@ -38,7 +38,7 @@ const RouteContent = ({
         <SearchPage />
       </Route>
       <Route
-        path="/home/details/movies/:id"
+        path="/home/details/events/:id"
         exact
         render={(props) => (
           <Details

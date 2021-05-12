@@ -110,10 +110,6 @@ class Profile extends Component {
               />
             </Box>
             <Box className={classes.totalRatings}>
-              <Typography className={classes.avatarText} variant="h5">
-                Total ratings:{" "}
-                {this.props.rateTv.length + this.props.rateMovies.length}
-              </Typography>
               <List className={classes.root}>
                 <ListItem>
                   <ListItemAvatar>
@@ -124,20 +120,9 @@ class Profile extends Component {
                       />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Average movie rating" />
+                  <ListItemText primary="Average events rating" />
                 </ListItem>
                 <Divider variant="inset" component="li" />
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar className={classes.listAvatar}>
-                      <CircularProgressWithLabel
-                        className={classes.circularLabel}
-                        value={myAverageTv * 10}
-                      />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary=" Average tv rating" />
-                </ListItem>
                 <Divider variant="inset" component="li" />
               </List>
             </Box>
